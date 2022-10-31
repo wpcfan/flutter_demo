@@ -1,7 +1,9 @@
 import 'package:demo/pages/root_page.dart';
+import 'package:demo/repositories/todo_repository.dart';
 import 'package:demo/routes.dart';
 import 'package:demo/states/tab_cubit.dart';
 import 'package:demo/states/theme_cubit.dart';
+import 'package:demo/states/todo_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -29,10 +31,17 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(providers: [
-      BlocProvider<TabCubit>(create: (context) => TabCubit()),
-      BlocProvider<ThemeCubit>(create: (context) => ThemeCubit()),
-    ], child: const AppView());
+    return MultiRepositoryProvider(
+        providers: [
+          RepositoryProvider(create: (context) => TodoRepository()),
+        ],
+        child: MultiBlocProvider(providers: [
+          BlocProvider<TabCubit>(create: (context) => TabCubit()),
+          BlocProvider<ThemeCubit>(create: (context) => ThemeCubit()),
+          BlocProvider(
+              create: (context) =>
+                  TodoCubit(repository: context.read<TodoRepository>()))
+        ], child: const AppView()));
   }
 }
 

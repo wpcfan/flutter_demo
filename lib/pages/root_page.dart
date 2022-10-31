@@ -2,6 +2,7 @@ import 'package:demo/routes.dart';
 import 'package:demo/states/counter_cubit.dart';
 import 'package:demo/states/tab_cubit.dart';
 import 'package:demo/states/theme_cubit.dart';
+import 'package:demo/states/todo_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -28,6 +29,9 @@ class RootPage extends StatelessWidget {
             currentIndex: currentPage,
             onTap: (index) {
               context.read<TabCubit>().changeTab(index);
+              if (index == 2) {
+                context.read<TodoCubit>().getTodos();
+              }
             },
             items: const [
               BottomNavigationBarItem(

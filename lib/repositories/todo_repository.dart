@@ -4,7 +4,7 @@ import 'package:demo/models/todo_model.dart';
 import 'package:http/http.dart';
 
 class TodoRepository {
-  final String _url = 'https://jsonplaceholder.typicode.com';
+  final String _url = 'jsonplaceholder.typicode.com';
 
   Future<List<Todo>> getTodos() async {
     final response = await get(Uri.https(_url, '/todos'));

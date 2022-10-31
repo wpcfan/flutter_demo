@@ -1,34 +1,9 @@
-import 'package:demo/repositories/todo_repository.dart';
 import 'package:demo/states/todo_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class TodoPage extends StatelessWidget {
   const TodoPage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return RepositoryProvider(
-        create: (context) => TodoRepository(), child: const TodoView());
-  }
-}
-
-class TodoView extends StatelessWidget {
-  const TodoView({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final todoRepo = RepositoryProvider.of<TodoRepository>(context);
-    todoRepo.getTodos();
-    return BlocProvider(
-        create: (context) =>
-            TodoCubit(repository: context.read<TodoRepository>()),
-        child: const TodoList());
-  }
-}
-
-class TodoList extends StatelessWidget {
-  const TodoList({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +17,6 @@ class TodoList extends StatelessWidget {
               final todo = state.todos[index];
               return ListTile(
                   title: Text(todo.title),
-                  subtitle: Text(todo.description ?? ''),
                   trailing: Checkbox(
                       value: todo.completed,
                       onChanged: (value) {
