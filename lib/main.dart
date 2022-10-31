@@ -1,58 +1,57 @@
+import 'package:demo/pages/root_page.dart';
 import 'package:demo/routes.dart';
-import 'package:demo/tab_bar.dart';
+import 'package:demo/states/tab_cubit.dart';
+import 'package:demo/states/theme_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+class AppBlocObserver extends BlocObserver {
+  @override
+  void onChange(BlocBase bloc, Change change) {
+    super.onChange(bloc, change);
+    if (bloc is Cubit) print(change);
+  }
+
+  @override
+  void onTransition(Bloc bloc, Transition transition) {
+    super.onTransition(bloc, transition);
+    print(transition);
+  }
+}
 
 void main() {
-  runApp(const MyApp());
+  Bloc.observer = AppBlocObserver();
+  runApp(const App());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class App extends StatelessWidget {
+  const App({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        theme: getRootTheme(),
-        home: const RootPage(),
-        routes: routes());
-  }
-
-  ThemeData getRootTheme() {
-    return ThemeData(
-      primarySwatch: Colors.green,
-    );
+    return MultiBlocProvider(providers: [
+      BlocProvider<TabCubit>(create: (context) => TabCubit()),
+      BlocProvider<ThemeCubit>(create: (context) => ThemeCubit()),
+    ], child: const AppView());
   }
 }
 
-class RootPage extends StatefulWidget {
-  const RootPage({super.key});
-
-  @override
-  State<RootPage> createState() => _RootPageState();
-}
-
-class _RootPageState extends State<RootPage> {
-  int currentPage = 0;
+class AppView extends StatelessWidget with WidgetsBindingObserver {
+  const AppView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Flutter Demo Home Page'),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          debugPrint('FloatingActionButton pressed');
-        },
-        child: const Icon(Icons.add),
-      ),
-      body: pages[currentPage],
-      bottomNavigationBar: buildTabBar(currentPage, (int index) {
-        setState(() {
-          currentPage = index;
-        });
-      }),
+    // var brightness = WidgetsBinding.instance.window.platformBrightness;
+    // context.read<ThemeCubit>().changeTheme(brightness);
+    return BlocBuilder<ThemeCubit, ThemeData>(
+      builder: (_, theme) {
+        return MaterialApp(
+          debugShowCheckedModeBanner: false,
+          theme: theme,
+          routes: routes,
+          home: const RootPage(),
+        );
+      },
     );
   }
 }
