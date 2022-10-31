@@ -48,12 +48,10 @@ class _RootPageState extends State<RootPage> {
         child: const Icon(Icons.add),
       ),
       body: pages[currentPage],
-      bottomNavigationBar: buildTabBar(currentPage, () {
-        return (int index) {
-          setState(() {
-            currentPage = index;
-          });
-        };
+      bottomNavigationBar: buildTabBar(currentPage, (int index) {
+        setState(() {
+          currentPage = index;
+        });
       }),
     );
   }

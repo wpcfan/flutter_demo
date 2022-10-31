@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-Widget buildTabBar(int currentIndex, Function onTap) {
+Widget buildTabBar(int currentIndex, void Function(int) onTap) {
   return BottomNavigationBar(
     items: const [
       BottomNavigationBarItem(
@@ -18,6 +18,6 @@ Widget buildTabBar(int currentIndex, Function onTap) {
     ],
     currentIndex: currentIndex,
     selectedItemColor: Colors.amber[800],
-    onTap: onTap(),
+    onTap: onTap,
   );
 }
