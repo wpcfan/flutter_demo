@@ -24,32 +24,38 @@ class RootPage extends StatelessWidget {
             child: const Icon(Icons.toggle_on),
           ),
           body: BlocProvider(
-              create: (context) => CounterCubit(), child: pages[currentPage]),
-          bottomNavigationBar: BottomNavigationBar(
-            currentIndex: currentPage,
-            onTap: (index) {
-              context.read<TabCubit>().changeTab(index);
-              if (index == 2) {
-                context.read<TodoCubit>().getTodos();
-              }
-            },
-            items: const [
-              BottomNavigationBarItem(
-                icon: Icon(Icons.home),
-                label: 'Home',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.school),
-                label: 'Learn',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.list),
-                label: 'Todo',
-              ),
-            ],
+            create: (context) => CounterCubit(),
+            child: pages[currentPage],
           ),
+          bottomNavigationBar: buildTabBar(currentPage, context),
         );
       },
+    );
+  }
+
+  BottomNavigationBar buildTabBar(int currentPage, BuildContext context) {
+    return BottomNavigationBar(
+      currentIndex: currentPage,
+      onTap: (index) {
+        context.read<TabCubit>().changeTab(index);
+        if (index == 2) {
+          context.read<TodoCubit>().getTodos();
+        }
+      },
+      items: const [
+        BottomNavigationBarItem(
+          icon: Icon(Icons.home),
+          label: 'Home',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.school),
+          label: 'Learn',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.list),
+          label: 'Todo',
+        ),
+      ],
     );
   }
 }

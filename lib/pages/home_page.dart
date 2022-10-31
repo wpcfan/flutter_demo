@@ -7,9 +7,7 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: ElevatedButton(
-        onPressed: () {
-          Navigator.pushNamed(context, '/learn_flutter');
-        },
+        onPressed: () => Navigator.pushNamed(context, '/learn_flutter'),
         child: const Text('ElevatedButton'),
       ),
     );

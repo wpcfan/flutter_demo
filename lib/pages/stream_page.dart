@@ -15,22 +15,16 @@ class StreamPage extends StatelessWidget {
             'You have pushed the button this many times:',
           ),
           BlocBuilder<CounterCubit, int>(
-            builder: (context, state) {
-              return Text(
-                '$state',
-                style: Theme.of(context).textTheme.headline4,
-              );
-            },
+            builder: (context, state) => Text(
+              '$state',
+              style: Theme.of(context).textTheme.headline4,
+            ),
           ),
           ElevatedButton(
-              onPressed: () {
-                context.read<CounterCubit>().increment();
-              },
+              onPressed: () => context.read<CounterCubit>().increment(),
               child: const Text('Increment')),
           ElevatedButton(
-              onPressed: () {
-                context.read<CounterCubit>().decrement();
-              },
+              onPressed: () => context.read<CounterCubit>().decrement(),
               child: const Text('Decrement')),
         ],
       ),
