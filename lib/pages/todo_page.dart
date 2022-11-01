@@ -33,10 +33,9 @@ class TodoPage extends StatelessWidget {
           return ListTile(
               title: Text(todo.title),
               trailing: Checkbox(
-                  value: todo.completed,
-                  onChanged: (value) {
-                    context.read<TodoCubit>().toggle(todo);
-                  }));
+                value: todo.completed,
+                onChanged: (value) => context.read<TodoCubit>().toggle(todo),
+              ));
         });
   }
 }

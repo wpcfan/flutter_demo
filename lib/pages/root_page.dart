@@ -18,9 +18,7 @@ class RootPage extends StatelessWidget {
             title: const Text('Flutter Demo Home Page'),
           ),
           floatingActionButton: FloatingActionButton(
-            onPressed: () {
-              context.read<ThemeCubit>().toggleTheme();
-            },
+            onPressed: () => context.read<ThemeCubit>().toggleTheme(),
             child: const Icon(Icons.toggle_on),
           ),
           body: BlocProvider(
