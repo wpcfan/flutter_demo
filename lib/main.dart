@@ -1,6 +1,7 @@
 import 'package:demo/pages/root_page.dart';
 import 'package:demo/repositories/todo_repository.dart';
 import 'package:demo/routes.dart';
+import 'package:demo/states/message_cubit.dart';
 import 'package:demo/states/tab_cubit.dart';
 import 'package:demo/states/theme_cubit.dart';
 import 'package:demo/states/todo_cubit.dart';
@@ -39,6 +40,7 @@ class App extends StatelessWidget {
           providers: [
             BlocProvider(create: (context) => TabCubit()),
             BlocProvider(create: (context) => ThemeCubit()),
+            BlocProvider(create: (context) => MessageCubit()),
             BlocProvider(
                 create: (context) =>
                     TodoCubit(repository: context.read<TodoRepository>()))
@@ -55,6 +57,10 @@ class AppView extends StatelessWidget with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     // var brightness = WidgetsBinding.instance.window.platformBrightness;
     // context.read<ThemeCubit>().changeTheme(brightness);
+    return themeAware();
+  }
+
+  BlocBuilder<ThemeCubit, ThemeData> themeAware() {
     return BlocBuilder<ThemeCubit, ThemeData>(
       builder: (_, theme) {
         return MaterialApp(

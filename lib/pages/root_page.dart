@@ -1,5 +1,6 @@
 import 'package:demo/routes.dart';
 import 'package:demo/states/counter_cubit.dart';
+import 'package:demo/states/message_cubit.dart';
 import 'package:demo/states/tab_cubit.dart';
 import 'package:demo/states/theme_cubit.dart';
 import 'package:demo/states/todo_cubit.dart';
@@ -11,23 +12,34 @@ class RootPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<TabCubit, int>(
-      builder: (context, currentPage) {
-        return Scaffold(
-          appBar: AppBar(
-            title: const Text('Flutter Demo Home Page'),
-          ),
-          floatingActionButton: FloatingActionButton(
-            onPressed: () => context.read<ThemeCubit>().toggleTheme(),
-            child: const Icon(Icons.toggle_on),
-          ),
-          body: BlocProvider(
-            create: (context) => CounterCubit(),
-            child: tabs[currentPage],
-          ),
-          bottomNavigationBar: buildTabBar(currentPage, context),
-        );
-      },
+    return BlocListener<MessageCubit, String?>(
+      listener: ((context, state) {
+        if (state != null) {
+          ScaffoldMessenger.of(context)
+              .removeCurrentSnackBar(reason: SnackBarClosedReason.dismiss);
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(state),
+          ));
+        }
+      }),
+      child: BlocBuilder<TabCubit, int>(
+        builder: (context, currentPage) {
+          return Scaffold(
+            appBar: AppBar(
+              title: const Text('Flutter Demo Home Page'),
+            ),
+            floatingActionButton: FloatingActionButton(
+              onPressed: () => context.read<ThemeCubit>().toggleTheme(),
+              child: const Icon(Icons.toggle_on),
+            ),
+            body: BlocProvider(
+              create: (context) => CounterCubit(),
+              child: tabs[currentPage],
+            ),
+            bottomNavigationBar: buildTabBar(currentPage, context),
+          );
+        },
+      ),
     );
   }
 
