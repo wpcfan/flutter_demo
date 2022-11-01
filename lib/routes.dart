@@ -8,7 +8,7 @@ Map<String, WidgetBuilder> routes = {
   '/todo': (context) => const TodoPage(),
 };
 
-final List<Widget> pages = [
+final List<Widget> tabs = [
   const HomePage(),
   const StreamPage(),
   const TodoPage(),

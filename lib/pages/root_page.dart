@@ -25,7 +25,7 @@ class RootPage extends StatelessWidget {
           ),
           body: BlocProvider(
             create: (context) => CounterCubit(),
-            child: pages[currentPage],
+            child: tabs[currentPage],
           ),
           bottomNavigationBar: buildTabBar(currentPage, context),
         );
