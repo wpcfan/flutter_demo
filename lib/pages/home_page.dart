@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -7,7 +8,7 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: ElevatedButton(
-        onPressed: () => Navigator.pushNamed(context, '/learn_flutter'),
+        onPressed: () => context.pushNamed('learn'),
         child: const Text('ElevatedButton'),
       ),
     );

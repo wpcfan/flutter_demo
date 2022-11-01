@@ -1,12 +1,14 @@
+import 'package:demo/observers/nav_observer.dart';
+import 'package:demo/pages/all.dart';
 import 'package:demo/pages/root_page.dart';
 import 'package:demo/repositories/todo_repository.dart';
-import 'package:demo/routes.dart';
 import 'package:demo/states/message_cubit.dart';
 import 'package:demo/states/tab_cubit.dart';
 import 'package:demo/states/theme_cubit.dart';
 import 'package:demo/states/todo_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 class AppBlocObserver extends BlocObserver {
   @override
@@ -45,13 +47,13 @@ class App extends StatelessWidget {
                 create: (context) =>
                     TodoCubit(repository: context.read<TodoRepository>()))
           ],
-          child: const AppView(),
+          child: AppView(),
         ));
   }
 }
 
 class AppView extends StatelessWidget with WidgetsBindingObserver {
-  const AppView({Key? key}) : super(key: key);
+  AppView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -63,13 +65,43 @@ class AppView extends StatelessWidget with WidgetsBindingObserver {
   BlocBuilder<ThemeCubit, ThemeData> themeAware() {
     return BlocBuilder<ThemeCubit, ThemeData>(
       builder: (_, theme) {
-        return MaterialApp(
+        return MaterialApp.router(
           debugShowCheckedModeBanner: false,
           theme: theme,
-          routes: routes,
-          home: const RootPage(),
+          routerConfig: router,
         );
       },
     );
   }
+
+  final GoRouter router = GoRouter(
+    observers: <NavigatorObserver>[NavObserver()],
+    routes: <GoRoute>[
+      GoRoute(
+        path: '/',
+        builder: (BuildContext context, GoRouterState state) {
+          return const RootPage();
+        },
+      ),
+      GoRoute(
+        name: 'learn',
+        path: '/learn_flutter',
+        builder: (BuildContext context, GoRouterState state) {
+          return const LearnFlutterPage();
+        },
+      ),
+      GoRoute(
+        path: '/stream',
+        builder: (BuildContext context, GoRouterState state) {
+          return const StreamPage();
+        },
+      ),
+      GoRoute(
+        path: '/todo',
+        builder: (BuildContext context, GoRouterState state) {
+          return const TodoPage();
+        },
+      ),
+    ],
+  );
 }

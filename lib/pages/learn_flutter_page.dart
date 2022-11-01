@@ -1,6 +1,7 @@
 import 'package:demo/states/message_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 class LearnFlutterPage extends StatelessWidget {
   const LearnFlutterPage({super.key});
@@ -16,7 +17,7 @@ class LearnFlutterPage extends StatelessWidget {
             automaticallyImplyLeading: false,
             leading: IconButton(
               icon: const Icon(Icons.arrow_back),
-              onPressed: () => Navigator.pop(context),
+              onPressed: () => context.pop(),
             ),
             actions: [
               IconButton(
