@@ -25,16 +25,12 @@ class _LearnFlutterPageState extends State<LearnFlutterPage> {
           automaticallyImplyLeading: false,
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),
-            onPressed: () {
-              Navigator.pop(context);
-            },
+            onPressed: () => Navigator.pop(context),
           ),
           actions: [
             IconButton(
               icon: const Icon(Icons.add),
-              onPressed: () {
-                _snack(context, 'Add pressed');
-              },
+              onPressed: () => _snack(context, 'Add pressed'),
             ),
           ],
         ),
@@ -63,28 +59,20 @@ class _LearnFlutterPageState extends State<LearnFlutterPage> {
                 ),
               ),
               ElevatedButton(
-                onPressed: () {
-                  debugPrint('ElevatedButton pressed');
-                },
+                onPressed: () => debugPrint('ElevatedButton pressed'),
                 child: const Text('ElevatedButton'),
               ),
               OutlinedButton(
-                onPressed: () {
-                  debugPrint('OutlinedButton pressed');
-                },
+                onPressed: () => debugPrint('OutlinedButton pressed'),
                 child: const Text('OutlinedButton'),
               ),
               TextButton(
-                onPressed: () {
-                  debugPrint('TextButton pressed');
-                },
+                onPressed: () => debugPrint('TextButton pressed'),
                 child: const Text('TextButton'),
               ),
               GestureDetector(
                   behavior: HitTestBehavior.opaque,
-                  onTap: () {
-                    debugPrint('GestureDetector pressed');
-                  },
+                  onTap: () => debugPrint('GestureDetector pressed'),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     crossAxisAlignment: CrossAxisAlignment.center,
