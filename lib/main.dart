@@ -35,13 +35,16 @@ class App extends StatelessWidget {
         providers: [
           RepositoryProvider(create: (context) => TodoRepository()),
         ],
-        child: MultiBlocProvider(providers: [
-          BlocProvider<TabCubit>(create: (context) => TabCubit()),
-          BlocProvider<ThemeCubit>(create: (context) => ThemeCubit()),
-          BlocProvider(
-              create: (context) =>
-                  TodoCubit(repository: context.read<TodoRepository>()))
-        ], child: const AppView()));
+        child: MultiBlocProvider(
+          providers: [
+            BlocProvider(create: (context) => TabCubit()),
+            BlocProvider(create: (context) => ThemeCubit()),
+            BlocProvider(
+                create: (context) =>
+                    TodoCubit(repository: context.read<TodoRepository>()))
+          ],
+          child: const AppView(),
+        ));
   }
 }
 
