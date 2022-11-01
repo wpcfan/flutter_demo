@@ -10,6 +10,7 @@ class TodoPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    context.read<TodoCubit>().getTodos();
     return BlocBuilder<TodoCubit, TodoState>(
       builder: (context, state) => reducer(state),
       buildWhen: (previous, current) => current is TodoLoaded,
