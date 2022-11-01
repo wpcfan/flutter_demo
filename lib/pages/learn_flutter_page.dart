@@ -7,8 +7,9 @@ class LearnFlutterPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder(
-      bloc: context.read<MessageCubit>(),
+    // BlocBuilder(
+    //  bloc: context.read<MessageCubit>(),
+    return BlocBuilder<MessageCubit, String?>(
       builder: (context, state) => Scaffold(
           appBar: AppBar(
             title: const Text('Learn Flutter'),
