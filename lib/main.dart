@@ -93,7 +93,7 @@ class AppView extends StatelessWidget with WidgetsBindingObserver {
       GoRoute(
         path: '/stream',
         builder: (BuildContext context, GoRouterState state) {
-          return const StreamPage();
+          return const CounterPage();
         },
       ),
       GoRoute(
