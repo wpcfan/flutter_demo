@@ -1,22 +1,18 @@
-import 'package:demo/states/tab_cubit.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:demo/tab_def.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 class TabbarWidget extends StatelessWidget {
-  const TabbarWidget({super.key});
+  final TabsRouter tabsRouter;
+  const TabbarWidget({super.key, required this.tabsRouter});
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<TabCubit, int>(
-      builder: (context, currentPage) {
-        return BottomNavigationBar(
-          currentIndex: currentPage,
-          items: tabItems,
-          onTap: (index) {
-            context.read<TabCubit>().changeTab(index);
-          },
-        );
+    return BottomNavigationBar(
+      currentIndex: tabsRouter.activeIndex,
+      items: tabItems,
+      onTap: (index) {
+        tabsRouter.setActiveIndex(index);
       },
     );
   }

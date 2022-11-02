@@ -51,6 +51,24 @@ class _$AppRouter extends RootStackRouter {
         ),
       );
     },
+    Home.name: (routeData) {
+      return MaterialPageX<dynamic>(
+        routeData: routeData,
+        child: const HomePage(),
+      );
+    },
+    Counter.name: (routeData) {
+      return MaterialPageX<dynamic>(
+        routeData: routeData,
+        child: const CounterPage(),
+      );
+    },
+    Todo.name: (routeData) {
+      return MaterialPageX<dynamic>(
+        routeData: routeData,
+        child: const TodoPage(),
+      );
+    },
   };
 
   @override
@@ -58,6 +76,23 @@ class _$AppRouter extends RootStackRouter {
         RouteConfig(
           RootRoute.name,
           path: '/',
+          children: [
+            RouteConfig(
+              Home.name,
+              path: '',
+              parent: RootRoute.name,
+            ),
+            RouteConfig(
+              Counter.name,
+              path: 'counter-page',
+              parent: RootRoute.name,
+            ),
+            RouteConfig(
+              Todo.name,
+              path: 'todo-page',
+              parent: RootRoute.name,
+            ),
+          ],
         ),
         RouteConfig(
           LearnFlutterRoute.name,
@@ -81,10 +116,11 @@ class _$AppRouter extends RootStackRouter {
 /// generated route for
 /// [RootPage]
 class RootRoute extends PageRouteInfo<void> {
-  const RootRoute()
+  const RootRoute({List<PageRouteInfo>? children})
       : super(
           RootRoute.name,
           path: '/',
+          initialChildren: children,
         );
 
   static const String name = 'RootRoute';
@@ -158,4 +194,40 @@ class ErrorArgs {
   String toString() {
     return 'ErrorArgs{key: $key, error: $error}';
   }
+}
+
+/// generated route for
+/// [HomePage]
+class Home extends PageRouteInfo<void> {
+  const Home()
+      : super(
+          Home.name,
+          path: '',
+        );
+
+  static const String name = 'Home';
+}
+
+/// generated route for
+/// [CounterPage]
+class Counter extends PageRouteInfo<void> {
+  const Counter()
+      : super(
+          Counter.name,
+          path: 'counter-page',
+        );
+
+  static const String name = 'Counter';
+}
+
+/// generated route for
+/// [TodoPage]
+class Todo extends PageRouteInfo<void> {
+  const Todo()
+      : super(
+          Todo.name,
+          path: 'todo-page',
+        );
+
+  static const String name = 'Todo';
 }

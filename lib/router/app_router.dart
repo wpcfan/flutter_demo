@@ -7,7 +7,11 @@ part 'app_router.gr.dart';
 @MaterialAutoRouter(
   replaceInRouteName: 'Page,Route',
   routes: <AutoRoute>[
-    AutoRoute(page: RootPage, initial: true),
+    AutoRoute(page: RootPage, initial: true, children: [
+      AutoRoute(page: HomePage, name: 'home', initial: true),
+      AutoRoute(page: CounterPage, name: 'counter'),
+      AutoRoute(page: TodoPage, name: 'todo'),
+    ]),
     AutoRoute(page: LearnFlutterPage),
     AutoRoute(page: LoginPage, name: 'login'),
     AutoRoute(page: SplashPage, name: 'splash'),

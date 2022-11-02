@@ -7,27 +7,33 @@ class CounterPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          const Text(
-            'You have pushed the button this many times:',
-          ),
-          BlocBuilder<CounterCubit, int>(
-            builder: (context, state) => Text(
-              '$state',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-          ),
-          ElevatedButton(
-              onPressed: () => context.read<CounterCubit>().increment(),
-              child: const Text('Increment')),
-          ElevatedButton(
-              onPressed: () => context.read<CounterCubit>().decrement(),
-              child: const Text('Decrement')),
-        ],
-      ),
+    return BlocProvider(
+      create: (context) => CounterCubit(),
+      child: BlocBuilder<CounterCubit, int>(
+          builder: ((context, state) => Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    const Text(
+                      'You have pushed the button this many times:',
+                    ),
+                    BlocBuilder<CounterCubit, int>(
+                      builder: (context, state) => Text(
+                        '$state',
+                        style: Theme.of(context).textTheme.headline4,
+                      ),
+                    ),
+                    ElevatedButton(
+                        onPressed: () =>
+                            context.read<CounterCubit>().increment(),
+                        child: const Text('Increment')),
+                    ElevatedButton(
+                        onPressed: () =>
+                            context.read<CounterCubit>().decrement(),
+                        child: const Text('Decrement')),
+                  ],
+                ),
+              ))),
     );
   }
 }

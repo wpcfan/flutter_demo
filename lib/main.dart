@@ -1,7 +1,6 @@
 import 'package:demo/repositories/todo_repository.dart';
 import 'package:demo/router/app_router.dart';
 import 'package:demo/states/message_cubit.dart';
-import 'package:demo/states/tab_cubit.dart';
 import 'package:demo/states/theme_cubit.dart';
 import 'package:demo/states/todo_cubit.dart';
 import 'package:flutter/material.dart';
@@ -43,7 +42,6 @@ class App extends StatelessWidget {
         ],
         child: MultiBlocProvider(
           providers: [
-            BlocProvider(create: (context) => TabCubit()),
             BlocProvider(create: (context) => ThemeCubit()),
             BlocProvider(create: (context) => MessageCubit()),
             BlocProvider(
