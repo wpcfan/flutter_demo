@@ -1,14 +1,12 @@
-import 'package:demo/observers/nav_observer.dart';
-import 'package:demo/pages/all.dart';
 import 'package:demo/repositories/todo_repository.dart';
+import 'package:demo/router/app_router.dart';
 import 'package:demo/states/message_cubit.dart';
 import 'package:demo/states/tab_cubit.dart';
 import 'package:demo/states/theme_cubit.dart';
 import 'package:demo/states/todo_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
-import 'package:leancloud_storage/leancloud.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AppBlocObserver extends BlocObserver {
   @override
@@ -24,24 +22,21 @@ class AppBlocObserver extends BlocObserver {
   }
 }
 
-void main() {
+void main() async {
   Bloc.observer = AppBlocObserver();
-  runApp(const App());
+  WidgetsFlutterBinding.ensureInitialized();
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+  runApp(App(
+    sharedPreferences: prefs,
+  ));
 }
 
 class App extends StatelessWidget {
-  const App({Key? key}) : super(key: key);
+  final SharedPreferences sharedPreferences;
+  const App({Key? key, required this.sharedPreferences}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    LeanCloud.initialize(
-      'xvE7lpziyTMBjKCmfqbyjNKh-gzGzoHsz',
-      '25wuss1uvHYt7dQbreGfojB2',
-      queryCache: LCQueryCache(),
-      server: 'https://feeds.twigcodes.com',
-    );
-    LCLogger.setLevel(LCLogger.DebugLevel);
-
     return MultiRepositoryProvider(
         providers: [
           RepositoryProvider(create: (context) => TodoRepository()),
@@ -61,61 +56,22 @@ class App extends StatelessWidget {
 }
 
 class AppView extends StatelessWidget with WidgetsBindingObserver {
+  final appRouter = AppRouter();
   AppView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     // var brightness = WidgetsBinding.instance.window.platformBrightness;
     // context.read<ThemeCubit>().changeTheme(brightness);
-    return themeAware();
-  }
-
-  BlocBuilder<ThemeCubit, ThemeData> themeAware() {
     return BlocBuilder<ThemeCubit, ThemeData>(
       builder: (_, theme) {
         return MaterialApp.router(
           debugShowCheckedModeBanner: false,
           theme: theme,
-          routerConfig: router,
+          routerDelegate: appRouter.delegate(),
+          routeInformationParser: appRouter.defaultRouteParser(),
         );
       },
     );
   }
-
-  final GoRouter router = GoRouter(
-    observers: <NavigatorObserver>[NavObserver()],
-    routes: <GoRoute>[
-      GoRoute(
-        path: '/',
-        builder: (BuildContext context, GoRouterState state) {
-          // LCUser currentUser = await LCUser.getCurrent();
-          // if (currentUser != null) {
-          //   // Redirect to the home page
-          // } else {
-          //   // Show the sign-up or log-in page
-          // }
-          return const RootPage();
-        },
-      ),
-      GoRoute(
-        name: 'learn',
-        path: '/learn_flutter',
-        builder: (BuildContext context, GoRouterState state) {
-          return const LearnFlutterPage();
-        },
-      ),
-      GoRoute(
-        path: '/stream',
-        builder: (BuildContext context, GoRouterState state) {
-          return const CounterPage();
-        },
-      ),
-      GoRoute(
-        path: '/todo',
-        builder: (BuildContext context, GoRouterState state) {
-          return const TodoPage();
-        },
-      ),
-    ],
-  );
 }
