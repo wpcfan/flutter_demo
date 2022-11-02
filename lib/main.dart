@@ -8,6 +8,8 @@ import 'package:demo/states/theme_cubit.dart';
 import 'package:demo/states/todo_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'observers/nav_observer.dart';
@@ -75,6 +77,12 @@ class AppView extends StatelessWidget with WidgetsBindingObserver {
         return MaterialApp.router(
           debugShowCheckedModeBanner: false,
           theme: theme,
+          localizationsDelegates: const [
+            ...GlobalMaterialLocalizations.delegates,
+            FormBuilderLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+          ],
+          supportedLocales: FormBuilderLocalizations.delegate.supportedLocales,
           routerDelegate: AutoRouterDelegate(appRouter,
               navigatorObservers: () => [
                     NavObserver(),
