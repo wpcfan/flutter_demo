@@ -1,27 +1,34 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 
-class NavObserver extends NavigatorObserver {
+class NavObserver extends AutoRouterObserver {
   @override
-  void didPush(Route<dynamic> route, Route<dynamic>? previousRoute) {
+  void didPush(Route route, Route? previousRoute) {
+    debugPrint('didPush: $route');
     super.didPush(route, previousRoute);
-    debugPrint('didPush: ${route.settings.name}');
   }
 
   @override
-  void didPop(Route<dynamic> route, Route<dynamic>? previousRoute) {
+  void didInitTabRoute(TabPageRoute route, TabPageRoute? previousRoute) {
+    debugPrint('didInitTabRoute: $route');
+    super.didInitTabRoute(route, previousRoute);
+  }
+
+  @override
+  void didChangeTabRoute(TabPageRoute route, TabPageRoute previousRoute) {
+    debugPrint('didChangeTabRoute: $route');
+    super.didChangeTabRoute(route, previousRoute);
+  }
+
+  @override
+  void didPop(Route route, Route? previousRoute) {
+    debugPrint('didPop: $route');
     super.didPop(route, previousRoute);
-    debugPrint('didPop: ${route.settings.name}');
   }
 
   @override
-  void didRemove(Route<dynamic> route, Route<dynamic>? previousRoute) {
+  void didRemove(Route route, Route? previousRoute) {
+    debugPrint('didRemove: $route');
     super.didRemove(route, previousRoute);
-    debugPrint('didRemove: ${route.settings.name}');
-  }
-
-  @override
-  void didReplace({Route<dynamic>? newRoute, Route<dynamic>? oldRoute}) {
-    super.didReplace(newRoute: newRoute, oldRoute: oldRoute);
-    debugPrint('didReplace: ${newRoute?.settings.name}');
   }
 }

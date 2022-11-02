@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:demo/repositories/todo_repository.dart';
 import 'package:demo/router/app_router.dart';
 import 'package:demo/router/guards/auth_guard.dart';
@@ -8,6 +9,8 @@ import 'package:demo/states/todo_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'observers/nav_observer.dart';
 
 class AppBlocObserver extends BlocObserver {
   @override
@@ -72,7 +75,10 @@ class AppView extends StatelessWidget with WidgetsBindingObserver {
         return MaterialApp.router(
           debugShowCheckedModeBanner: false,
           theme: theme,
-          routerDelegate: appRouter.delegate(),
+          routerDelegate: AutoRouterDelegate(appRouter,
+              navigatorObservers: () => [
+                    NavObserver(),
+                  ]),
           routeInformationParser: appRouter.defaultRouteParser(),
         );
       },

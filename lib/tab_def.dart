@@ -14,6 +14,10 @@ final List<BottomNavigationBarItem> tabItems = [
     icon: Icon(Icons.list),
     label: 'Todo',
   ),
+  const BottomNavigationBarItem(
+    icon: Icon(Icons.person),
+    label: 'My',
+  ),
 ];
 
 final List<Widget> tabs = [

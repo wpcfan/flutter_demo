@@ -74,6 +74,12 @@ class _$AppRouter extends RootStackRouter {
         child: const TodoPage(),
       );
     },
+    My.name: (routeData) {
+      return MaterialPageX<dynamic>(
+        routeData: routeData,
+        child: const MyPage(),
+      );
+    },
   };
 
   @override
@@ -96,6 +102,11 @@ class _$AppRouter extends RootStackRouter {
             RouteConfig(
               Todo.name,
               path: 'todo-page',
+              parent: RootRoute.name,
+            ),
+            RouteConfig(
+              My.name,
+              path: 'my-page',
               parent: RootRoute.name,
             ),
           ],
@@ -236,4 +247,16 @@ class Todo extends PageRouteInfo<void> {
         );
 
   static const String name = 'Todo';
+}
+
+/// generated route for
+/// [MyPage]
+class My extends PageRouteInfo<void> {
+  const My()
+      : super(
+          My.name,
+          path: 'my-page',
+        );
+
+  static const String name = 'My';
 }
