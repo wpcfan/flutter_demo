@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:demo/pages/all.dart';
 import 'package:demo/pages/my_page.dart';
+import 'package:demo/pages/register_page.dart';
 import 'package:demo/router/guards/auth_guard.dart';
 import 'package:flutter/material.dart';
 
@@ -22,6 +23,7 @@ part 'app_router.gr.dart';
     ),
     AutoRoute(page: LearnFlutterPage),
     AutoRoute(page: LoginPage, name: 'login'),
+    AutoRoute(page: RegisterPage, name: 'register'),
     AutoRoute(page: SplashPage, name: 'splash'),
     AutoRoute(page: ErrorPage, name: 'error'),
   ],

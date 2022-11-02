@@ -40,6 +40,12 @@ class _$AppRouter extends RootStackRouter {
         child: const LoginPage(),
       );
     },
+    Register.name: (routeData) {
+      return MaterialPageX<dynamic>(
+        routeData: routeData,
+        child: const RegisterPage(),
+      );
+    },
     Splash.name: (routeData) {
       return MaterialPageX<dynamic>(
         routeData: routeData,
@@ -120,6 +126,10 @@ class _$AppRouter extends RootStackRouter {
           path: '/login-page',
         ),
         RouteConfig(
+          Register.name,
+          path: '/register-page',
+        ),
+        RouteConfig(
           Splash.name,
           path: '/splash-page',
         ),
@@ -165,6 +175,18 @@ class Login extends PageRouteInfo<void> {
         );
 
   static const String name = 'Login';
+}
+
+/// generated route for
+/// [RegisterPage]
+class Register extends PageRouteInfo<void> {
+  const Register()
+      : super(
+          Register.name,
+          path: '/register-page',
+        );
+
+  static const String name = 'Register';
 }
 
 /// generated route for

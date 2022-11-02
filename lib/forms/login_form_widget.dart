@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
@@ -16,7 +17,7 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
   bool _passwordHasError = false;
   @override
   Widget build(BuildContext context) {
-    return form();
+    return form(context);
   }
 
   /// 用户名输入框
@@ -99,8 +100,17 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
     );
   }
 
+  Widget navRegisterButton(BuildContext context) {
+    return TextButton(
+      onPressed: () {
+        context.router.pushNamed('/register-page');
+      },
+      child: const Text('Register'),
+    );
+  }
+
   /// 构建登录表单
-  Widget form() {
+  Widget form(BuildContext context) {
     return Center(
         child: Column(
       children: [
@@ -131,6 +141,10 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
             const SizedBox(width: 20),
             Expanded(
               child: resetButton(),
+            ),
+            const SizedBox(width: 20),
+            Expanded(
+              child: navRegisterButton(context),
             ),
           ],
         ),

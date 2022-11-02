@@ -469,6 +469,34 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.2.1"
+  reactive_forms:
+    dependency: "direct main"
+    description:
+      name: reactive_forms
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "14.1.0"
+  reactive_forms_annotations:
+    dependency: "direct main"
+    description:
+      name: reactive_forms_annotations
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.13.0-beta"
+  reactive_forms_generator:
+    dependency: "direct dev"
+    description:
+      name: reactive_forms_generator
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.22.0-beta"
+  recase:
+    dependency: transitive
+    description:
+      name: recase
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "4.1.0"
   rxdart:
     dependency: "direct main"
     description:
