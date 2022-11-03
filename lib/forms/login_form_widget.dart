@@ -1,5 +1,9 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:demo/router/app_router.dart';
+import 'package:demo/states/login_cubit.dart';
+import 'package:demo/widgets/loading_overlay/loading_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 
@@ -15,9 +19,33 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
   bool _passwordVisible = false;
   bool _usernameHasError = false;
   bool _passwordHasError = false;
+
   @override
   Widget build(BuildContext context) {
-    return form(context);
+    return BlocListener<LoginCubit, LoginState>(
+      listener: reducer,
+      child: form(context),
+    );
+  }
+
+  void reducer(BuildContext context, LoginState state) {
+    if (state is LoginSuccess) {
+      context.read<LoadingProvider>().setLoad(false);
+      context.router.navigate(const Home());
+    } else if (state is LoginError) {
+      context.read<LoadingProvider>().setLoad(false);
+      ScaffoldMessenger.of(context)
+          .removeCurrentSnackBar(reason: SnackBarClosedReason.dismiss);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(state.message),
+        ),
+      );
+    } else if (state is LoginLoading) {
+      context.read<LoadingProvider>().setLoad(true);
+    } else {
+      context.read<LoadingProvider>().setLoad(false);
+    }
   }
 
   /// 用户名输入框
@@ -69,7 +97,10 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
     return ElevatedButton(
       onPressed: () {
         if (_formKey.currentState?.saveAndValidate() ?? false) {
-          debugPrint(_formKey.currentState?.value.toString());
+          context.read<LoginCubit>().login(
+                _formKey.currentState?.fields['username']?.value,
+                _formKey.currentState?.fields['password']?.value,
+              );
         } else {
           debugPrint(_formKey.currentState?.value.toString());
           debugPrint('validation failed');

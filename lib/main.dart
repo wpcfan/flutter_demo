@@ -46,21 +46,21 @@ class App extends StatelessWidget {
                     RegisterCubit(repository: context.read<AuthRepository>())),
           ],
           child: BlocBuilder<LoginCubit, LoginState>(
-            builder: (context, state) => AppView(),
+            builder: (context, state) =>
+                AppView(sharedPreferences: sharedPreferences),
           ),
         ));
   }
 }
 
 class AppView extends StatelessWidget with WidgetsBindingObserver {
-  AppView({Key? key}) : super(key: key);
-
+  AppView({Key? key, required this.sharedPreferences}) : super(key: key);
+  final SharedPreferences sharedPreferences;
   @override
   Widget build(BuildContext context) {
     // var brightness = WidgetsBinding.instance.window.platformBrightness;
     // context.read<ThemeCubit>().changeTheme(brightness);
-    final AppRouter appRouter =
-        AppRouter(AuthGuard(context.read<LoginCubit>()));
+    final AppRouter appRouter = AppRouter(AuthGuard(sharedPreferences));
     return BlocBuilder<ThemeCubit, ThemeData>(
       builder: (_, theme) {
         return MaterialApp.router(

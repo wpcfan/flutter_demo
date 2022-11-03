@@ -108,7 +108,7 @@ class RegisterPage extends StatelessWidget {
           onPressed: () {
             if (form.form.valid && state is! RegisterLoading) {
               context.read<RegisterCubit>().register(
-                  form.user!.username, form.user!.password, form.user!.phone);
+                  form.model.username, form.model.password, form.model.phone);
             } else {
               form.form.markAllAsTouched();
             }

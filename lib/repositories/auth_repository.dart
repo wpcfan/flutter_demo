@@ -19,17 +19,23 @@ class AuthRepository {
           'password': password,
           'phone': phone,
         }));
-    if (response.statusCode == 200) {
-      final json = jsonDecode(response.body);
-      final auth = Auth.fromJson(json);
-      final user = getMyInfoBySessionToken(auth.sessionToken);
-      return user;
+    switch (response.statusCode) {
+      case 201:
+        final json = jsonDecode(response.body);
+        final auth = Auth.fromJson(json);
+        final user = getMyInfoBySessionToken(auth.sessionToken);
+        return user;
+      case 400:
+        final json = jsonDecode(response.body);
+        final error = json['error'];
+        throw Exception(error);
+      default:
+        throw Exception('Failed to register');
     }
-    throw Exception('Failed to login.');
   }
 
   Future<User> login(String username, String password) async {
-    final response = await post(Uri.https(lcApiBase, '/login'),
+    final response = await post(Uri.https(lcApiBase, '/1.1/login'),
         headers: {
           'Content-Type': 'application/json; charset=UTF-8',
           'X-LC-Id': lcAppId,
@@ -39,16 +45,22 @@ class AuthRepository {
           'username': username,
           'password': password,
         }));
-    if (response.statusCode == 200) {
-      final json = jsonDecode(response.body);
-      return User.fromJson(json);
+    switch (response.statusCode) {
+      case 200:
+        final json = jsonDecode(response.body);
+        return User.fromJson(json);
+      case 400:
+        final json = jsonDecode(response.body);
+        final error = json['error'];
+        throw Exception(error);
+      default:
+        throw Exception('Failed to register');
     }
-    throw Exception('Failed to login.');
   }
 
   Future<User> getUser(String objectId) async {
     final response =
-        await get(Uri.https(lcApiBase, '/users/$objectId'), headers: {
+        await get(Uri.https(lcApiBase, '/1.1/users/$objectId'), headers: {
       'Content-Type': 'application/json; charset=UTF-8',
       'X-LC-Id': lcAppId,
       'X-LC-Key': lcAppKey
@@ -61,7 +73,7 @@ class AuthRepository {
   }
 
   Future<User> getMyInfoBySessionToken(String sessionToken) async {
-    final response = await get(Uri.https(lcApiBase, '/users/me'), headers: {
+    final response = await get(Uri.https(lcApiBase, '/1.1/users/me'), headers: {
       'Content-Type': 'application/json; charset=UTF-8',
       'X-LC-Id': lcAppId,
       'X-LC-Key': lcAppKey,
