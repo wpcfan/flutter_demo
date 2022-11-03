@@ -13,7 +13,7 @@ class RegisterPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return UserFormBuilder(
-      model: User('', '', ''),
+      model: User(),
       builder: (context, formModel, child) => Scaffold(
         appBar: AppBar(title: const Text('Register')),
         body: BlocListener<RegisterCubit, RegisterState>(
@@ -40,7 +40,7 @@ class RegisterPage extends StatelessWidget {
   void reducer(BuildContext context, RegisterState state) {
     if (state is RegisterSuccess) {
       context.read<LoadingProvider>().setLoad(false);
-      context.router.navigate(const Home());
+      context.router.navigate(const RootRoute());
     } else if (state is RegisterError) {
       context.read<LoadingProvider>().setLoad(false);
       ScaffoldMessenger.of(context)
@@ -107,8 +107,8 @@ class RegisterPage extends StatelessWidget {
         return ElevatedButton(
           onPressed: () {
             if (form.form.valid && state is! RegisterLoading) {
-              context.read<RegisterCubit>().register(
-                  form.model.username, form.model.password, form.model.phone);
+              context.read<RegisterCubit>().register(form.model.username!,
+                  form.model.password!, form.model.phone!);
             } else {
               form.form.markAllAsTouched();
             }

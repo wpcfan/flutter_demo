@@ -185,9 +185,9 @@ class UserForm implements FormModel<User> {
   String usernameControlPath() => pathBuilder(usernameControlName);
   String passwordControlPath() => pathBuilder(passwordControlName);
   String phoneControlPath() => pathBuilder(phoneControlName);
-  String get _usernameValue => usernameControl.value as String;
-  String get _passwordValue => passwordControl.value as String;
-  String get _phoneValue => phoneControl.value as String;
+  String? get _usernameValue => usernameControl?.value;
+  String? get _passwordValue => passwordControl?.value;
+  String? get _phoneValue => phoneControl?.value;
   bool get containsUsername {
     try {
       form.control(usernameControlPath());
@@ -215,111 +215,192 @@ class UserForm implements FormModel<User> {
     }
   }
 
-  Object? get usernameErrors => usernameControl.errors;
-  Object? get passwordErrors => passwordControl.errors;
-  Object? get phoneErrors => phoneControl.errors;
+  Object? get usernameErrors => usernameControl?.errors;
+  Object? get passwordErrors => passwordControl?.errors;
+  Object? get phoneErrors => phoneControl?.errors;
   void get usernameFocus => form.focus(usernameControlPath());
   void get passwordFocus => form.focus(passwordControlPath());
   void get phoneFocus => form.focus(phoneControlPath());
-  void usernameValueUpdate(
-    String value, {
+  void usernameRemove({
     bool updateParent = true,
     bool emitEvent = true,
   }) {
-    usernameControl.updateValue(value,
+    if (containsUsername) {
+      final controlPath = path;
+      if (controlPath == null) {
+        form.removeControl(
+          usernameControlName,
+          updateParent: updateParent,
+          emitEvent: emitEvent,
+        );
+      } else {
+        final formGroup = form.control(controlPath);
+
+        if (formGroup is FormGroup) {
+          formGroup.removeControl(
+            usernameControlName,
+            updateParent: updateParent,
+            emitEvent: emitEvent,
+          );
+        }
+      }
+    }
+  }
+
+  void passwordRemove({
+    bool updateParent = true,
+    bool emitEvent = true,
+  }) {
+    if (containsPassword) {
+      final controlPath = path;
+      if (controlPath == null) {
+        form.removeControl(
+          passwordControlName,
+          updateParent: updateParent,
+          emitEvent: emitEvent,
+        );
+      } else {
+        final formGroup = form.control(controlPath);
+
+        if (formGroup is FormGroup) {
+          formGroup.removeControl(
+            passwordControlName,
+            updateParent: updateParent,
+            emitEvent: emitEvent,
+          );
+        }
+      }
+    }
+  }
+
+  void phoneRemove({
+    bool updateParent = true,
+    bool emitEvent = true,
+  }) {
+    if (containsPhone) {
+      final controlPath = path;
+      if (controlPath == null) {
+        form.removeControl(
+          phoneControlName,
+          updateParent: updateParent,
+          emitEvent: emitEvent,
+        );
+      } else {
+        final formGroup = form.control(controlPath);
+
+        if (formGroup is FormGroup) {
+          formGroup.removeControl(
+            phoneControlName,
+            updateParent: updateParent,
+            emitEvent: emitEvent,
+          );
+        }
+      }
+    }
+  }
+
+  void usernameValueUpdate(
+    String? value, {
+    bool updateParent = true,
+    bool emitEvent = true,
+  }) {
+    usernameControl?.updateValue(value,
         updateParent: updateParent, emitEvent: emitEvent);
   }
 
   void passwordValueUpdate(
-    String value, {
+    String? value, {
     bool updateParent = true,
     bool emitEvent = true,
   }) {
-    passwordControl.updateValue(value,
+    passwordControl?.updateValue(value,
         updateParent: updateParent, emitEvent: emitEvent);
   }
 
   void phoneValueUpdate(
-    String value, {
+    String? value, {
     bool updateParent = true,
     bool emitEvent = true,
   }) {
-    phoneControl.updateValue(value,
+    phoneControl?.updateValue(value,
         updateParent: updateParent, emitEvent: emitEvent);
   }
 
   void usernameValuePatch(
-    String value, {
+    String? value, {
     bool updateParent = true,
     bool emitEvent = true,
   }) {
-    usernameControl.patchValue(value,
+    usernameControl?.patchValue(value,
         updateParent: updateParent, emitEvent: emitEvent);
   }
 
   void passwordValuePatch(
-    String value, {
+    String? value, {
     bool updateParent = true,
     bool emitEvent = true,
   }) {
-    passwordControl.patchValue(value,
+    passwordControl?.patchValue(value,
         updateParent: updateParent, emitEvent: emitEvent);
   }
 
   void phoneValuePatch(
-    String value, {
+    String? value, {
     bool updateParent = true,
     bool emitEvent = true,
   }) {
-    phoneControl.patchValue(value,
+    phoneControl?.patchValue(value,
         updateParent: updateParent, emitEvent: emitEvent);
   }
 
   void usernameValueReset(
-    String value, {
+    String? value, {
     bool updateParent = true,
     bool emitEvent = true,
     bool removeFocus = false,
     bool? disabled,
   }) =>
-      usernameControl.reset(
+      usernameControl?.reset(
           value: value, updateParent: updateParent, emitEvent: emitEvent);
   void passwordValueReset(
-    String value, {
+    String? value, {
     bool updateParent = true,
     bool emitEvent = true,
     bool removeFocus = false,
     bool? disabled,
   }) =>
-      passwordControl.reset(
+      passwordControl?.reset(
           value: value, updateParent: updateParent, emitEvent: emitEvent);
   void phoneValueReset(
-    String value, {
+    String? value, {
     bool updateParent = true,
     bool emitEvent = true,
     bool removeFocus = false,
     bool? disabled,
   }) =>
-      phoneControl.reset(
+      phoneControl?.reset(
           value: value, updateParent: updateParent, emitEvent: emitEvent);
-  FormControl<String> get usernameControl =>
-      form.control(usernameControlPath()) as FormControl<String>;
-  FormControl<String> get passwordControl =>
-      form.control(passwordControlPath()) as FormControl<String>;
-  FormControl<String> get phoneControl =>
-      form.control(phoneControlPath()) as FormControl<String>;
+  FormControl<String>? get usernameControl => containsUsername
+      ? form.control(usernameControlPath()) as FormControl<String>?
+      : null;
+  FormControl<String>? get passwordControl => containsPassword
+      ? form.control(passwordControlPath()) as FormControl<String>?
+      : null;
+  FormControl<String>? get phoneControl => containsPhone
+      ? form.control(phoneControlPath()) as FormControl<String>?
+      : null;
   void usernameSetDisabled(
     bool disabled, {
     bool updateParent = true,
     bool emitEvent = true,
   }) {
     if (disabled) {
-      usernameControl.markAsDisabled(
+      usernameControl?.markAsDisabled(
         updateParent: updateParent,
         emitEvent: emitEvent,
       );
     } else {
-      usernameControl.markAsEnabled(
+      usernameControl?.markAsEnabled(
         updateParent: updateParent,
         emitEvent: emitEvent,
       );
@@ -332,12 +413,12 @@ class UserForm implements FormModel<User> {
     bool emitEvent = true,
   }) {
     if (disabled) {
-      passwordControl.markAsDisabled(
+      passwordControl?.markAsDisabled(
         updateParent: updateParent,
         emitEvent: emitEvent,
       );
     } else {
-      passwordControl.markAsEnabled(
+      passwordControl?.markAsEnabled(
         updateParent: updateParent,
         emitEvent: emitEvent,
       );
@@ -350,12 +431,12 @@ class UserForm implements FormModel<User> {
     bool emitEvent = true,
   }) {
     if (disabled) {
-      phoneControl.markAsDisabled(
+      phoneControl?.markAsDisabled(
         updateParent: updateParent,
         emitEvent: emitEvent,
       );
     } else {
-      phoneControl.markAsEnabled(
+      phoneControl?.markAsEnabled(
         updateParent: updateParent,
         emitEvent: emitEvent,
       );
@@ -368,7 +449,16 @@ class UserForm implements FormModel<User> {
         'Prefer not to call `model` on non-valid form it could cause unexpected exceptions in case you created a non-nullable field in model and expect it to be guarded by some kind of `required` validator.',
       );
     }
-    return User(_usernameValue, _passwordValue, _phoneValue);
+    return User(
+        username: _usernameValue,
+        password: _passwordValue,
+        phone: _phoneValue,
+        objectId: user?.objectId,
+        sessionToken: user?.sessionToken,
+        updatedAt: user?.updatedAt,
+        createdAt: user?.createdAt,
+        emailVerified: user?.emailVerified,
+        mobilePhoneVerified: user?.mobilePhoneVerified);
   }
 
   UserForm copyWithPath(String? path) {
@@ -406,7 +496,7 @@ class UserForm implements FormModel<User> {
   FormGroup formElements() => FormGroup({
         usernameControlName: FormControl<String>(
             value: user?.username,
-            validators: [requiredValidator],
+            validators: [requiredValidator, minLengthValidator],
             asyncValidators: [],
             asyncValidatorsDebounceTime: 250,
             disabled: false,

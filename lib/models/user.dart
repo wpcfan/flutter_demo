@@ -5,9 +5,9 @@ part 'user.gform.dart';
 
 @ReactiveFormAnnotation()
 class User {
-  final String username;
-  final String password;
-  final String phone;
+  String? username;
+  String? password;
+  String? phone;
   String? objectId;
   String? sessionToken;
   DateTime? updatedAt;
@@ -15,18 +15,36 @@ class User {
   bool? emailVerified;
   bool? mobilePhoneVerified;
 
-  User(
-    @FormControlAnnotation(validators: [requiredValidator]) this.username,
-    @FormControlAnnotation(validators: [requiredValidator]) this.password,
-    @FormControlAnnotation(validators: [requiredValidator]) this.phone,
-  );
+  User({
+    @FormControlAnnotation(
+      validators: [requiredValidator, minLengthValidator],
+    )
+        this.username,
+    @FormControlAnnotation(
+      validators: [
+        requiredValidator,
+      ],
+    )
+        this.password,
+    @FormControlAnnotation(
+      validators: [
+        requiredValidator,
+      ],
+    )
+        this.phone,
+    this.objectId,
+    this.sessionToken,
+    this.updatedAt,
+    this.createdAt,
+    this.emailVerified,
+    this.mobilePhoneVerified,
+  });
 
   factory User.fromJson(Map<String, dynamic> json) {
-    return User(
-      json['username'] as String,
-      json['password'] as String,
-      json['phone'] as String,
-    )
+    return User()
+      ..username = json['username'] as String?
+      ..password = json['password'] as String?
+      ..phone = json['password'] as String?
       ..objectId = json['objectId'] as String?
       ..sessionToken = json['sessionToken'] as String?
       ..updatedAt = json['updatedAt'] == null

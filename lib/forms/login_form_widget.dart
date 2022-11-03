@@ -31,7 +31,7 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
   void reducer(BuildContext context, LoginState state) {
     if (state is LoginSuccess) {
       context.read<LoadingProvider>().setLoad(false);
-      context.router.navigate(const Home());
+      context.router.navigate(const RootRoute());
     } else if (state is LoginError) {
       context.read<LoadingProvider>().setLoad(false);
       ScaffoldMessenger.of(context)

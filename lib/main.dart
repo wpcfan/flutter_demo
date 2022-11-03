@@ -1,7 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:demo/repositories/all.dart';
 import 'package:demo/router/app_router.dart';
-import 'package:demo/router/guards/auth_guard.dart';
 import 'package:demo/states/all.dart';
 import 'package:demo/states/register_cubit.dart';
 import 'package:demo/widgets/loading_overlay/loading_widget.dart';
@@ -40,6 +39,9 @@ class App extends StatelessWidget {
           providers: [
             BlocProvider(create: (context) => ThemeCubit()),
             BlocProvider(create: (context) => MessageCubit()),
+            BlocProvider<TodoCubit>(
+                create: (context) =>
+                    TodoCubit(repository: context.read<TodoRepository>())),
             BlocProvider(
                 create: (context) =>
                     LoginCubit(repository: context.read<AuthRepository>())),
@@ -62,7 +64,8 @@ class AppView extends StatelessWidget with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     // var brightness = WidgetsBinding.instance.window.platformBrightness;
     // context.read<ThemeCubit>().changeTheme(brightness);
-    final AppRouter appRouter = AppRouter(AuthGuard(sharedPreferences));
+    // final AppRouter appRouter = AppRouter(AuthGuard(sharedPreferences));
+    final AppRouter appRouter = AppRouter();
     return BlocBuilder<ThemeCubit, ThemeData>(
       builder: (_, theme) {
         return MaterialApp.router(

@@ -9,12 +9,20 @@ class ThemeCubit extends Cubit<ThemeData> {
     floatingActionButtonTheme: const FloatingActionButtonThemeData(
       foregroundColor: Colors.white,
     ),
+    bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+      selectedItemColor: Colors.blue,
+      unselectedItemColor: Colors.grey,
+    ),
     brightness: Brightness.light,
   );
 
   static final _darkTheme = ThemeData(
     floatingActionButtonTheme: const FloatingActionButtonThemeData(
       foregroundColor: Colors.black,
+    ),
+    bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+      selectedItemColor: Colors.green,
+      unselectedItemColor: Colors.grey,
     ),
     brightness: Brightness.dark,
   );
