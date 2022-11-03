@@ -5,28 +5,13 @@ import 'package:demo/router/guards/auth_guard.dart';
 import 'package:demo/states/login_cubit.dart';
 import 'package:demo/states/message_cubit.dart';
 import 'package:demo/states/theme_cubit.dart';
-import 'package:demo/states/todo_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'observers/nav_observer.dart';
-
-class AppBlocObserver extends BlocObserver {
-  @override
-  void onChange(BlocBase bloc, Change change) {
-    super.onChange(bloc, change);
-    if (bloc is Cubit) print(change);
-  }
-
-  @override
-  void onTransition(Bloc bloc, Transition transition) {
-    super.onTransition(bloc, transition);
-    print(transition);
-  }
-}
+import 'observers/all.dart';
 
 void main() async {
   Bloc.observer = AppBlocObserver();
@@ -52,9 +37,6 @@ class App extends StatelessWidget {
             BlocProvider(create: (context) => ThemeCubit()),
             BlocProvider(create: (context) => MessageCubit()),
             BlocProvider(create: (context) => LoginCubit()),
-            BlocProvider(
-                create: (context) =>
-                    TodoCubit(repository: context.read<TodoRepository>()))
           ],
           child: BlocBuilder<LoginCubit, LoginState>(
             builder: (context, state) => AppView(),

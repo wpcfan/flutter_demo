@@ -1,3 +1,4 @@
+import 'package:demo/repositories/todo_repository.dart';
 import 'package:demo/states/todo_cubit.dart';
 import 'package:demo/widgets/no_data_widget.dart';
 import 'package:demo/widgets/todo_list_widget.dart';
@@ -11,9 +12,13 @@ class TodoPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     context.read<TodoCubit>().getTodos();
-    return BlocBuilder<TodoCubit, TodoState>(
-      builder: (context, state) => reducer(state),
-      buildWhen: (previous, current) => current is TodoLoaded,
+    return BlocProvider<TodoCubit>(
+      create: (context) =>
+          TodoCubit(repository: context.read<TodoRepository>()),
+      child: BlocBuilder<TodoCubit, TodoState>(
+        builder: (context, state) => reducer(state),
+        buildWhen: (previous, current) => current is TodoLoaded,
+      ),
     );
   }
 
