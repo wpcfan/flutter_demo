@@ -7,6 +7,7 @@ import 'package:demo/states/message_cubit.dart';
 import 'package:demo/states/theme_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -64,7 +65,7 @@ class AppView extends StatelessWidget with WidgetsBindingObserver {
             FormBuilderLocalizations.delegate,
             GlobalWidgetsLocalizations.delegate,
           ],
-          supportedLocales: FormBuilderLocalizations.delegate.supportedLocales,
+          supportedLocales: AppLocalizations.supportedLocales,
           routerDelegate: AutoRouterDelegate(appRouter,
               navigatorObservers: () => [
                     NavObserver(),
