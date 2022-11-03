@@ -7,6 +7,7 @@ import 'package:demo/states/register_cubit.dart';
 import 'package:demo/widgets/loading_overlay/loading_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
@@ -17,6 +18,7 @@ import 'observers/all.dart';
 void main() async {
   Bloc.observer = AppBlocObserver();
   WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load(fileName: ".env");
   final SharedPreferences prefs = await SharedPreferences.getInstance();
   runApp(App(
     sharedPreferences: prefs,

@@ -1,3 +1,5 @@
-String get lcAppId => 'xvE7lpziyTMBjKCmfqbyjNKh-gzGzoHsz';
-String get lcAppKey => '25wuss1uvHYt7dQbreGfojB2';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+
+String get lcAppId => dotenv.env['LC_APP_ID'] ?? '';
+String get lcAppKey => dotenv.env['LC_APP_KEY'] ?? '';
 String get lcApiBase => 'feeds.twigcodes.com';
