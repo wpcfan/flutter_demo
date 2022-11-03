@@ -1,10 +1,9 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:demo/repositories/todo_repository.dart';
+import 'package:demo/repositories/all.dart';
 import 'package:demo/router/app_router.dart';
 import 'package:demo/router/guards/auth_guard.dart';
-import 'package:demo/states/login_cubit.dart';
-import 'package:demo/states/message_cubit.dart';
-import 'package:demo/states/theme_cubit.dart';
+import 'package:demo/states/all.dart';
+import 'package:demo/states/register_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -32,12 +31,18 @@ class App extends StatelessWidget {
     return MultiRepositoryProvider(
         providers: [
           RepositoryProvider(create: (context) => TodoRepository()),
+          RepositoryProvider(create: (context) => AuthRepository()),
         ],
         child: MultiBlocProvider(
           providers: [
             BlocProvider(create: (context) => ThemeCubit()),
             BlocProvider(create: (context) => MessageCubit()),
-            BlocProvider(create: (context) => LoginCubit()),
+            BlocProvider(
+                create: (context) =>
+                    LoginCubit(repository: context.read<AuthRepository>())),
+            BlocProvider(
+                create: (context) =>
+                    RegisterCubit(repository: context.read<AuthRepository>())),
           ],
           child: BlocBuilder<LoginCubit, LoginState>(
             builder: (context, state) => AppView(),

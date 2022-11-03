@@ -1,10 +1,19 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:demo/models/user.dart';
+import 'package:demo/states/all.dart';
+import 'package:demo/states/register_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:reactive_forms/reactive_forms.dart';
 
-class RegisterPage extends StatelessWidget {
+class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
 
+  @override
+  State<RegisterPage> createState() => _RegisterPageState();
+}
+
+class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     return UserFormBuilder(
@@ -54,16 +63,38 @@ class RegisterPage extends StatelessWidget {
               const SizedBox(height: 16),
               ReactiveUserFormConsumer(builder: (context, form, child) {
                 return ElevatedButton(
-                  onPressed: form.form.valid
-                      ? () {
-                          debugPrint(form.model.username);
-                          debugPrint(form.model.username);
-                          debugPrint(form.model.password);
-                        }
-                      : null,
-                  child: const Text('Submit'),
+                  onPressed: () {
+                    if (form.form.valid) {
+                      context.read<RegisterCubit>().register(
+                          form.user!.username,
+                          form.user!.password,
+                          form.user!.phone);
+                    } else {
+                      form.form.markAllAsTouched();
+                    }
+                  },
+                  child: const Text('Register'),
                 );
               }),
+              Center(
+                child: BlocConsumer<RegisterCubit, RegisterState>(
+                  listener: (context, state) {
+                    if (state is RegisterSuccess) {
+                      context.router.pop();
+                    }
+                  },
+                  builder: (context, state) {
+                    if (state is RegisterLoading) {
+                      return const CircularProgressIndicator();
+                    } else if (state is RegisterError) {
+                      context.read<MessageCubit>().showMessage(state.message);
+                      return Text(state.message);
+                    } else {
+                      return const SizedBox();
+                    }
+                  },
+                ),
+              ),
             ],
           ),
         ),

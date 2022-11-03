@@ -1,37 +1,22 @@
+import 'package:demo/models/all.dart';
+import 'package:demo/repositories/all.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 // ignore: depend_on_referenced_packages
 import 'package:meta/meta.dart';
-import 'package:rxdart/rxdart.dart';
 
 part 'login_state.dart';
 
 class LoginCubit extends Cubit<LoginState> {
-  LoginCubit() : super(LoginInitial());
+  LoginCubit({required this.repository}) : super(LoginInitial());
+  final AuthRepository repository;
 
-  final usernameController = BehaviorSubject<String>();
-  final passwordController = BehaviorSubject<String>();
-
-  Stream<String> get usernameStream => usernameController.stream;
-  Stream<String> get passwordStream => passwordController.stream;
-
-  void updateUsername(String username) {
-    if (username.length < 4) {
-      usernameController.sink
-          .addError('Username must be at least 4 characters');
-    } else {
-      usernameController.sink.add(username);
+  void login(String username, String password) async {
+    emit(LoginLoading());
+    try {
+      final user = await repository.login(username, password);
+      emit(LoginSuccess(user: user));
+    } catch (e) {
+      emit(LoginError(e.toString()));
     }
   }
-
-  void updatePassword(String password) {
-    if (password.length < 4) {
-      passwordController.sink
-          .addError('Password must be at least 4 characters');
-    } else {
-      passwordController.sink.add(password);
-    }
-  }
-
-  Stream<bool> get submitValid =>
-      Rx.combineLatest2(usernameStream, passwordStream, (a, b) => true);
 }

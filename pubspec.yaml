@@ -48,7 +48,7 @@ dependencies:
   form_builder_validators: ^8.3.0
   reactive_forms: ^14.1.0
   reactive_forms_annotations: ^0.13.0-beta
-  
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
