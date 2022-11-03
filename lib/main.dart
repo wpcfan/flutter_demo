@@ -4,6 +4,7 @@ import 'package:demo/router/app_router.dart';
 import 'package:demo/router/guards/auth_guard.dart';
 import 'package:demo/states/all.dart';
 import 'package:demo/states/register_cubit.dart';
+import 'package:demo/widgets/loading_overlay/loading_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -63,6 +64,7 @@ class AppView extends StatelessWidget with WidgetsBindingObserver {
     return BlocBuilder<ThemeCubit, ThemeData>(
       builder: (_, theme) {
         return MaterialApp.router(
+          builder: LoadingScreen.init(),
           debugShowCheckedModeBanner: false,
           theme: theme,
           localizationsDelegates: const [
