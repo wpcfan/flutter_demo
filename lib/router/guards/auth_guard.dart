@@ -13,8 +13,10 @@ class AuthGuard extends AutoRouteGuard {
     if (perfs.getString('sessionToken') != null) {
       resolver.next(true);
     } else {
-      debugPrint('AuthGuard: current route -- ${router.currentPath}');
-      perfs.setString(PERF_KEY_ROUTE_BEFORE_LOGIN, router.currentPath);
+      if (restoreLastRouteBeforeLogin) {
+        debugPrint('AuthGuard: current route -- ${router.currentPath}');
+        perfs.setString(PERF_KEY_ROUTE_BEFORE_LOGIN, router.currentPath);
+      }
       router.push(const Login()).then((value) {
         resolver.next(false);
       });
