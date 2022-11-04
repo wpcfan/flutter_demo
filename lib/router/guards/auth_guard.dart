@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class AuthGuard extends AutoRouteGuard {
   final SharedPreferences perfs;
   AuthGuard(this.perfs);
+
   @override
   void onNavigation(NavigationResolver resolver, StackRouter router) {
     if (perfs.getString('sessionToken') != null) {

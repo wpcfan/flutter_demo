@@ -14,6 +14,7 @@ class TabbarWidget extends StatelessWidget {
       onTap: (index) {
         tabsRouter.setActiveIndex(index);
       },
+      type: BottomNavigationBarType.fixed,
     );
   }
 }
