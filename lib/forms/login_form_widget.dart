@@ -37,7 +37,7 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
         SharedPreferences.getInstance().then((perfs) {
           final String route =
               perfs.getString(PERF_KEY_ROUTE_BEFORE_LOGIN) ?? '/';
-          context.router.navigateNamed(route);
+          context.router.popUntilRouteWithName(route);
         });
       } else {
         context.router.navigate(const RootRoute());
@@ -144,7 +144,7 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
   Widget navRegisterButton(BuildContext context) {
     return TextButton(
       onPressed: () {
-        context.router.pushNamed('/register-page');
+        context.router.replaceNamed('/register-page');
       },
       child: const Text('Register'),
     );
