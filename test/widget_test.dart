@@ -6,6 +6,8 @@
 // tree, read text, and verify that the values of widget properties are correct.
 
 import 'package:demo/main.dart';
+import 'package:demo/router/app_router.dart';
+import 'package:demo/router/guards/auth_guard.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -14,8 +16,10 @@ void main() {
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
     // Build our app and trigger a frame.
     final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final appRouter = AppRouter(AuthGuard(prefs));
     await tester.pumpWidget(App(
       sharedPreferences: prefs,
+      appRouter: appRouter,
     ));
 
     // Verify that our counter starts at 0.
