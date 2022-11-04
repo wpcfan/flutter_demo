@@ -1,11 +1,12 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:demo/router/app_router.dart';
+import 'package:demo/config.dart';
 import 'package:demo/states/login_cubit.dart';
 import 'package:demo/widgets/loading_overlay/loading_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginFormWidget extends StatefulWidget {
   const LoginFormWidget({super.key});
@@ -31,7 +32,11 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
   void loginStateListener(BuildContext context, LoginState state) {
     if (state is LoginSuccess) {
       context.read<LoadingProvider>().setLoad(false);
-      context.router.navigate(const RootRoute());
+      SharedPreferences.getInstance().then((perfs) {
+        final String route =
+            perfs.getString(PERF_KEY_ROUTE_BEFORE_LOGIN) ?? '/';
+        context.router.navigateNamed(route);
+      });
     } else if (state is LoginError) {
       context.read<LoadingProvider>().setLoad(false);
       ScaffoldMessenger.of(context)
