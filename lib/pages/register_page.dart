@@ -17,7 +17,7 @@ class RegisterPage extends StatelessWidget {
       builder: (context, formModel, child) => Scaffold(
         appBar: AppBar(title: const Text('Register')),
         body: BlocListener<RegisterCubit, RegisterState>(
-          listener: reducer,
+          listener: registerStateListener,
           child: Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(
@@ -37,7 +37,7 @@ class RegisterPage extends StatelessWidget {
     );
   }
 
-  void reducer(BuildContext context, RegisterState state) {
+  void registerStateListener(BuildContext context, RegisterState state) {
     if (state is RegisterSuccess) {
       context.read<LoadingProvider>().setLoad(false);
       context.router.navigate(const RootRoute());

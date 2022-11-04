@@ -23,12 +23,12 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
   @override
   Widget build(BuildContext context) {
     return BlocListener<LoginCubit, LoginState>(
-      listener: reducer,
+      listener: loginStateListener,
       child: form(context),
     );
   }
 
-  void reducer(BuildContext context, LoginState state) {
+  void loginStateListener(BuildContext context, LoginState state) {
     if (state is LoginSuccess) {
       context.read<LoadingProvider>().setLoad(false);
       context.router.navigate(const RootRoute());
