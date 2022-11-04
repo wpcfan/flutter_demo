@@ -25,7 +25,7 @@ part 'app_router.gr.dart';
     AutoRoute(page: LoginPage, name: 'login'),
     AutoRoute(page: RegisterPage, name: 'register'),
     AutoRoute(page: SplashPage, name: 'splash'),
-    AutoRoute(page: ErrorPage, name: 'error'),
+    AutoRoute(page: ErrorPage, path: '*'),
   ],
 )
 // extend the generated private router

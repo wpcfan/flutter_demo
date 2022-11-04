@@ -52,8 +52,9 @@ class _$AppRouter extends RootStackRouter {
         child: const SplashPage(),
       );
     },
-    Error.name: (routeData) {
-      final args = routeData.argsAs<ErrorArgs>(orElse: () => const ErrorArgs());
+    ErrorRoute.name: (routeData) {
+      final args = routeData.argsAs<ErrorRouteArgs>(
+          orElse: () => const ErrorRouteArgs());
       return MaterialPageX<dynamic>(
         routeData: routeData,
         child: ErrorPage(
@@ -134,8 +135,8 @@ class _$AppRouter extends RootStackRouter {
           path: '/splash-page',
         ),
         RouteConfig(
-          Error.name,
-          path: '/error-page',
+          ErrorRoute.name,
+          path: '*',
         ),
       ];
 }
@@ -203,24 +204,24 @@ class Splash extends PageRouteInfo<void> {
 
 /// generated route for
 /// [ErrorPage]
-class Error extends PageRouteInfo<ErrorArgs> {
-  Error({
+class ErrorRoute extends PageRouteInfo<ErrorRouteArgs> {
+  ErrorRoute({
     Key? key,
     String? error,
   }) : super(
-          Error.name,
-          path: '/error-page',
-          args: ErrorArgs(
+          ErrorRoute.name,
+          path: '*',
+          args: ErrorRouteArgs(
             key: key,
             error: error,
           ),
         );
 
-  static const String name = 'Error';
+  static const String name = 'ErrorRoute';
 }
 
-class ErrorArgs {
-  const ErrorArgs({
+class ErrorRouteArgs {
+  const ErrorRouteArgs({
     this.key,
     this.error,
   });
@@ -231,7 +232,7 @@ class ErrorArgs {
 
   @override
   String toString() {
-    return 'ErrorArgs{key: $key, error: $error}';
+    return 'ErrorRouteArgs{key: $key, error: $error}';
   }
 }
 
