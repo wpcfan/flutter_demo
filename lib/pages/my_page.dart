@@ -8,17 +8,42 @@ class MyPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      alignment: FractionalOffset.center,
-      child: ElevatedButton(
-        onPressed: () async {
-          final perfs = await SharedPreferences.getInstance();
-          if (perfs.containsKey('sessionToken')) {
-            perfs.remove('sessionToken');
-          }
-          context.router.navigate(const RootRoute());
-        },
-        child: const Text('Logout'),
+    return SizedBox.expand(
+      child: Stack(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(5.0),
+            alignment: Alignment.bottomCenter,
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: <Color>[
+                  Colors.black.withAlpha(0),
+                  Colors.black12,
+                  Colors.black45
+                ],
+              ),
+            ),
+            child: const Text(
+              'Foreground Text',
+              style: TextStyle(color: Colors.white, fontSize: 20.0),
+            ),
+          ),
+          Container(
+            alignment: FractionalOffset.center,
+            child: ElevatedButton(
+              onPressed: () async {
+                final perfs = await SharedPreferences.getInstance();
+                if (perfs.containsKey('sessionToken')) {
+                  perfs.remove('sessionToken');
+                }
+                context.router.navigate(const RootRoute());
+              },
+              child: const Text('Logout'),
+            ),
+          ),
+        ],
       ),
     );
   }
