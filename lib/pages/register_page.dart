@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:demo/models/user.dart';
+import 'package:demo/repositories/all.dart';
 import 'package:demo/router/app_router.dart';
 import 'package:demo/states/register_cubit.dart';
 import 'package:demo/widgets/loading_overlay/loading_provider.dart';
@@ -7,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:reactive_forms/reactive_forms.dart';
 
-class RegisterPage extends StatelessWidget {
+class RegisterPage extends StatelessWidget implements AutoRouteWrapper {
   const RegisterPage({super.key});
 
   @override
@@ -117,5 +118,14 @@ class RegisterPage extends StatelessWidget {
         );
       });
     });
+  }
+
+  @override
+  Widget wrappedRoute(BuildContext context) {
+    return BlocProvider<RegisterCubit>(
+      create: (context) =>
+          RegisterCubit(repository: context.read<AuthRepository>()),
+      child: this,
+    );
   }
 }

@@ -38,7 +38,7 @@ class MyPage extends StatelessWidget {
                 if (perfs.containsKey('sessionToken')) {
                   perfs.remove('sessionToken');
                 }
-                context.router.push(const RootRoute());
+                context.router.popUntilRoot();
               },
               child: const Text('Logout'),
             ),

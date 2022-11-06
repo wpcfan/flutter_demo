@@ -18,36 +18,29 @@ class App extends StatelessWidget {
       child: MultiBlocProvider(
         providers: [
           BlocProvider(create: (context) => ThemeCubit()),
-          BlocProvider(
-              create: (context) =>
-                  LoginCubit(repository: context.read<AuthRepository>())),
-          BlocProvider(
-              create: (context) =>
-                  RegisterCubit(repository: context.read<AuthRepository>())),
+          BlocProvider(create: (context) => MessageCubit()),
         ],
-        child: BlocBuilder<LoginCubit, LoginState>(
-          builder: (context, state) => BlocBuilder<ThemeCubit, ThemeData>(
-            builder: (_, theme) {
-              return MaterialApp.router(
-                builder: LoadingScreen.init(),
-                debugShowCheckedModeBanner: false,
-                theme: theme,
-                localizationsDelegates: const [
-                  ...GlobalMaterialLocalizations.delegates,
-                  FormBuilderLocalizations.delegate,
-                  GlobalWidgetsLocalizations.delegate,
+        child: BlocBuilder<ThemeCubit, ThemeData>(
+          builder: (_, theme) {
+            return MaterialApp.router(
+              builder: LoadingScreen.init(),
+              debugShowCheckedModeBanner: false,
+              theme: theme,
+              localizationsDelegates: const [
+                ...GlobalMaterialLocalizations.delegates,
+                FormBuilderLocalizations.delegate,
+                GlobalWidgetsLocalizations.delegate,
+              ],
+              supportedLocales: AppLocalizations.supportedLocales,
+              routerDelegate: AutoRouterDelegate(
+                appRouter,
+                navigatorObservers: () => [
+                  NavObserver(),
                 ],
-                supportedLocales: AppLocalizations.supportedLocales,
-                routerDelegate: AutoRouterDelegate(
-                  appRouter,
-                  navigatorObservers: () => [
-                    NavObserver(),
-                  ],
-                ),
-                routeInformationParser: appRouter.defaultRouteParser(),
-              );
-            },
-          ),
+              ),
+              routeInformationParser: appRouter.defaultRouteParser(),
+            );
+          },
         ),
       ),
     );
