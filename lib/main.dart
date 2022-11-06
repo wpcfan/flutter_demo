@@ -1,7 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:demo/repositories/all.dart';
 import 'package:demo/router/app_router.dart';
-import 'package:demo/router/guards/auth_guard.dart';
+import 'package:demo/router/guards/all.dart';
 import 'package:demo/states/all.dart';
 import 'package:demo/states/register_cubit.dart';
 import 'package:demo/widgets/loading_overlay/loading_widget.dart';

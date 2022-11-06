@@ -45,18 +45,18 @@ class SplashBloc extends Bloc<SplashEvent, SplashState> {
   @override
   void onChange(Change<SplashState> change) {
     super.onChange(change);
-    print(change);
+    debugPrint(change.toString());
   }
 
   @override
   void onTransition(Transition<SplashEvent, SplashState> transition) {
-    print(transition);
+    debugPrint(transition.toString());
     super.onTransition(transition);
   }
 
   @override
   void onError(Object error, StackTrace stackTrace) {
-    print('$error, $stackTrace');
+    debugPrint('$error, $stackTrace');
     super.onError(error, stackTrace);
   }
 }

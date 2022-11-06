@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:demo/pages/all.dart';
 import 'package:demo/router/guards/auth_guard.dart';
+import 'package:demo/router/guards/splash_guard.dart';
 import 'package:flutter/material.dart';
 
 part 'app_router.gr.dart';
