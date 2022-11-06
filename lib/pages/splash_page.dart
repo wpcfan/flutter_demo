@@ -23,25 +23,32 @@ class SplashPage extends StatelessWidget {
           onTap: () {
             context.read<SplashBloc>().add(const SplashStop());
           },
-          child: Stack(
-            children: [
-              Container(
-                alignment: FractionalOffset.center,
-                child: Image.network('$placeholderUri/150'),
-              ),
-              BlocBuilder<SplashBloc, SplashState>(builder: (context, state) {
-                return Container(
-                  color: Colors.grey,
-                  width: 60,
-                  height: 20,
+          child: SafeArea(
+            child: Stack(
+              children: [
+                Container(
+                  alignment: FractionalOffset.center,
+                  child: Image.network('$placeholderUri/150'),
+                ),
+                Container(
                   alignment: FractionalOffset.topRight,
-                  child: Text(
-                    '${state.count}',
-                    style: const TextStyle(color: Colors.white),
-                  ),
-                );
-              })
-            ],
+                  padding: const EdgeInsets.all(16),
+                  child: BlocBuilder<SplashBloc, SplashState>(
+                      builder: (context, state) {
+                    return Container(
+                      color: Colors.grey,
+                      width: 60,
+                      height: 20,
+                      alignment: Alignment.center,
+                      child: Text(
+                        '${state.count}',
+                        style: const TextStyle(color: Colors.white),
+                      ),
+                    );
+                  }),
+                )
+              ],
+            ),
           ),
         )),
       ),
