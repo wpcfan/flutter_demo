@@ -1,4 +1,4 @@
-part of 'splash_cubit.dart';
+part of 'splash_bloc.dart';
 
 @immutable
 abstract class SplashState extends Equatable {
@@ -7,13 +7,13 @@ abstract class SplashState extends Equatable {
 }
 
 class SplashInitial extends SplashState {
-  const SplashInitial() : super(count: 5);
+  const SplashInitial() : super(count: splashDuration);
   @override
   List<Object?> get props => [];
 }
 
-class SplashCountdown extends SplashState {
-  const SplashCountdown({required int count}) : super(count: count);
+class SplashCounting extends SplashState {
+  const SplashCounting({required int count}) : super(count: count);
 
   @override
   List<Object?> get props => [count];

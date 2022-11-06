@@ -6,3 +6,4 @@ String get lcApiBase => 'feeds.twigcodes.com';
 String get placeholderUri => 'https://via.placeholder.com';
 String get perfKeyRouteBeforeLogin => 'routeBeforeLogin';
 bool get restoreLastRouteBeforeLogin => true;
+const int splashDuration = 5;

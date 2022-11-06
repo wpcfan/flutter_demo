@@ -1,41 +1,55 @@
 import 'dart:async';
 
+import 'package:demo/config.dart';
+import 'package:equatable/equatable.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-abstract class SplashEvent {
-  const SplashEvent();
-}
+part 'splash_events.dart';
+part 'splash_state.dart';
 
-class SplashCountdown extends SplashEvent {
-  const SplashCountdown();
-}
+class SplashBloc extends Bloc<SplashEvent, SplashState> {
+  SplashBloc() : super(const SplashInitial()) {
+    on<SplashStart>(_onSplashStart);
+    on<SplashStop>(_onSplashStop);
+    on<SplashCountdown>(_onSplashCountdown);
+    add(const SplashStart(splashDuration));
+  }
 
-class SplashComplete extends SplashEvent {
-  const SplashComplete();
-}
-
-class SplashBloc extends Bloc<SplashEvent, int> {
-  StreamSubscription<int>? _tickerSubscription;
-  SplashBloc() : super(5) {
-    on<SplashCountdown>((event, emit) {
-      Stream.periodic(const Duration(seconds: 1), (x) => x)
-          .take(state)
-          .map((count) => state - count - 1)
-          .listen((count) => emit(count));
-    });
-    on<SplashComplete>((event, emit) {
-      emit(0);
+  void _onSplashStart(SplashStart event, Emitter<SplashState> emit) {
+    Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (timer.tick >= event.duration) {
+        timer.cancel();
+        add(const SplashStop());
+      } else {
+        add(SplashCountdown(event.duration - timer.tick));
+      }
+      debugPrint(
+          'timer tick: ${timer.tick}, state count: ${state.count}, event duration: ${event.duration}');
     });
   }
 
+  void _onSplashCountdown(SplashCountdown event, Emitter<SplashState> emit) {
+    emit(SplashCounting(count: event.count));
+  }
+
+  void _onSplashStop(SplashStop event, Emitter<SplashState> emit) {
+    emit(const SplashComplete());
+  }
+
   @override
-  void onChange(Change<int> change) {
+  Future<void> close() {
+    return super.close();
+  }
+
+  @override
+  void onChange(Change<SplashState> change) {
     super.onChange(change);
     print(change);
   }
 
   @override
-  void onTransition(Transition<SplashEvent, int> transition) {
+  void onTransition(Transition<SplashEvent, SplashState> transition) {
     print(transition);
     super.onTransition(transition);
   }
