@@ -43,6 +43,15 @@ class MyPage extends StatelessWidget {
               child: const Text('Logout'),
             ),
           ),
+          Container(
+            alignment: FractionalOffset.topLeft,
+            child: IconButton(
+              icon: const Icon(Icons.access_alarm),
+              onPressed: () {
+                context.router.navigate(const Splash());
+              },
+            ),
+          )
         ],
       ),
     );
