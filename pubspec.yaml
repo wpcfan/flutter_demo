@@ -51,6 +51,7 @@ dependencies:
   provider: ^6.0.4
   flutter_dotenv: ^5.0.2
   easy_rich_text: ^1.1.0
+  styled_widget: ^0.4.0+3
 
 dev_dependencies:
   flutter_test:
