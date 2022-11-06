@@ -7,8 +7,6 @@ import 'package:demo/states/register_cubit.dart';
 import 'package:demo/widgets/loading_overlay/loading_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_bloc/src/bloc_provider.dart';
-import 'package:flutter_bloc/src/repository_provider.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';

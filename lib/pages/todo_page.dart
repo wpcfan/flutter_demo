@@ -32,10 +32,13 @@ class TodoPage extends StatelessWidget implements AutoRouteWrapper {
 
   @override
   Widget wrappedRoute(BuildContext context) {
-    return BlocProvider<TodoCubit>(
-      create: (context) =>
-          TodoCubit(repository: context.read<TodoRepository>()),
-      child: this,
+    return RepositoryProvider(
+      create: (context) => TodoRepository(),
+      child: BlocProvider<TodoCubit>(
+        create: (context) =>
+            TodoCubit(repository: context.read<TodoRepository>()),
+        child: this,
+      ),
     );
   }
 }

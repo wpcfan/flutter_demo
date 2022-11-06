@@ -12,9 +12,19 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiRepositoryProvider(
-      providers: buildRepositoryProviders,
+      providers: [
+        RepositoryProvider(create: (context) => AuthRepository()),
+      ],
       child: MultiBlocProvider(
-        providers: buildProviders,
+        providers: [
+          BlocProvider(create: (context) => ThemeCubit()),
+          BlocProvider(
+              create: (context) =>
+                  LoginCubit(repository: context.read<AuthRepository>())),
+          BlocProvider(
+              create: (context) =>
+                  RegisterCubit(repository: context.read<AuthRepository>())),
+        ],
         child: BlocBuilder<LoginCubit, LoginState>(
           builder: (context, state) => BlocBuilder<ThemeCubit, ThemeData>(
             builder: (_, theme) {
@@ -22,7 +32,11 @@ class App extends StatelessWidget {
                 builder: LoadingScreen.init(),
                 debugShowCheckedModeBanner: false,
                 theme: theme,
-                localizationsDelegates: buildLocalizationDelegates,
+                localizationsDelegates: const [
+                  ...GlobalMaterialLocalizations.delegates,
+                  FormBuilderLocalizations.delegate,
+                  GlobalWidgetsLocalizations.delegate,
+                ],
                 supportedLocales: AppLocalizations.supportedLocales,
                 routerDelegate: AutoRouterDelegate(
                   appRouter,
@@ -37,35 +51,5 @@ class App extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  /// 本地化
-  List<LocalizationsDelegate<dynamic>> get buildLocalizationDelegates {
-    return [
-      ...GlobalMaterialLocalizations.delegates,
-      FormBuilderLocalizations.delegate,
-      GlobalWidgetsLocalizations.delegate,
-    ];
-  }
-
-  /// 注册 Bloc 依赖
-  List<BlocProviderSingleChildWidget> get buildProviders {
-    return [
-      BlocProvider(create: (context) => ThemeCubit()),
-      BlocProvider(
-          create: (context) =>
-              LoginCubit(repository: context.read<AuthRepository>())),
-      BlocProvider(
-          create: (context) =>
-              RegisterCubit(repository: context.read<AuthRepository>())),
-    ];
-  }
-
-  /// 注册 Repository 依赖
-  List<RepositoryProviderSingleChildWidget> get buildRepositoryProviders {
-    return [
-      RepositoryProvider(create: (context) => TodoRepository()),
-      RepositoryProvider(create: (context) => AuthRepository()),
-    ];
   }
 }
