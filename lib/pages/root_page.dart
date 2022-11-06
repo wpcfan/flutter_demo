@@ -6,7 +6,7 @@ import 'package:demo/widgets/tabbar_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class RootPage extends StatelessWidget {
+class RootPage extends StatelessWidget implements AutoRouteWrapper {
   const RootPage({super.key});
 
   @override
@@ -50,5 +50,15 @@ class RootPage extends StatelessWidget {
         content: Text(state),
       ));
     }
+  }
+
+  @override
+  Widget wrappedRoute(BuildContext context) {
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (context) => MessageCubit()),
+      ],
+      child: this,
+    );
   }
 }

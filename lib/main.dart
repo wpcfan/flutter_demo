@@ -7,6 +7,8 @@ import 'package:demo/states/register_cubit.dart';
 import 'package:demo/widgets/loading_overlay/loading_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_bloc/src/bloc_provider.dart';
+import 'package:flutter_bloc/src/repository_provider.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -15,76 +17,25 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'observers/all.dart';
 
+part 'app_widget.dart';
+
 void main() async {
   Bloc.observer = AppBlocObserver();
+
+  /// 确保在初始化之前调用
   WidgetsFlutterBinding.ensureInitialized();
+
+  /// 加载环境变量
   await dotenv.load(fileName: ".env");
+
+  /// 加载本地存储
   final SharedPreferences prefs = await SharedPreferences.getInstance();
 
-  /// Note: DO NOT put router initialization to builder function
-  /// Otherwise you will see empty screen after hot reload
+  /// 注意：不要把路由初始化放到 `builder` 函数中
+  /// 否则你会在热重载后看到空白屏
   final AppRouter appRouter = AppRouter(AuthGuard(prefs));
-  // final AppRouter appRouter = AppRouter();
   runApp(App(
     sharedPreferences: prefs,
     appRouter: appRouter,
   ));
-}
-
-class App extends StatelessWidget {
-  final SharedPreferences sharedPreferences;
-  // final AppRouter appRouter = AppRouter(AuthGuard(sharedPreferences));
-  /// Note: DO NOT put router initialization to builder function
-  /// Otherwise you will see empty screen after hot reload
-  final AppRouter appRouter;
-  const App({
-    Key? key,
-    required this.sharedPreferences,
-    required this.appRouter,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return MultiRepositoryProvider(
-        providers: [
-          RepositoryProvider(create: (context) => TodoRepository()),
-          RepositoryProvider(create: (context) => AuthRepository()),
-        ],
-        child: MultiBlocProvider(
-          providers: [
-            BlocProvider(create: (context) => ThemeCubit()),
-            BlocProvider(create: (context) => MessageCubit()),
-            BlocProvider(
-                create: (context) =>
-                    LoginCubit(repository: context.read<AuthRepository>())),
-            BlocProvider(
-                create: (context) =>
-                    RegisterCubit(repository: context.read<AuthRepository>())),
-          ],
-          child: BlocBuilder<LoginCubit, LoginState>(
-            builder: (context, state) => BlocBuilder<ThemeCubit, ThemeData>(
-              builder: (_, theme) {
-                return MaterialApp.router(
-                  builder: LoadingScreen.init(),
-                  debugShowCheckedModeBanner: false,
-                  theme: theme,
-                  localizationsDelegates: const [
-                    ...GlobalMaterialLocalizations.delegates,
-                    FormBuilderLocalizations.delegate,
-                    GlobalWidgetsLocalizations.delegate,
-                  ],
-                  supportedLocales: AppLocalizations.supportedLocales,
-                  routerDelegate: AutoRouterDelegate(
-                    appRouter,
-                    navigatorObservers: () => [
-                      NavObserver(),
-                    ],
-                  ),
-                  routeInformationParser: appRouter.defaultRouteParser(),
-                );
-              },
-            ),
-          ),
-        ));
-  }
 }
