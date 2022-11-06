@@ -15,9 +15,10 @@ class SplashBloc extends Bloc<SplashEvent, SplashState> {
     on<SplashCountdown>(_onSplashCountdown);
     add(const SplashStart(splashDuration));
   }
+  late Timer timer;
 
   void _onSplashStart(SplashStart event, Emitter<SplashState> emit) {
-    Timer.periodic(const Duration(seconds: 1), (timer) {
+    timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (timer.tick >= event.duration) {
         timer.cancel();
         add(const SplashStop());
@@ -34,6 +35,7 @@ class SplashBloc extends Bloc<SplashEvent, SplashState> {
   }
 
   void _onSplashStop(SplashStop event, Emitter<SplashState> emit) {
+    timer.cancel();
     emit(const SplashComplete());
   }
 
