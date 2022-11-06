@@ -54,9 +54,6 @@ class App extends StatelessWidget {
           providers: [
             BlocProvider(create: (context) => ThemeCubit()),
             BlocProvider(create: (context) => MessageCubit()),
-            BlocProvider<TodoCubit>(
-                create: (context) =>
-                    TodoCubit(repository: context.read<TodoRepository>())),
             BlocProvider(
                 create: (context) =>
                     LoginCubit(repository: context.read<AuthRepository>())),

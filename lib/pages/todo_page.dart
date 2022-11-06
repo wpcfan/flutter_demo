@@ -1,3 +1,5 @@
+import 'package:auto_route/auto_route.dart';
+import 'package:demo/repositories/all.dart';
 import 'package:demo/states/todo_cubit.dart';
 import 'package:demo/widgets/no_data_widget.dart';
 import 'package:demo/widgets/skeletons/all.dart';
@@ -5,12 +7,11 @@ import 'package:demo/widgets/todo_list_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class TodoPage extends StatelessWidget {
+class TodoPage extends StatelessWidget implements AutoRouteWrapper {
   const TodoPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    context.read<TodoCubit>().getTodos();
     return BlocBuilder<TodoCubit, TodoState>(
       builder: (context, state) => reducer(state),
       buildWhen: (previous, current) => current is TodoLoaded,
@@ -27,5 +28,14 @@ class TodoPage extends StatelessWidget {
     } else {
       return const NoDataWidget();
     }
+  }
+
+  @override
+  Widget wrappedRoute(BuildContext context) {
+    return BlocProvider<TodoCubit>(
+      create: (context) =>
+          TodoCubit(repository: context.read<TodoRepository>()),
+      child: this,
+    );
   }
 }

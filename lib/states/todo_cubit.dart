@@ -9,7 +9,9 @@ part 'todo_state.dart';
 class TodoCubit extends Cubit<TodoState> {
   final TodoRepository repository;
 
-  TodoCubit({required this.repository}) : super(TodoInitial());
+  TodoCubit({required this.repository}) : super(TodoInitial()) {
+    getTodos();
+  }
 
   Future<List<Todo>> getTodos() async {
     emit(TodoLoading());
