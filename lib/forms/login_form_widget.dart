@@ -40,7 +40,7 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
             context.router.popUntilRouteWithName(route);
             return;
           } else {
-            context.router.replace(const RootRoute());
+            context.router.replaceAll(const [RootRoute()]);
           }
         });
       } else {
