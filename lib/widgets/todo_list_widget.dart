@@ -9,16 +9,19 @@ class TodoListWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-        itemCount: todos.length,
-        itemBuilder: (context, index) {
-          final todo = todos[index];
-          return ListTile(
-              title: Text(todo.title),
-              trailing: Checkbox(
-                value: todo.completed,
-                onChanged: (value) => context.read<TodoCubit>().toggle(todo),
-              ));
-        });
+    return SliverList(
+        delegate: SliverChildBuilderDelegate(
+      (context, index) {
+        final todo = todos[index];
+        return ListTile(
+          title: Text(todo.title),
+          trailing: Checkbox(
+            value: todo.completed,
+            onChanged: (value) => context.read<TodoCubit>().toggle(todo),
+          ),
+        );
+      },
+      childCount: todos.length,
+    ));
   }
 }
