@@ -6,8 +6,11 @@ import 'package:http/http.dart';
 class TodoRepository {
   final String _url = 'jsonplaceholder.typicode.com';
 
-  Future<List<Todo>> getTodos() async {
-    final response = await get(Uri.https(_url, '/todos'));
+  Future<List<Todo>> getTodos(int page, int limit) async {
+    final response = await get(Uri.https(_url, '/todos', {
+      '_page': page.toString(),
+      '_limit': limit.toString(),
+    }));
     if (response.statusCode == 200) {
       final json = jsonDecode(response.body) as List;
       final todos = json.map((e) => Todo.fromJson(e)).toList();

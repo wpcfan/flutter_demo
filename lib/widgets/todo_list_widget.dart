@@ -5,7 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class TodoListWidget extends StatelessWidget {
   final List<Todo> todos;
-  // final void Function(bool?)? onToggleCompleted;
   const TodoListWidget({super.key, required this.todos});
 
   @override

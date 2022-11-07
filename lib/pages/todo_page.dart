@@ -9,16 +9,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class TodoPage extends StatelessWidget implements AutoRouteWrapper {
   const TodoPage({super.key});
-
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<TodoCubit, TodoState>(
-      builder: (context, state) => reducer(state),
+      builder: (context, state) => reducer(context, state),
       buildWhen: (previous, current) => current is TodoLoaded,
     );
   }
 
-  Widget reducer(TodoState state) {
+  Widget reducer(BuildContext context, TodoState state) {
     if (state is TodoLoading) {
       return const SkeletonListView();
     } else if (state is TodoLoaded) {
