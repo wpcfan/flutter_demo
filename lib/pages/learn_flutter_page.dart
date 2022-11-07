@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:demo/states/message_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:styled_widget/styled_widget.dart';
 
 class LearnFlutterPage extends StatelessWidget {
   const LearnFlutterPage({super.key});
@@ -36,6 +37,12 @@ class LearnFlutterPage extends StatelessWidget {
                   color: Colors.grey,
                   height: 20,
                 ),
+                Styled.widget(
+                  child: Text(
+                    'Welcome to Flutter',
+                    style: Theme.of(context).textTheme.headline5,
+                  ),
+                ).alignment(Alignment.center).padding(all: 20),
                 Container(
                   margin: const EdgeInsets.all(10),
                   padding: const EdgeInsets.all(20),

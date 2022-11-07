@@ -18,6 +18,10 @@ final List<BottomNavigationBarItem> tabItems = [
     icon: Icon(Icons.person),
     label: 'My',
   ),
+  const BottomNavigationBarItem(
+    icon: Icon(Icons.settings),
+    label: 'Setting',
+  ),
 ];
 
 final List<Widget> tabs = [

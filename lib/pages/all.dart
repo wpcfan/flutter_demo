@@ -6,5 +6,6 @@ export 'login_page.dart';
 export 'my_page.dart';
 export 'register_page.dart';
 export 'root_page.dart';
+export 'setting_page.dart';
 export 'splash_page.dart';
 export 'todo_page.dart';

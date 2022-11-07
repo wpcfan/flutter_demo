@@ -37,19 +37,19 @@ class _$AppRouter extends RootStackRouter {
     Login.name: (routeData) {
       return MaterialPageX<dynamic>(
         routeData: routeData,
-        child: const LoginPage(),
+        child: WrappedRoute(child: const LoginPage()),
       );
     },
     Register.name: (routeData) {
       return MaterialPageX<dynamic>(
         routeData: routeData,
-        child: const RegisterPage(),
+        child: WrappedRoute(child: const RegisterPage()),
       );
     },
     Splash.name: (routeData) {
       return MaterialPageX<dynamic>(
         routeData: routeData,
-        child: const SplashPage(),
+        child: WrappedRoute(child: const SplashPage()),
       );
     },
     ErrorRoute.name: (routeData) {
@@ -72,19 +72,25 @@ class _$AppRouter extends RootStackRouter {
     Counter.name: (routeData) {
       return MaterialPageX<dynamic>(
         routeData: routeData,
-        child: const CounterPage(),
+        child: WrappedRoute(child: const CounterPage()),
       );
     },
     Todo.name: (routeData) {
       return MaterialPageX<dynamic>(
         routeData: routeData,
-        child: const TodoPage(),
+        child: WrappedRoute(child: const TodoPage()),
       );
     },
     My.name: (routeData) {
       return MaterialPageX<dynamic>(
         routeData: routeData,
         child: const MyPage(),
+      );
+    },
+    Setting.name: (routeData) {
+      return MaterialPageX<dynamic>(
+        routeData: routeData,
+        child: const SettingPage(),
       );
     },
   };
@@ -113,6 +119,11 @@ class _$AppRouter extends RootStackRouter {
             RouteConfig(
               My.name,
               path: 'my-page',
+              parent: RootRoute.name,
+            ),
+            RouteConfig(
+              Setting.name,
+              path: 'setting-page',
               parent: RootRoute.name,
             ),
           ],
@@ -282,4 +293,16 @@ class My extends PageRouteInfo<void> {
         );
 
   static const String name = 'My';
+}
+
+/// generated route for
+/// [SettingPage]
+class Setting extends PageRouteInfo<void> {
+  const Setting()
+      : super(
+          Setting.name,
+          path: 'setting-page',
+        );
+
+  static const String name = 'Setting';
 }

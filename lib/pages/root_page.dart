@@ -19,6 +19,7 @@ class RootPage extends StatelessWidget {
           Counter(),
           Todo(),
           My(),
+          Setting(),
         ],
         builder: (context, child, animation) {
           final tabsRouter = AutoTabsRouter.of(context);
