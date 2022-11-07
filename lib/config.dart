@@ -8,3 +8,4 @@ String get perfKeyRouteBeforeLogin => 'routeBeforeLogin';
 bool get restoreLastRouteBeforeLogin => true;
 const int splashDuration = 5;
 const bool hasSplash = false;
+const int pageSize = 20;

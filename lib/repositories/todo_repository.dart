@@ -1,23 +1,23 @@
 import 'dart:convert';
 
+import 'package:demo/config.dart';
 import 'package:demo/models/todo_model.dart';
 import 'package:http/http.dart';
 
 class TodoRepository {
   final String _url = 'jsonplaceholder.typicode.com';
 
-  Future<List<Todo>> getTodos(int page, int limit) async {
+  Future<List<Todo>> getTodos([int startIndex = 0]) async {
     final response = await get(Uri.https(_url, '/todos', {
-      '_page': page.toString(),
-      '_limit': limit.toString(),
+      '_start': '$startIndex',
+      '_limit': '$pageSize',
     }));
     if (response.statusCode == 200) {
       final json = jsonDecode(response.body) as List;
       final todos = json.map((e) => Todo.fromJson(e)).toList();
       return todos;
-    } else {
-      throw Exception('Failed to load todos');
     }
+    throw Exception('Failed to load todos');
   }
 
   Future<Todo> createTodo(Todo todo) async {

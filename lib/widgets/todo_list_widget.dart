@@ -1,5 +1,5 @@
+import 'package:demo/bloc/todo_bloc.dart';
 import 'package:demo/models/all.dart';
-import 'package:demo/states/todo_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -17,7 +17,8 @@ class TodoListWidget extends StatelessWidget {
           title: Text(todo.title),
           trailing: Checkbox(
             value: todo.completed,
-            onChanged: (value) => context.read<TodoCubit>().toggle(todo),
+            onChanged: (value) =>
+                context.read<TodoBloc>().add(TodoToggleEvent(todo: todo)),
           ),
         );
       },
