@@ -1,0 +1,50 @@
+{
+  "posts": [
+    {
+      "id": 1,
+      "title": "json-server",
+      "author": "typicode"
+    }
+  ],
+  "comments": [
+    {
+      "id": 1,
+      "body": "some comment",
+      "postId": 1
+    }
+  ],
+  "profile": {
+    "name": "typicode"
+  },
+  "pages": [
+    {
+      "id": 1,
+      "title": "json-server",
+      "type": "APP_BANNER",
+      "data": [
+        {
+          "sort": 1,
+          "title": "image 1",
+          "imgUrl": "https://picsum.photos/200/300/?image=1",
+          "link": {
+            "type": "URL",
+            "url": "https://www.google.com"
+          },
+          "width": 200,
+          "height": 300
+        },
+        {
+          "sort": 2,
+          "title": "image 2",
+          "imgUrl": "https://picsum.photos/200/300/?image=2",
+          "link": {
+            "type": "ROUTE",
+            "url": ""
+          },
+          "width": 200,
+          "height": 300
+        }
+      ]
+    }
+  ]
+}
