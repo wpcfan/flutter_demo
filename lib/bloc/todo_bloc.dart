@@ -19,9 +19,12 @@ EventTransformer<E> throttleDroppable<E>(Duration duration) {
 class TodoBloc extends Bloc<TodoEvent, TodoState> {
   final TodoRepository repository;
   TodoBloc({required this.repository}) : super(const TodoState()) {
-    on<TodoFetchedEvent>(_onTodoFetchedEvent);
-    on<TodoRefreshEvent>(_onTodoRefreshEvent);
-    on<TodoToggleEvent>(_onTodoToggleEvent);
+    on<TodoFetchedEvent>(_onTodoFetchedEvent,
+        transformer: throttleDroppable(throttleDuration));
+    on<TodoRefreshEvent>(_onTodoRefreshEvent,
+        transformer: throttleDroppable(throttleDuration));
+    on<TodoToggleEvent>(_onTodoToggleEvent,
+        transformer: throttleDroppable(throttleDuration));
   }
 
   Future<void> _onTodoFetchedEvent(
@@ -29,23 +32,26 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
     Emitter<TodoState> emit,
   ) async {
     if (state.hasReachedMax) return;
-    emit(state.copyWith(status: TodoStatus.loading));
     try {
       if (state.status == TodoStatus.initial) {
+        emit(state.copyWith(isRefreshing: true));
         final todos = await repository.getTodos();
         return emit(TodoState(
           status: TodoStatus.success,
           todos: todos,
           hasReachedMax: false,
+          isRefreshing: false,
         ));
       }
+      emit(state.copyWith(isFetching: true));
       final todos = await repository.getTodos(state.todos.length);
       emit(todos.isEmpty
           ? state.copyWith(hasReachedMax: true)
-          : TodoState(
+          : state.copyWith(
               status: TodoStatus.success,
-              todos: [...state.todos, ...todos],
+              todos: List.of(state.todos)..addAll(todos),
               hasReachedMax: false,
+              isFetching: false,
             ));
     } catch (e) {
       emit(state.copyWith(status: TodoStatus.failure, error: e.toString()));

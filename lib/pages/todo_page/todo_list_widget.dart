@@ -10,14 +10,7 @@ class TodoListWidget extends StatelessWidget {
         delegate: SliverChildBuilderDelegate(
       (context, index) {
         final todo = todos[index];
-        return ListTile(
-          title: Text(todo.title),
-          trailing: Checkbox(
-            value: todo.completed,
-            onChanged: (value) =>
-                context.read<TodoBloc>().add(TodoToggleEvent(todo: todo)),
-          ),
-        );
+        return TodoListItem(todo: todo);
       },
       childCount: todos.length,
     ));

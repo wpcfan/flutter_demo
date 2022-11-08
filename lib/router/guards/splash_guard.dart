@@ -7,7 +7,7 @@ class SplashGuard extends AutoRouteGuard {
   @override
   void onNavigation(NavigationResolver resolver, StackRouter router) {
     if (hasSplash &&
-        (defaultTargetPlatform == TargetPlatform.android ||
+        (defaultTargetPlatform == TargetPlatform.iOS ||
             defaultTargetPlatform == TargetPlatform.iOS)) {
       router.replace(const Splash()).then((value) => resolver.next(true));
     } else {

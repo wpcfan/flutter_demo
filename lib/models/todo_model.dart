@@ -1,10 +1,14 @@
-class Todo {
-  int? id;
-  String title;
-  bool completed;
-  int? userId;
+import 'package:equatable/equatable.dart';
+import 'package:flutter/foundation.dart';
 
-  Todo({
+@immutable
+class Todo extends Equatable {
+  final int? id;
+  final String title;
+  final bool completed;
+  final int? userId;
+
+  const Todo({
     this.id,
     required this.title,
     this.completed = false,
@@ -38,4 +42,7 @@ class Todo {
       userId: userId ?? this.userId,
     );
   }
+
+  @override
+  List<Object?> get props => [id, title, completed, userId];
 }

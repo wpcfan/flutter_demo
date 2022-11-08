@@ -5,9 +5,11 @@ class TodoScrollView extends StatelessWidget {
     Key? key,
     required this.todos,
     required this.hasReachedMax,
+    required this.isFetching,
   }) : super(key: key);
   final List<Todo> todos;
   final bool hasReachedMax;
+  final bool isFetching;
   @override
   Widget build(BuildContext context) {
     return CustomScrollView(
@@ -24,9 +26,11 @@ class TodoScrollView extends StatelessWidget {
             onPressed: hasReachedMax
                 ? null
                 : () => context.read<TodoBloc>().add(TodoFetchedEvent()),
-            child: hasReachedMax
-                ? const Text('No more data')
-                : const Text('Load More'),
+            child: isFetching
+                ? const CircularProgressIndicator()
+                : hasReachedMax
+                    ? const Text('No more data')
+                    : const Text('Load More'),
           )),
         ),
       ],
