@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:demo/bloc/todo_bloc.dart';
+import 'package:demo/helpers/all.dart';
 import 'package:demo/models/all.dart';
 import 'package:demo/repositories/all.dart';
 import 'package:demo/widgets/no_data_widget.dart';
@@ -23,17 +24,30 @@ class TodoPage extends StatelessWidget implements AutoRouteWrapper {
   }
 
   Widget reducer(BuildContext context, TodoState state) {
+    final bloc = context.read<TodoBloc>();
     switch (state.status) {
       case TodoStatus.initial:
         return const SkeletonListView();
       case TodoStatus.success:
         return state.todos.isEmpty
             ? const NoDataWidget()
-            : TodoScrollView(
-                todos: state.todos,
-                hasReachedMax: state.hasReachedMax,
-                isFetching: state.isFetching,
-              );
+            : RefreshIndicator(
+                color: Colors.white,
+                backgroundColor: Colors.blue,
+                strokeWidth: 4.0,
+                child: TodoScrollView(
+                  todos: state.todos,
+                  hasReachedMax: state.hasReachedMax,
+                  isFetching: state.isFetching,
+                  onScrollTop: () {},
+                  onScrollEnd: () => bloc.add(TodoFetchedEvent()),
+                  loadMore: () => bloc.add(TodoFetchedEvent()),
+                ),
+                onRefresh: () async {
+                  bloc.add(TodoRefreshEvent());
+                  bloc.stream
+                      .firstWhere((state) => state.isRefreshing == false);
+                });
       case TodoStatus.failure:
         return Center(
           child: Text(state.error ?? 'Unknow Error'),

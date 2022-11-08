@@ -6,16 +6,22 @@ class TodoScrollView extends StatelessWidget {
     required this.todos,
     required this.hasReachedMax,
     required this.isFetching,
+    required this.onScrollEnd,
+    required this.onScrollTop,
+    required this.loadMore,
   }) : super(key: key);
   final List<Todo> todos;
   final bool hasReachedMax;
   final bool isFetching;
+  final Function() onScrollEnd;
+  final Function() onScrollTop;
+  final Function() loadMore;
   @override
   Widget build(BuildContext context) {
     return CustomScrollView(
       controller: CustomScrollController(
-        onScrollTop: () => context.read<TodoBloc>().add(TodoRefreshEvent()),
-        onScrollEnd: () => context.read<TodoBloc>().add(TodoFetchedEvent()),
+        onScrollTop: onScrollTop,
+        onScrollEnd: onScrollEnd,
       ),
       slivers: [
         if (todos.isEmpty) const NoDataWidget(),
@@ -23,9 +29,7 @@ class TodoScrollView extends StatelessWidget {
         SliverToBoxAdapter(
           child: Center(
               child: TextButton(
-            onPressed: hasReachedMax
-                ? null
-                : () => context.read<TodoBloc>().add(TodoFetchedEvent()),
+            onPressed: hasReachedMax ? null : loadMore,
             child: isFetching
                 ? const CircularProgressIndicator()
                 : hasReachedMax
@@ -35,32 +39,5 @@ class TodoScrollView extends StatelessWidget {
         ),
       ],
     );
-  }
-}
-
-class CustomScrollController extends ScrollController {
-  final Function() onScrollEnd;
-  final Function() onScrollTop;
-  final double scrollEndThreshold;
-  final double scrollEndOffset;
-  final double scrollTopOffset;
-
-  CustomScrollController(
-      {this.scrollEndThreshold = 1.0,
-      this.scrollEndOffset = 0.0,
-      this.scrollTopOffset = 0.0,
-      required this.onScrollTop,
-      required this.onScrollEnd});
-
-  @override
-  void notifyListeners() {
-    super.notifyListeners();
-    var maxScroll = position.maxScrollExtent * scrollEndThreshold;
-    if (position.pixels >= maxScroll + scrollEndOffset) {
-      onScrollEnd();
-    }
-    if (position.pixels <= -scrollTopOffset) {
-      onScrollTop();
-    }
   }
 }
