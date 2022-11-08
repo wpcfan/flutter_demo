@@ -1,11 +1,8 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:demo/bloc/todo_bloc.dart';
+import 'package:demo/bloc/all.dart';
 import 'package:demo/models/all.dart';
 import 'package:demo/repositories/all.dart';
-import 'package:demo/widgets/loading_scroll_list/loading_scroll_silver_list.dart';
-import 'package:demo/widgets/loading_scroll_list/loading_silver_list.dart';
-import 'package:demo/widgets/no_data_widget.dart';
-import 'package:demo/widgets/skeletons/all.dart';
+import 'package:demo/widgets/all.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
