@@ -1,4 +1,5 @@
 import 'package:demo/helpers/all.dart';
+import 'package:demo/widgets/loading_scroll_list/loading_silver_list.dart';
 import 'package:demo/widgets/no_data_widget.dart';
 import 'package:flutter/material.dart';
 
@@ -11,7 +12,7 @@ class LoadingScrollSilverList<T> extends StatelessWidget {
     required this.onScrollEnd,
     required this.onScrollTop,
     required this.loadMore,
-    required this.silverListWidget,
+    required this.itemBuilder,
     this.emptyWidget,
     this.loadingContainerWidget,
     this.noMoreDataWidget,
@@ -24,7 +25,7 @@ class LoadingScrollSilverList<T> extends StatelessWidget {
   final Function() onScrollEnd;
   final Function() onScrollTop;
   final Function() loadMore;
-  final Widget silverListWidget;
+  final Widget Function(T) itemBuilder;
   final Widget? emptyWidget;
   final Widget? loadingContainerWidget;
   final Widget? loadingIndicatorWidget;
@@ -40,7 +41,8 @@ class LoadingScrollSilverList<T> extends StatelessWidget {
       ),
       slivers: [
         if (data.isEmpty) emptyWidget ?? const NoDataWidget(),
-        if (data.isNotEmpty) silverListWidget,
+        if (data.isNotEmpty)
+          LoadingSilverList<T>(data: data, itemBuilder: itemBuilder),
         SliverToBoxAdapter(
           child: Center(
               child: loadingContainerWidget ??

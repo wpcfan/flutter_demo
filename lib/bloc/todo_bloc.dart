@@ -34,13 +34,13 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
     if (state.hasReachedMax) return;
     try {
       if (state.status == TodoStatus.initial) {
-        emit(state.copyWith(isRefreshing: true));
+        emit(state.copyWith(isFetching: true));
         final todos = await repository.getTodos();
         return emit(TodoState(
           status: TodoStatus.success,
           todos: todos,
           hasReachedMax: false,
-          isRefreshing: false,
+          isFetching: false,
         ));
       }
       emit(state.copyWith(isFetching: true));
@@ -62,12 +62,14 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
     TodoRefreshEvent event,
     Emitter<TodoState> emit,
   ) async {
+    emit(state.copyWith(isRefreshing: true, status: TodoStatus.initial));
     try {
       final todos = await repository.getTodos();
       emit(TodoState(
         status: TodoStatus.success,
         todos: todos,
         hasReachedMax: false,
+        isRefreshing: false,
       ));
     } catch (e) {
       emit(state.copyWith(status: TodoStatus.failure, error: e.toString()));
@@ -82,10 +84,9 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
       final todo = await repository.updateTodoById(event.todo.id!,
           event.todo.copyWith(completed: !event.todo.completed));
       final todos = state.todos.map((t) => t.id == todo.id ? todo : t).toList();
-      emit(TodoState(
+      emit(state.copyWith(
         status: TodoStatus.success,
         todos: todos,
-        hasReachedMax: false,
       ));
     } catch (e) {
       emit(state.copyWith(status: TodoStatus.failure, error: e.toString()));

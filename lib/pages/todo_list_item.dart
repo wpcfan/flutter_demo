@@ -1,8 +1,4 @@
-import 'package:demo/bloc/all.dart';
-import 'package:demo/models/all.dart';
-import 'package:demo/widgets/loading_scroll_list/loading_silver_list.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+part of 'todo_page.dart';
 
 class TodoListItem extends LoadingSilverItem<Todo> {
   const TodoListItem({super.key, required Todo item}) : super(item: item);

@@ -9,7 +9,7 @@ import 'package:demo/widgets/skeletons/all.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'todo_page/todo_list_item.dart';
+part 'todo_list_item.dart';
 
 class TodoPage extends StatelessWidget implements AutoRouteWrapper {
   const TodoPage({super.key});
@@ -30,9 +30,6 @@ class TodoPage extends StatelessWidget implements AutoRouteWrapper {
         return state.todos.isEmpty
             ? const NoDataWidget()
             : RefreshIndicator(
-                color: Colors.white,
-                backgroundColor: Colors.blue,
-                strokeWidth: 4.0,
                 child: LoadingScrollSilverList<Todo>(
                   data: state.todos,
                   hasReachedMax: state.hasReachedMax,
@@ -40,10 +37,7 @@ class TodoPage extends StatelessWidget implements AutoRouteWrapper {
                   onScrollTop: () {},
                   onScrollEnd: () => bloc.add(TodoFetchedEvent()),
                   loadMore: () => bloc.add(TodoFetchedEvent()),
-                  silverListWidget: LoadingSilverList<Todo>(
-                    data: state.todos,
-                    itemBuilder: (item) => TodoListItem(item: item),
-                  ),
+                  itemBuilder: (item) => TodoListItem(item: item),
                 ),
                 onRefresh: () async {
                   bloc.add(TodoRefreshEvent());
