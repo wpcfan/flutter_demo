@@ -6,10 +6,12 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: ElevatedButton(
-        onPressed: () => context.router.pushNamed('/learn-flutter-page'),
-        child: const Text('ElevatedButton'),
+    return SafeArea(
+      child: Center(
+        child: ElevatedButton(
+          onPressed: () => context.router.pushNamed('/learn-flutter-page'),
+          child: const Text('ElevatedButton'),
+        ),
       ),
     );
   }
