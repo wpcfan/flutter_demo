@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-class LoadingSilverList<T> extends StatelessWidget {
+class LoadingSliverList<T> extends StatelessWidget {
   final List<T> data;
   final Widget Function(T) itemBuilder;
-  const LoadingSilverList(
+  const LoadingSliverList(
       {super.key, required this.data, required this.itemBuilder});
 
   @override

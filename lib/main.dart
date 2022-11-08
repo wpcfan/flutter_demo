@@ -3,7 +3,6 @@ import 'package:demo/repositories/all.dart';
 import 'package:demo/router/app_router.dart';
 import 'package:demo/router/guards/all.dart';
 import 'package:demo/states/all.dart';
-import 'package:demo/states/register_cubit.dart';
 import 'package:demo/widgets/loading_overlay/loading_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

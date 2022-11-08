@@ -1,10 +1,10 @@
 import 'package:demo/helpers/all.dart';
-import 'package:demo/widgets/loading_scroll_list/loading_silver_list.dart';
+import 'package:demo/widgets/loading_scroll_list/loading_sliver_list.dart';
 import 'package:demo/widgets/no_data_widget.dart';
 import 'package:flutter/material.dart';
 
-class LoadingScrollSilverList<T> extends StatelessWidget {
-  const LoadingScrollSilverList({
+class LoadingScrollSliverList<T> extends StatelessWidget {
+  const LoadingScrollSliverList({
     Key? key,
     required this.data,
     required this.hasReachedMax,
@@ -42,7 +42,7 @@ class LoadingScrollSilverList<T> extends StatelessWidget {
       slivers: [
         if (data.isEmpty) emptyWidget ?? const NoDataWidget(),
         if (data.isNotEmpty)
-          LoadingSilverList<T>(data: data, itemBuilder: itemBuilder),
+          LoadingSliverList<T>(data: data, itemBuilder: itemBuilder),
         SliverToBoxAdapter(
           child: Center(
               child: loadingContainerWidget ??

@@ -1,20 +1,11 @@
-import 'package:bloc_concurrency/bloc_concurrency.dart';
+import 'package:demo/helpers/all.dart';
 import 'package:demo/models/all.dart';
 import 'package:demo/repositories/all.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:stream_transform/stream_transform.dart';
 
 part 'todo_event.dart';
 part 'todo_state.dart';
-
-const throttleDuration = Duration(milliseconds: 100);
-
-EventTransformer<E> throttleDroppable<E>(Duration duration) {
-  return (events, mapper) {
-    return droppable<E>().call(events.throttle(duration), mapper);
-  };
-}
 
 class TodoBloc extends Bloc<TodoEvent, TodoState> {
   final TodoRepository repository;

@@ -20,17 +20,18 @@
     {
       "id": 1,
       "title": "json-server",
-      "type": "APP_BANNER",
+      "type": "slider",
       "width": 400,
-      "height": 300,
+      "height": 150,
+      "sort": 1,
       "data": [
         {
           "sort": 1,
           "title": "image 1",
-          "imgUrl": "https://picsum.photos/400/150/?image=1",
+          "image": "https://picsum.photos/400/150/?image=1",
           "link": {
             "type": "URL",
-            "url": "https://www.google.com"
+            "value": "https://www.google.com"
           },
           "width": 400,
           "height": 150
@@ -38,10 +39,10 @@
         {
           "sort": 2,
           "title": "image 2",
-          "imgUrl": "https://picsum.photos/400/150/?image=2",
+          "image": "https://picsum.photos/400/150/?image=2",
           "link": {
             "type": "ROUTE",
-            "url": "customscheme://flutterbooksample.com/book/1"
+            "value": "customscheme://flutterbooksample.com/book/1"
           },
           "width": 400,
           "height": 150
@@ -49,10 +50,10 @@
         {
           "sort": 3,
           "title": "image 3",
-          "imgUrl": "https://picsum.photos/400/150/?image=3",
+          "image": "https://picsum.photos/400/150/?image=3",
           "link": {
             "type": "ROUTE",
-            "url": "customscheme://flutterbooksample.com/book/2"
+            "value": "customscheme://flutterbooksample.com/book/2"
           },
           "width": 400,
           "height": 150

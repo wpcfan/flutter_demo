@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:demo/config.dart';
-import 'package:demo/models/todo_model.dart';
+import 'package:demo/models/todo.dart';
 import 'package:http/http.dart';
 
 class TodoRepository {

@@ -27,7 +27,7 @@ class TodoPage extends StatelessWidget implements AutoRouteWrapper {
         return state.todos.isEmpty
             ? const NoDataWidget()
             : RefreshIndicator(
-                child: LoadingScrollSilverList<Todo>(
+                child: LoadingScrollSliverList<Todo>(
                   data: state.todos,
                   hasReachedMax: state.hasReachedMax,
                   isFetching: state.isFetching,
