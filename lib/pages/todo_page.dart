@@ -1,11 +1,14 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:demo/bloc/todo_bloc.dart';
+import 'package:demo/models/all.dart';
 import 'package:demo/repositories/all.dart';
 import 'package:demo/widgets/no_data_widget.dart';
 import 'package:demo/widgets/skeletons/all.dart';
-import 'package:demo/widgets/todo_list_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+part './todo_page/todo_list_widget.dart';
+part './todo_page/todo_scroll_view.dart';
 
 class TodoPage extends StatelessWidget implements AutoRouteWrapper {
   const TodoPage({super.key});
@@ -20,34 +23,14 @@ class TodoPage extends StatelessWidget implements AutoRouteWrapper {
   Widget reducer(BuildContext context, TodoState state) {
     switch (state.status) {
       case TodoStatus.initial:
+      case TodoStatus.loading:
         return const SkeletonListView();
       case TodoStatus.success:
         return state.todos.isEmpty
             ? const NoDataWidget()
-            : CustomScrollView(
-                controller: CustomScrollController(
-                  onScrollTop: () =>
-                      context.read<TodoBloc>().add(TodoRefreshEvent()),
-                  onScrollEnd: () =>
-                      context.read<TodoBloc>().add(TodoFetchedEvent()),
-                ),
-                slivers: [
-                  if (state.todos.isEmpty) const NoDataWidget(),
-                  if (state.todos.isNotEmpty)
-                    TodoListWidget(todos: state.todos),
-                  SliverToBoxAdapter(
-                    child: Center(
-                        child: TextButton(
-                      onPressed: state.hasReachedMax
-                          ? null
-                          : () =>
-                              context.read<TodoBloc>().add(TodoFetchedEvent()),
-                      child: state.hasReachedMax
-                          ? const Text('No more data')
-                          : const Text('Load More'),
-                    )),
-                  ),
-                ],
+            : TodoScrollView(
+                todos: state.todos,
+                hasReachedMax: state.hasReachedMax,
               );
       case TodoStatus.failure:
         return Center(
@@ -67,32 +50,5 @@ class TodoPage extends StatelessWidget implements AutoRouteWrapper {
         child: this,
       ),
     );
-  }
-}
-
-class CustomScrollController extends ScrollController {
-  final Function() onScrollEnd;
-  final Function() onScrollTop;
-  final double scrollEndThreshold;
-  final double scrollEndOffset;
-  final double scrollTopOffset;
-
-  CustomScrollController(
-      {this.scrollEndThreshold = 1.0,
-      this.scrollEndOffset = 0.0,
-      this.scrollTopOffset = 0.0,
-      required this.onScrollTop,
-      required this.onScrollEnd});
-
-  @override
-  void notifyListeners() {
-    super.notifyListeners();
-    var maxScroll = position.maxScrollExtent * scrollEndThreshold;
-    if (position.pixels >= maxScroll + scrollEndOffset) {
-      onScrollEnd();
-    }
-    if (position.pixels <= -scrollTopOffset) {
-      onScrollTop();
-    }
   }
 }

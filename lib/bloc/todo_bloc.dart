@@ -29,6 +29,7 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
     Emitter<TodoState> emit,
   ) async {
     if (state.hasReachedMax) return;
+    emit(state.copyWith(status: TodoStatus.loading));
     try {
       if (state.status == TodoStatus.initial) {
         final todos = await repository.getTodos();
@@ -47,7 +48,7 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
               hasReachedMax: false,
             ));
     } catch (e) {
-      emit(TodoState(status: TodoStatus.failure, error: e.toString()));
+      emit(state.copyWith(status: TodoStatus.failure, error: e.toString()));
     }
   }
 
@@ -63,7 +64,7 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
         hasReachedMax: false,
       ));
     } catch (e) {
-      emit(TodoState(status: TodoStatus.failure, error: e.toString()));
+      emit(state.copyWith(status: TodoStatus.failure, error: e.toString()));
     }
   }
 
@@ -81,7 +82,7 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
         hasReachedMax: false,
       ));
     } catch (e) {
-      emit(TodoState(status: TodoStatus.failure, error: e.toString()));
+      emit(state.copyWith(status: TodoStatus.failure, error: e.toString()));
     }
   }
 }

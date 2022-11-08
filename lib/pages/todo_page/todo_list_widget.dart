@@ -1,7 +1,4 @@
-import 'package:demo/bloc/todo_bloc.dart';
-import 'package:demo/models/all.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+part of '../todo_page.dart';
 
 class TodoListWidget extends StatelessWidget {
   final List<Todo> todos;
