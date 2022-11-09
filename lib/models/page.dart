@@ -1,13 +1,22 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter/foundation.dart';
 
 enum PageBlockType {
-  slider,
+  slider('slider'),
+  ;
+
+  final String value;
+  const PageBlockType(this.value);
 }
 
 enum LinkType {
-  url,
-  route,
-  deepLink,
+  url('url'),
+  route('route'),
+  deepLink('deep_link'),
+  ;
+
+  final String value;
+  const LinkType(this.value);
 }
 
 class Link extends Equatable {
@@ -24,14 +33,14 @@ class Link extends Equatable {
 
   factory Link.fromJson(Map<String, dynamic> json) {
     return Link(
-      type: LinkType.values.firstWhere((e) => e.toString() == json['type']),
+      type: LinkType.values.firstWhere((e) => e.value == json['type']),
       value: json['value'],
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      'type': type.toString(),
+      'type': type.value,
       'value': value,
     };
   }
@@ -49,7 +58,7 @@ abstract class PageBlock extends Equatable {
 
   factory PageBlock.fromJson(Map<String, dynamic> json) {
     final type =
-        PageBlockType.values.firstWhere((e) => e.toString() == json['type']);
+        PageBlockType.values.firstWhere((e) => e.value == json['type']);
     switch (type) {
       case PageBlockType.slider:
         return SliderPageBlock.fromJson(json);
@@ -73,8 +82,8 @@ class ImageData extends Equatable {
   final Link link;
   final int sort;
   final String? title;
-  final double? width;
-  final double? height;
+  final int? width;
+  final int? height;
 
   factory ImageData.fromJson(Map<String, dynamic> json) {
     return ImageData(
@@ -104,8 +113,8 @@ class ImageData extends Equatable {
 
 class SliderPageBlock extends PageBlock {
   final String? title;
-  final double? width;
-  final double? height;
+  final int? width;
+  final int? height;
   final List<ImageData> data;
 
   const SliderPageBlock({
@@ -121,6 +130,7 @@ class SliderPageBlock extends PageBlock {
   List<Object?> get props => [id, type, sort, data, title, width, height];
 
   factory SliderPageBlock.fromJson(Map<String, dynamic> json) {
+    debugPrint(json.toString());
     return SliderPageBlock(
       id: json['id'],
       sort: json['sort'],
@@ -138,7 +148,7 @@ class SliderPageBlock extends PageBlock {
   Map<String, dynamic> toJson() {
     return {
       'id': id,
-      'type': type.toString(),
+      'type': type.value,
       'sort': sort,
       'data': data.map((e) => e.toJson()).toList(),
       'title': title,

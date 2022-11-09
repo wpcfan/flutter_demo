@@ -19,31 +19,19 @@ class PageBlockBloc extends Bloc<PageBlockEvent, PageBlockState> {
     Emitter<PageBlockState> emit,
   ) async {
     try {
-      if (state.status == PageBlockStatus.initial) {
-        emit(state.copyWith(isFetching: true));
-        final pageBlocks = await repository.getPageBlocks();
-        return emit(PageBlockState(
-          status: PageBlockStatus.success,
-          pageBlocks: pageBlocks,
-          isFetching: false,
-        ));
-      }
       emit(state.copyWith(isFetching: true));
-      final pageBlocks =
-          await repository.getPageBlocks(state.pageBlocks.length);
-      if (pageBlocks.isNotEmpty) {
-        emit(state.copyWith(
-          status: PageBlockStatus.success,
-          pageBlocks: List.of(state.pageBlocks)..addAll(pageBlocks),
-          isFetching: false,
-        ));
-      } else {
-        emit(
-            state.copyWith(status: PageBlockStatus.success, isFetching: false));
-      }
+      final pageBlocks = await repository.getPageBlocks();
+      return emit(PageBlockState(
+        status: PageBlockStatus.success,
+        pageBlocks: pageBlocks,
+        isFetching: false,
+      ));
     } catch (e) {
-      emit(
-          state.copyWith(status: PageBlockStatus.failure, error: e.toString()));
+      emit(state.copyWith(
+        status: PageBlockStatus.failure,
+        error: e.toString(),
+        isFetching: false,
+      ));
     }
   }
 }

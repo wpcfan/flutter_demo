@@ -6,7 +6,7 @@ import 'package:http/http.dart';
 class PageBlockRepository {
   final String _url = 'localhost:3000';
 
-  Future<List<PageBlock>> getPageBlocks([int startIndex = 0]) async {
+  Future<List<PageBlock>> getPageBlocks() async {
     final response = await get(Uri.http(_url, '/pages'));
     if (response.statusCode == 200) {
       final json = jsonDecode(response.body) as List;

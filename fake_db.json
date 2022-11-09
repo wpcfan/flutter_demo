@@ -30,7 +30,7 @@
           "title": "image 1",
           "image": "https://picsum.photos/400/150/?image=1",
           "link": {
-            "type": "URL",
+            "type": "url",
             "value": "https://www.google.com"
           },
           "width": 400,
@@ -41,7 +41,7 @@
           "title": "image 2",
           "image": "https://picsum.photos/400/150/?image=2",
           "link": {
-            "type": "ROUTE",
+            "type": "route",
             "value": "customscheme://flutterbooksample.com/book/1"
           },
           "width": 400,
@@ -52,7 +52,7 @@
           "title": "image 3",
           "image": "https://picsum.photos/400/150/?image=3",
           "link": {
-            "type": "ROUTE",
+            "type": "deep_link",
             "value": "customscheme://flutterbooksample.com/book/2"
           },
           "width": 400,
