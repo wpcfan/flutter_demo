@@ -8,15 +8,16 @@ import 'package:shared_preferences/shared_preferences.dart';
 part 'login_state.dart';
 
 class LoginCubit extends Cubit<LoginState> {
-  LoginCubit({required this.repository}) : super(LoginInitial());
+  LoginCubit({required this.repository, required this.perfs})
+      : super(LoginInitial());
   final AuthRepository repository;
+  final SharedPreferences perfs;
 
   void login(String username, String password) async {
     emit(LoginLoading());
     try {
       final user = await repository.login(username, password);
       if (user.sessionToken != null) {
-        final SharedPreferences perfs = await SharedPreferences.getInstance();
         perfs.setString('sessionToken', user.sessionToken!);
         emit(LoginSuccess(user: user));
       } else {

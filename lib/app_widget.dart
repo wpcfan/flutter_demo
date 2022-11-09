@@ -13,17 +13,42 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiRepositoryProvider(
       providers: [
-        RepositoryProvider(create: (context) => AuthRepository()),
-        RepositoryProvider(create: (context) => PageBlockRepository()),
+        RepositoryProvider<SharedPreferences>(
+          create: (context) => sharedPreferences,
+        ),
+        RepositoryProvider<Dio>(
+          create: (context) => Dio(BaseOptions(
+            connectTimeout: 5000,
+            receiveTimeout: 3000,
+          ))
+            ..interceptors.add(
+              LogInterceptor(
+                requestHeader: true,
+                requestBody: true,
+                responseBody: true,
+                responseHeader: true,
+              ),
+            )
+            ..interceptors.add(
+              LeanCloudInterceptor(
+                sharedPreferences.getString('sessionToken'),
+                appId: lcAppId,
+                appKey: lcAppKey,
+              ),
+            )
+            ..interceptors.add(
+              ContentTypeInterceptor(),
+            ),
+        ),
+        RepositoryProvider<AuthRepository>(
+            create: (context) => AuthRepository(context.read<Dio>())),
+        RepositoryProvider<PageBlockRepository>(
+            create: (context) => PageBlockRepository(context.read<Dio>())),
       ],
       child: MultiBlocProvider(
         providers: [
           BlocProvider(create: (context) => ThemeCubit()),
           BlocProvider(create: (context) => MessageCubit()),
-          BlocProvider(
-            create: (context) =>
-                PageBlockBloc(repository: context.read<PageBlockRepository>()),
-          ),
         ],
         child: BlocBuilder<ThemeCubit, ThemeData>(
           builder: (_, theme) {

@@ -3,6 +3,7 @@ import 'package:demo/bloc/all.dart';
 import 'package:demo/models/all.dart';
 import 'package:demo/repositories/all.dart';
 import 'package:demo/widgets/all.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -51,7 +52,7 @@ class TodoPage extends StatelessWidget implements AutoRouteWrapper {
   @override
   Widget wrappedRoute(BuildContext context) {
     return RepositoryProvider(
-      create: (context) => TodoRepository(),
+      create: (context) => TodoRepository(context.read<Dio>()),
       child: BlocProvider<TodoBloc>(
         create: (context) =>
             TodoBloc(repository: context.read<TodoRepository>())

@@ -4,6 +4,7 @@ import 'package:demo/repositories/all.dart';
 import 'package:demo/states/all.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatelessWidget implements AutoRouteWrapper {
   const LoginPage({super.key});
@@ -23,8 +24,10 @@ class LoginPage extends StatelessWidget implements AutoRouteWrapper {
   @override
   Widget wrappedRoute(BuildContext context) {
     return BlocProvider<LoginCubit>(
-      create: (context) =>
-          LoginCubit(repository: context.read<AuthRepository>()),
+      create: (context) => LoginCubit(
+        repository: context.read<AuthRepository>(),
+        perfs: context.read<SharedPreferences>(),
+      ),
       child: this,
     );
   }

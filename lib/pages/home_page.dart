@@ -1,10 +1,12 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:demo/bloc/all.dart';
 import 'package:demo/models/all.dart';
+import 'package:demo/repositories/all.dart';
 import 'package:demo/widgets/all.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatelessWidget implements AutoRouteWrapper {
   const HomePage({super.key});
 
   @override
@@ -19,6 +21,15 @@ class HomePage extends StatelessWidget {
         return const DesktopHomePage();
       }
     });
+  }
+
+  @override
+  Widget wrappedRoute(BuildContext context) {
+    return BlocProvider<PageBlockBloc>(
+      create: (context) =>
+          PageBlockBloc(repository: context.read<PageBlockRepository>()),
+      child: this,
+    );
   }
 }
 

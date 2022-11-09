@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:demo/router/app_router.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MyPage extends StatelessWidget {
@@ -33,8 +34,8 @@ class MyPage extends StatelessWidget {
           Container(
             alignment: FractionalOffset.center,
             child: ElevatedButton(
-              onPressed: () async {
-                final perfs = await SharedPreferences.getInstance();
+              onPressed: () {
+                final perfs = RepositoryProvider.of<SharedPreferences>(context);
                 if (perfs.containsKey('sessionToken')) {
                   perfs.remove('sessionToken');
                 }

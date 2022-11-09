@@ -1,19 +1,20 @@
-import 'dart:convert';
-
 import 'package:demo/config.dart';
 import 'package:demo/models/todo.dart';
-import 'package:http/http.dart';
+import 'package:dio/dio.dart';
 
 class TodoRepository {
+  final Dio dio;
   final String _url = 'jsonplaceholder.typicode.com';
 
+  TodoRepository(this.dio);
+
   Future<List<Todo>> getTodos([int startIndex = 0]) async {
-    final response = await get(Uri.https(_url, '/todos', {
+    final response = await dio.getUri(Uri.https(_url, '/todos', {
       '_start': '$startIndex',
       '_limit': '$pageSize',
     }));
     if (response.statusCode == 200) {
-      final json = jsonDecode(response.body) as List;
+      final json = response.data as List;
       final todos = json.map((e) => Todo.fromJson(e)).toList();
       return todos;
     }
@@ -21,11 +22,10 @@ class TodoRepository {
   }
 
   Future<Todo> createTodo(Todo todo) async {
-    final response = await post(Uri.https(_url, '/todos'),
-        headers: {'Content-Type': 'application/json; charset=UTF-8'},
-        body: jsonEncode(todo.toJson()));
+    final response =
+        await dio.postUri(Uri.https(_url, '/todos'), data: todo.toJson());
     if (response.statusCode == 201) {
-      final json = jsonDecode(response.body);
+      final json = response.data;
       final todo = Todo.fromJson(json);
       return todo;
     } else {
@@ -34,11 +34,12 @@ class TodoRepository {
   }
 
   Future<Todo> updateTodoById(int id, Todo todo) async {
-    final response = await put(Uri.https(_url, '/todos/$id'),
-        headers: {'Content-Type': 'application/json; charset=UTF-8'},
-        body: jsonEncode(todo.toJson()));
+    final response = await dio.putUri(
+      Uri.https(_url, '/todos/$id'),
+      data: todo.toJson(),
+    );
     if (response.statusCode == 200) {
-      final json = jsonDecode(response.body);
+      final json = response.data;
       final todo = Todo.fromJson(json);
       return todo;
     } else {
@@ -47,7 +48,7 @@ class TodoRepository {
   }
 
   Future<void> deleteTodoById(int id) async {
-    final response = await delete(Uri.https(_url, '/todos/$id'));
+    final response = await dio.deleteUri(Uri.https(_url, '/todos/$id'));
     if (response.statusCode != 200) {
       throw Exception('Failed to delete todo');
     }

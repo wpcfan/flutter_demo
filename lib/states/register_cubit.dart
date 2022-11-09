@@ -8,15 +8,16 @@ import 'package:shared_preferences/shared_preferences.dart';
 part 'register_state.dart';
 
 class RegisterCubit extends Cubit<RegisterState> {
-  RegisterCubit({required this.repository}) : super(RegisterInitial());
+  RegisterCubit({required this.repository, required this.perfs})
+      : super(RegisterInitial());
   final AuthRepository repository;
+  final SharedPreferences perfs;
 
   void register(String username, String password, String phone) async {
     emit(RegisterLoading());
     try {
       final user = await repository.register(username, password, phone);
       if (user.sessionToken != null) {
-        final SharedPreferences perfs = await SharedPreferences.getInstance();
         perfs.setString('sessionToken', user.sessionToken!);
         emit(RegisterSuccess(user: user));
       } else {

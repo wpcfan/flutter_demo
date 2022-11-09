@@ -7,6 +7,7 @@ import 'package:demo/widgets/all.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:reactive_forms/reactive_forms.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class RegisterPage extends StatelessWidget implements AutoRouteWrapper {
   const RegisterPage({super.key});
@@ -123,8 +124,9 @@ class RegisterPage extends StatelessWidget implements AutoRouteWrapper {
   @override
   Widget wrappedRoute(BuildContext context) {
     return BlocProvider<RegisterCubit>(
-      create: (context) =>
-          RegisterCubit(repository: context.read<AuthRepository>()),
+      create: (context) => RegisterCubit(
+          repository: context.read<AuthRepository>(),
+          perfs: context.read<SharedPreferences>()),
       child: this,
     );
   }
