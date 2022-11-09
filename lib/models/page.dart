@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 
 enum PageBlockType {
   slider('slider'),
+  imageList('image_list'),
   ;
 
   final String value;
@@ -11,7 +12,6 @@ enum PageBlockType {
 
 enum LinkType {
   url('url'),
-  route('route'),
   deepLink('deep_link'),
   ;
 
@@ -64,6 +64,8 @@ abstract class PageBlock extends Equatable {
     switch (type) {
       case PageBlockType.slider:
         return SliderPageBlock.fromJson(json);
+      case PageBlockType.imageList:
+        return ImageListPageBlock.fromJson(json);
     }
   }
 
@@ -141,6 +143,61 @@ class SliderPageBlock extends PageBlock {
   factory SliderPageBlock.fromJson(Map<String, dynamic> json) {
     debugPrint(json.toString());
     return SliderPageBlock(
+      id: json['id'],
+      sort: json['sort'],
+      data: (json['data'] as List)
+          .map((e) => ImageData.fromJson(e))
+          .toList()
+          .cast<ImageData>(),
+      title: json['title'],
+      width: json['width'],
+      height: json['height'],
+      platform: json['platform'],
+    );
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'type': type.value,
+      'sort': sort,
+      'data': data.map((e) => e.toJson()).toList(),
+      'title': title,
+      'width': width,
+      'height': height,
+      'platform': platform,
+    };
+  }
+}
+
+class ImageListPageBlock extends PageBlock {
+  final String? title;
+  final int? width;
+  final int? height;
+  final List<ImageData> data;
+
+  const ImageListPageBlock({
+    required int id,
+    required int sort,
+    required String platform,
+    this.title,
+    this.width,
+    this.height,
+    required this.data,
+  }) : super(
+          id: id,
+          type: PageBlockType.imageList,
+          sort: sort,
+          platform: platform,
+        );
+
+  @override
+  List<Object?> get props =>
+      [id, type, sort, data, title, width, height, platform];
+
+  factory ImageListPageBlock.fromJson(Map<String, dynamic> json) {
+    return ImageListPageBlock(
       id: json['id'],
       sort: json['sort'],
       data: (json['data'] as List)

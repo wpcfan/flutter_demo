@@ -17,7 +17,7 @@ class RootPage extends StatelessWidget {
         routes: const [
           Home(),
           Counter(),
-          Todo(),
+          Todos(),
           My(),
           Setting(),
         ],

@@ -66,7 +66,7 @@ class _$AppRouter extends RootStackRouter {
     Home.name: (routeData) {
       return MaterialPageX<dynamic>(
         routeData: routeData,
-        child: const HomePage(),
+        child: WrappedRoute(child: const HomePage()),
       );
     },
     Counter.name: (routeData) {
@@ -75,7 +75,7 @@ class _$AppRouter extends RootStackRouter {
         child: WrappedRoute(child: const CounterPage()),
       );
     },
-    Todo.name: (routeData) {
+    Todos.name: (routeData) {
       return MaterialPageX<dynamic>(
         routeData: routeData,
         child: WrappedRoute(child: const TodoPage()),
@@ -112,13 +112,13 @@ class _$AppRouter extends RootStackRouter {
               parent: RootRoute.name,
             ),
             RouteConfig(
-              Todo.name,
-              path: 'todo-page',
+              Todos.name,
+              path: 'todos',
               parent: RootRoute.name,
             ),
             RouteConfig(
               My.name,
-              path: 'my-page',
+              path: 'my',
               parent: RootRoute.name,
             ),
             RouteConfig(
@@ -135,11 +135,11 @@ class _$AppRouter extends RootStackRouter {
         ),
         RouteConfig(
           Login.name,
-          path: '/login-page',
+          path: '/login',
         ),
         RouteConfig(
           Register.name,
-          path: '/register-page',
+          path: '/register',
         ),
         RouteConfig(
           Splash.name,
@@ -183,7 +183,7 @@ class Login extends PageRouteInfo<void> {
   const Login()
       : super(
           Login.name,
-          path: '/login-page',
+          path: '/login',
         );
 
   static const String name = 'Login';
@@ -195,7 +195,7 @@ class Register extends PageRouteInfo<void> {
   const Register()
       : super(
           Register.name,
-          path: '/register-page',
+          path: '/register',
         );
 
   static const String name = 'Register';
@@ -273,14 +273,14 @@ class Counter extends PageRouteInfo<void> {
 
 /// generated route for
 /// [TodoPage]
-class Todo extends PageRouteInfo<void> {
-  const Todo()
+class Todos extends PageRouteInfo<void> {
+  const Todos()
       : super(
-          Todo.name,
-          path: 'todo-page',
+          Todos.name,
+          path: 'todos',
         );
 
-  static const String name = 'Todo';
+  static const String name = 'Todos';
 }
 
 /// generated route for
@@ -289,7 +289,7 @@ class My extends PageRouteInfo<void> {
   const My()
       : super(
           My.name,
-          path: 'my-page',
+          path: 'my',
         );
 
   static const String name = 'My';
