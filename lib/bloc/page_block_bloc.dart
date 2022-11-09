@@ -20,7 +20,7 @@ class PageBlockBloc extends Bloc<PageBlockEvent, PageBlockState> {
   ) async {
     try {
       emit(state.copyWith(isFetching: true));
-      final pageBlocks = await repository.getPageBlocks();
+      final pageBlocks = await repository.getPageBlocks(event.platform);
       return emit(PageBlockState(
         status: PageBlockStatus.success,
         pageBlocks: pageBlocks,

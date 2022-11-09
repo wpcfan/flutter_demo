@@ -51,10 +51,12 @@ abstract class PageBlock extends Equatable {
     required this.id,
     required this.type,
     required this.sort,
+    required this.platform,
   });
   final int id;
   final PageBlockType type;
   final int sort;
+  final String platform;
 
   factory PageBlock.fromJson(Map<String, dynamic> json) {
     final type =
@@ -120,14 +122,21 @@ class SliderPageBlock extends PageBlock {
   const SliderPageBlock({
     required int id,
     required int sort,
-    required this.data,
+    required String platform,
     this.title,
     this.width,
     this.height,
-  }) : super(id: id, type: PageBlockType.slider, sort: sort);
+    required this.data,
+  }) : super(
+          id: id,
+          type: PageBlockType.slider,
+          sort: sort,
+          platform: platform,
+        );
 
   @override
-  List<Object?> get props => [id, type, sort, data, title, width, height];
+  List<Object?> get props =>
+      [id, type, sort, data, title, width, height, platform];
 
   factory SliderPageBlock.fromJson(Map<String, dynamic> json) {
     debugPrint(json.toString());
@@ -141,6 +150,7 @@ class SliderPageBlock extends PageBlock {
       title: json['title'],
       width: json['width'],
       height: json['height'],
+      platform: json['platform'],
     );
   }
 
@@ -154,6 +164,7 @@ class SliderPageBlock extends PageBlock {
       'title': title,
       'width': width,
       'height': height,
+      'platform': platform,
     };
   }
 }

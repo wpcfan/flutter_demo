@@ -20,6 +20,10 @@ class App extends StatelessWidget {
         providers: [
           BlocProvider(create: (context) => ThemeCubit()),
           BlocProvider(create: (context) => MessageCubit()),
+          BlocProvider(
+            create: (context) =>
+                PageBlockBloc(repository: context.read<PageBlockRepository>()),
+          ),
         ],
         child: BlocBuilder<ThemeCubit, ThemeData>(
           builder: (_, theme) {

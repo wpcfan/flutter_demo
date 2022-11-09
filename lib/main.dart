@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:demo/bloc/all.dart';
 import 'package:demo/repositories/all.dart';
 import 'package:demo/router/app_router.dart';
 import 'package:demo/router/guards/all.dart';

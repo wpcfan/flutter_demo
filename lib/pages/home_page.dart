@@ -1,13 +1,29 @@
-import 'package:auto_route/auto_route.dart';
 import 'package:demo/bloc/all.dart';
 import 'package:demo/models/all.dart';
-import 'package:demo/repositories/all.dart';
 import 'package:demo/widgets/all.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class HomePage extends StatelessWidget implements AutoRouteWrapper {
+class HomePage extends StatelessWidget {
   const HomePage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(builder: (context, constraints) {
+      final bloc = context.read<PageBlockBloc>();
+      if (constraints.maxWidth < 600) {
+        bloc.add(const PageBlockFetched('mobile'));
+        return const MobileHomePage();
+      } else {
+        bloc.add(const PageBlockFetched('desktop'));
+        return const DesktopHomePage();
+      }
+    });
+  }
+}
+
+class MobileHomePage extends StatelessWidget {
+  const MobileHomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -35,10 +51,10 @@ class HomePage extends StatelessWidget implements AutoRouteWrapper {
                       switch (pageBlock.type) {
                         case PageBlockType.slider:
                           final sliderPageBlock = pageBlock as SliderPageBlock;
-                          return ImageSlider(children: [
-                            for (final image in sliderPageBlock.data)
-                              Image.network(image.image)
-                          ]);
+                          return ImageSlider(
+                              children: sliderPageBlock.data
+                                  .map((elm) => Image.network(elm.image))
+                                  .toList());
                       }
                     },
                     childCount: state.pageBlocks.length,
@@ -51,14 +67,15 @@ class HomePage extends StatelessWidget implements AutoRouteWrapper {
       ),
     );
   }
+}
+
+class DesktopHomePage extends StatelessWidget {
+  const DesktopHomePage({super.key});
 
   @override
-  Widget wrappedRoute(BuildContext context) {
-    return BlocProvider(
-      create: (context) =>
-          PageBlockBloc(repository: context.read<PageBlockRepository>())
-            ..add(PageBlockFetched()),
-      child: this,
+  Widget build(BuildContext context) {
+    return Container(
+      color: Colors.red,
     );
   }
 }
