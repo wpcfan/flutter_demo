@@ -4,12 +4,12 @@ import 'package:auto_route/auto_route.dart';
 import 'package:demo/bloc/all.dart';
 import 'package:demo/models/all.dart';
 import 'package:demo/repositories/all.dart';
+import 'package:demo/widgets/extended_nested_scroll_view/extended_nested_scroll_view.dart';
 import 'package:demo/widgets/page_blocks/all.dart';
 import 'package:demo/widgets/page_blocks/image_row.dart';
 import 'package:extended_sliver/extended_sliver.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sliver_tools/sliver_tools.dart';
 
 part './home_page_desktop.dart';
 part './home_page_mobile.dart';

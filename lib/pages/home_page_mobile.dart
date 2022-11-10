@@ -8,12 +8,25 @@ class MobileHomePage extends StatefulWidget {
 }
 
 class _MobileHomePageState extends State<MobileHomePage>
-    with SingleTickerProviderStateMixin {
-  TabController? _tabController;
-
+    with TickerProviderStateMixin {
+  TabController? tabController;
+  final tabs = const [
+    Tab(
+      icon: Icon(Icons.home),
+      text: 'Home',
+    ),
+    Tab(
+      icon: Icon(Icons.calculate),
+      text: 'Counter',
+    ),
+    Tab(
+      icon: Icon(Icons.list),
+      text: 'Todo',
+    ),
+  ];
   @override
   void initState() {
-    _tabController = TabController(
+    tabController = TabController(
       initialIndex: 0,
       length: 3,
       vsync: this,
@@ -34,21 +47,8 @@ class _MobileHomePageState extends State<MobileHomePage>
             if (state.status == PageBlockStatus.failure) {
               return Text(state.error ?? 'Something went wrong');
             }
-            return AboveTabWidget(
-              state: state,
-              tabs: const [
-                Tab(
-                  text: 'Home',
-                ),
-                Tab(
-                  text: 'About',
-                ),
-                Tab(
-                  text: 'Contact',
-                ),
-              ],
-              tabController: _tabController!,
-            );
+            return HomeWidget(
+                tabs: tabs, tabController: tabController!, state: state);
           },
         ),
       ),
@@ -56,121 +56,259 @@ class _MobileHomePageState extends State<MobileHomePage>
   }
 }
 
-class AboveTabWidget extends StatelessWidget {
-  final PageBlockState state;
+class HomeWidget extends StatelessWidget {
+  final List<Tab> tabs;
   final TabController tabController;
-  final List<Widget> tabs;
+  final PageBlockState state;
+  const HomeWidget(
+      {super.key,
+      required this.tabs,
+      required this.tabController,
+      required this.state});
+
+  @override
+  Widget build(BuildContext context) {
+    // statusBar height
+    // final double statusBarHeight = MediaQuery.of(context).padding.top;
+    const double pinnedHeaderHeight = kToolbarHeight;
+    return ExtendedNestedScrollView(
+        headerSliverBuilder: (context, innerBoxIsScrolled) {
+          return <Widget>[
+            SliverPersistentHeader(
+              pinned: true,
+              floating: false,
+              delegate: HomePageHeaderDelegate(maxExtent: 350, minExtent: 0),
+            ),
+            SliverList(
+              delegate: SliverChildBuilderDelegate(
+                (_, index) {
+                  final pageBlock = state.pageBlocks[index];
+                  switch (pageBlock.type) {
+                    case PageBlockType.slider:
+                      return ImageSliderWidget(
+                        pageBlock: pageBlock as SliderPageBlock,
+                      );
+                    case PageBlockType.imageRow:
+                      return ImageRowWidget(
+                        pageBlock: pageBlock as ImageRowPageBlock,
+                      );
+                  }
+                },
+                childCount: state.pageBlocks.length,
+              ),
+            ),
+            SliverFixedExtentList(
+              itemExtent: 50,
+              delegate: SliverChildBuilderDelegate(
+                (BuildContext context, int index) {
+                  return Container(
+                    alignment: Alignment.center,
+                    color: Colors.lightBlue[100 * (index % 9)],
+                    child: Text('list item $index'),
+                  );
+                },
+                childCount: 10,
+              ),
+            ),
+            SliverGrid(
+              delegate: SliverChildBuilderDelegate(
+                (context, index) => Container(
+                  alignment: Alignment.center,
+                  color: Colors.purple[100 * (index % 9)],
+                  child: Text('grid item $index'),
+                ),
+                childCount: 10,
+              ),
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                mainAxisSpacing: 10,
+                crossAxisSpacing: 10,
+                childAspectRatio: 1.5,
+              ),
+            ),
+          ];
+        },
+        //1.[pinned sliver header issue](https://github.com/flutter/flutter/issues/22393)
+        pinnedHeaderSliverHeightBuilder: () {
+          return pinnedHeaderHeight;
+        },
+        //2.[inner scrollables in tabview sync issue](https://github.com/flutter/flutter/issues/21868)
+        onlyOneScrollInBody: true,
+        body: Column(
+          children: [
+            TabBar(
+              controller: tabController,
+              tabs: tabs,
+              isScrollable: false,
+              labelColor: Colors.black,
+              unselectedLabelColor: Colors.grey,
+              indicatorColor: Colors.black,
+            ),
+            Expanded(
+              child: TabBarView(
+                controller: tabController,
+                children: <Widget>[
+                  SafeArea(
+                    top: false,
+                    bottom: false,
+                    child: Builder(
+                      builder: (context) => CustomScrollView(
+                        key: const PageStorageKey<String>('Tab1'),
+                        slivers: <Widget>[
+                          SliverPadding(
+                            padding: const EdgeInsets.all(8),
+                            sliver: SliverFixedExtentList(
+                              itemExtent: 48,
+                              delegate: SliverChildBuilderDelegate(
+                                (context, index) => ListTile(
+                                  title: Text('Item $index'),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  SafeArea(
+                    top: false,
+                    bottom: false,
+                    child: Builder(
+                      builder: (context) => CustomScrollView(
+                        key: const PageStorageKey<String>('Tab2'),
+                        slivers: <Widget>[
+                          SliverPadding(
+                            padding: const EdgeInsets.all(8),
+                            sliver: SliverFixedExtentList(
+                              itemExtent: 48,
+                              delegate: SliverChildBuilderDelegate(
+                                (context, index) => ListTile(
+                                  title: Text('Item $index'),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  SafeArea(
+                    top: false,
+                    bottom: false,
+                    child: Builder(
+                      builder: (context) => CustomScrollView(
+                        key: const PageStorageKey<String>('Tab3'),
+                        slivers: <Widget>[
+                          SliverPadding(
+                            padding: const EdgeInsets.all(8),
+                            sliver: SliverFixedExtentList(
+                              itemExtent: 48,
+                              delegate: SliverChildBuilderDelegate(
+                                (context, index) => ListTile(
+                                  title: Text('Item $index'),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ],
+        ));
+  }
+}
+
+class AboveTabWidget extends StatelessWidget {
+  final List<Tab> tabs;
+  final TabController tabController;
+  final PageBlockState state;
   const AboveTabWidget(
       {Key? key,
       required this.state,
-      required this.tabController,
-      required this.tabs})
+      required this.tabs,
+      required this.tabController})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return CustomScrollView(
-      slivers: [
-        SliverPersistentHeader(
-          pinned: true,
-          floating: false,
-          delegate: HomePageHeaderDelegate(maxExtent: 350, minExtent: 0),
-        ),
-        SliverList(
-          delegate: SliverChildBuilderDelegate(
-            (_, index) {
-              final pageBlock = state.pageBlocks[index];
-              switch (pageBlock.type) {
-                case PageBlockType.slider:
-                  return ImageSliderWidget(
-                    pageBlock: pageBlock as SliderPageBlock,
-                  );
-                case PageBlockType.imageRow:
-                  return ImageRowWidget(
-                    pageBlock: pageBlock as ImageRowPageBlock,
-                  );
-              }
-            },
-            childCount: state.pageBlocks.length,
+    return NestedScrollView(headerSliverBuilder: (context, innerBoxIsScrolled) {
+      return <Widget>[
+        SliverOverlapAbsorber(
+          handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+          sliver: SliverPersistentHeader(
+            pinned: true,
+            floating: false,
+            delegate: HomePageHeaderDelegate(maxExtent: 350, minExtent: 0),
           ),
         ),
-        SliverFixedExtentList(
-          itemExtent: 50,
-          delegate: SliverChildBuilderDelegate(
-            (BuildContext context, int index) {
-              return Container(
-                alignment: Alignment.center,
-                color: Colors.lightBlue[100 * (index % 9)],
-                child: Text('list item $index'),
-              );
-            },
-            childCount: 10,
-          ),
-        ),
-        SliverGrid(
-          delegate: SliverChildBuilderDelegate(
-            (context, index) => Container(
-              alignment: Alignment.center,
-              color: Colors.purple[100 * (index % 9)],
-              child: Text('grid item $index'),
+      ];
+    }, body: Builder(builder: (context) {
+      return CustomScrollView(
+        slivers: [
+          SliverOverlapInjector(
+              handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context)),
+          SliverList(
+            delegate: SliverChildBuilderDelegate(
+              (_, index) {
+                final pageBlock = state.pageBlocks[index];
+                switch (pageBlock.type) {
+                  case PageBlockType.slider:
+                    return ImageSliderWidget(
+                      pageBlock: pageBlock as SliderPageBlock,
+                    );
+                  case PageBlockType.imageRow:
+                    return ImageRowWidget(
+                      pageBlock: pageBlock as ImageRowPageBlock,
+                    );
+                }
+              },
+              childCount: state.pageBlocks.length,
             ),
-            childCount: 10,
           ),
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            mainAxisSpacing: 10,
-            crossAxisSpacing: 10,
-            childAspectRatio: 1.5,
-          ),
-        ),
-        SliverAppBar(
-          pinned: true,
-          floating: false,
-          bottom: TabBar(
-            controller: tabController,
-            tabs: tabs,
-          ),
-        ),
-        SliverFillRemaining(
-          child: TabBarView(
-            controller: tabController,
-            children: [
-              ListView.builder(
-                itemBuilder: (_, index) => Container(
+          SliverFixedExtentList(
+            itemExtent: 50,
+            delegate: SliverChildBuilderDelegate(
+              (BuildContext context, int index) {
+                return Container(
                   alignment: Alignment.center,
-                  color: Colors.pink[100 * (index % 9)],
-                  height: 50,
-                  child: Text(
-                    'tab 1 item $index',
-                  ),
-                ),
-                itemCount: 10,
-              ),
-              ListView.builder(
-                itemBuilder: (_, index) => Container(
-                  alignment: Alignment.center,
-                  color: Colors.green[100 * (index % 9)],
-                  height: 50,
-                  child: Text('tab 2 item $index',
-                      style: const TextStyle(fontSize: 20)),
-                ),
-                itemCount: 20,
-              ),
-              ListView.builder(
-                itemBuilder: (_, index) => Container(
-                  alignment: Alignment.center,
-                  color: Colors.yellow[100 * (index % 9)],
-                  height: 50,
-                  child: Text('tab 3 item $index',
-                      style: const TextStyle(fontSize: 20)),
-                ),
-                itemCount: 30,
-              ),
-            ],
+                  color: Colors.lightBlue[100 * (index % 9)],
+                  child: Text('list item $index'),
+                );
+              },
+              childCount: 10,
+            ),
           ),
-        ),
-      ],
-    );
+          SliverGrid(
+            delegate: SliverChildBuilderDelegate(
+              (context, index) => Container(
+                alignment: Alignment.center,
+                color: Colors.purple[100 * (index % 9)],
+                child: Text('grid item $index'),
+              ),
+              childCount: 10,
+            ),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              mainAxisSpacing: 10,
+              crossAxisSpacing: 10,
+              childAspectRatio: 1.5,
+            ),
+          ),
+          SliverToNestedScrollBoxAdapter(
+            childExtent: 1000,
+            onScrollOffsetChanged: (offset) => debugPrint(offset.toString()),
+            child: TabWidget(
+              tabs: tabs,
+              tabController: tabController,
+            ),
+          ),
+        ],
+      );
+    }));
   }
 }
 
@@ -234,14 +372,133 @@ class HomePageHeaderDelegate extends SliverPersistentHeaderDelegate {
   }
 }
 
-class TabHeaderDelegate extends SliverPersistentHeaderDelegate {
-  get tabBar {
-    return TabBar(
-      controller: tabController,
-      tabs: tabs,
+class TabWidget extends StatelessWidget {
+  const TabWidget({super.key, required this.tabController, required this.tabs});
+  final TabController tabController;
+  final List<Widget> tabs;
+  @override
+  Widget build(BuildContext context) {
+    return NestedScrollView(
+      headerSliverBuilder: ((context, innerBoxIsScrolled) {
+        return <Widget>[
+          // SliverOverlapAbsorber(
+          //   handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+          //   sliver: SliverPersistentHeader(
+          //     pinned: true,
+          //     floating: false,
+          //     delegate:
+          //         TabHeaderDelegate(tabController: tabController, tabs: tabs),
+          //   ),
+          // ),
+          SliverAppBar(
+            floating: true,
+            bottom: TabBar(
+              controller: tabController,
+              tabs: tabs,
+            ),
+          ),
+        ];
+      }),
+      body: TabBarView(
+        controller: tabController,
+        children: <Widget>[
+          SafeArea(
+            top: false,
+            bottom: false,
+            child: Builder(
+              builder: (context) => CustomScrollView(
+                key: const PageStorageKey<String>('Tab1'),
+                slivers: <Widget>[
+                  SliverOverlapInjector(
+                    handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
+                        context),
+                  ),
+                  SliverPadding(
+                    padding: const EdgeInsets.all(8),
+                    sliver: SliverFixedExtentList(
+                      itemExtent: 48,
+                      delegate: SliverChildBuilderDelegate(
+                        (context, index) => ListTile(
+                          title: Text('Item $index'),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          SafeArea(
+            top: false,
+            bottom: false,
+            child: Builder(
+              builder: (context) => CustomScrollView(
+                key: const PageStorageKey<String>('Tab2'),
+                slivers: <Widget>[
+                  SliverOverlapInjector(
+                    handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
+                        context),
+                  ),
+                  SliverPadding(
+                    padding: const EdgeInsets.all(8),
+                    sliver: SliverFixedExtentList(
+                      itemExtent: 48,
+                      delegate: SliverChildBuilderDelegate(
+                        (context, index) => ListTile(
+                          title: Text('Item $index'),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          SafeArea(
+            top: false,
+            bottom: false,
+            child: Builder(
+              builder: (context) => CustomScrollView(
+                key: const PageStorageKey<String>('Tab3'),
+                slivers: <Widget>[
+                  SliverOverlapInjector(
+                    handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
+                        context),
+                  ),
+                  SliverPadding(
+                    padding: const EdgeInsets.all(8),
+                    sliver: SliverFixedExtentList(
+                      itemExtent: 48,
+                      delegate: SliverChildBuilderDelegate(
+                        (context, index) => ListTile(
+                          title: Text('Item $index'),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          )
+        ],
+      ),
     );
   }
+}
 
+class TabHeaderDelegate extends SliverPersistentHeaderDelegate {
+  TabHeaderDelegate({
+    required this.tabController,
+    required this.tabs,
+  });
+  TabBar get tabBar => TabBar(
+        controller: tabController,
+        tabs: tabs,
+        isScrollable: false,
+        labelColor: Colors.black,
+        unselectedLabelColor: Colors.grey,
+        indicatorColor: Colors.black,
+      );
   @override
   double get minExtent => tabBar.preferredSize.height;
   @override
@@ -249,21 +506,10 @@ class TabHeaderDelegate extends SliverPersistentHeaderDelegate {
   final TabController tabController;
   final List<Widget> tabs;
 
-  TabHeaderDelegate({
-    required this.tabController,
-    required this.tabs,
-  });
-
   @override
   Widget build(
       BuildContext context, double shrinkOffset, bool overlapsContent) {
-    return Container(
-      color: Colors.white,
-      child: TabBar(
-        tabs: tabs,
-        controller: tabController,
-      ),
-    );
+    return tabBar;
   }
 
   @override
