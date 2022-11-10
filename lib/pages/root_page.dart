@@ -24,7 +24,7 @@ class RootPage extends StatelessWidget {
         builder: (context, child, animation) {
           final tabsRouter = AutoTabsRouter.of(context);
           return Scaffold(
-            appBar: tabsRouter.activeIndex == 0
+            appBar: tabsRouter.activeIndex == 1
                 ? AppBar(
                     title: const Text('Flutter Demo Home Page'),
                   )

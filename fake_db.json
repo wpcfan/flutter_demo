@@ -64,7 +64,7 @@
     {
       "id": 2,
       "title": "one row one column",
-      "type": "image_list",
+      "type": "image_row",
       "width": 400,
       "height": 120,
       "sort": 2,
@@ -86,8 +86,8 @@
     {
       "id": 3,
       "title": "one row two columns",
-      "type": "image_list",
-      "width": 160,
+      "type": "image_row",
+      "width": 400,
       "height": 120,
       "sort": 3,
       "platform": "mobile",
@@ -119,8 +119,8 @@
     {
       "id": 4,
       "title": "one row three columns",
-      "type": "image_list",
-      "width": 120,
+      "type": "image_row",
+      "width": 400,
       "height": 90,
       "sort": 3,
       "platform": "mobile",

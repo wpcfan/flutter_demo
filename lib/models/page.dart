@@ -3,7 +3,7 @@ import 'package:flutter/foundation.dart';
 
 enum PageBlockType {
   slider('slider'),
-  imageList('image_list'),
+  imageRow('image_row'),
   ;
 
   final String value;
@@ -32,6 +32,7 @@ class Link extends Equatable {
   List<Object?> get props => [type, value];
 
   factory Link.fromJson(Map<String, dynamic> json) {
+    debugPrint('Link.fromJson: $json');
     return Link(
       type: LinkType.values.firstWhere((e) => e.value == json['type']),
       value: json['value'],
@@ -64,8 +65,8 @@ abstract class PageBlock extends Equatable {
     switch (type) {
       case PageBlockType.slider:
         return SliderPageBlock.fromJson(json);
-      case PageBlockType.imageList:
-        return ImageListPageBlock.fromJson(json);
+      case PageBlockType.imageRow:
+        return ImageRowPageBlock.fromJson(json);
     }
   }
 
@@ -90,6 +91,7 @@ class ImageData extends Equatable {
   final int? height;
 
   factory ImageData.fromJson(Map<String, dynamic> json) {
+    debugPrint('ImageData.fromJson: $json');
     return ImageData(
       image: json['image'],
       link: Link.fromJson(json['link']),
@@ -171,13 +173,13 @@ class SliderPageBlock extends PageBlock {
   }
 }
 
-class ImageListPageBlock extends PageBlock {
+class ImageRowPageBlock extends PageBlock {
   final String? title;
   final int? width;
   final int? height;
   final List<ImageData> data;
 
-  const ImageListPageBlock({
+  const ImageRowPageBlock({
     required int id,
     required int sort,
     required String platform,
@@ -187,7 +189,7 @@ class ImageListPageBlock extends PageBlock {
     required this.data,
   }) : super(
           id: id,
-          type: PageBlockType.imageList,
+          type: PageBlockType.imageRow,
           sort: sort,
           platform: platform,
         );
@@ -196,8 +198,8 @@ class ImageListPageBlock extends PageBlock {
   List<Object?> get props =>
       [id, type, sort, data, title, width, height, platform];
 
-  factory ImageListPageBlock.fromJson(Map<String, dynamic> json) {
-    return ImageListPageBlock(
+  factory ImageRowPageBlock.fromJson(Map<String, dynamic> json) {
+    return ImageRowPageBlock(
       id: json['id'],
       sort: json['sort'],
       data: (json['data'] as List)
