@@ -92,18 +92,13 @@ class HomeWidget extends StatelessWidget {
                       return ImageRowWidget(
                         pageBlock: pageBlock as ImageRowPageBlock,
                       );
+                    case PageBlockType.productRow:
+                      return ProductRowWidget(
+                        pageBlock: pageBlock as ProductRowPageBlock,
+                      );
                   }
                 },
                 childCount: state.pageBlocks.length,
-              ),
-            ),
-            SliverFixedExtentList(
-              itemExtent: 120,
-              delegate: SliverChildBuilderDelegate(
-                (BuildContext context, int index) {
-                  return const ProductCardOneRowOne();
-                },
-                childCount: 10,
               ),
             ),
             SliverGrid(
@@ -275,63 +270,5 @@ class HomePageHeaderDelegate extends SliverPersistentHeaderDelegate {
   @override
   bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) {
     return true;
-  }
-}
-
-class ProductCardOneRowOne extends StatelessWidget {
-  const ProductCardOneRowOne({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final paddingOfScreen = MediaQuery.of(context).padding.left +
-        MediaQuery.of(context).padding.right;
-    page({required Widget child}) => Styled.widget(child: child)
-        .padding(vertical: 8, horizontal: 12)
-        .constrained(
-            maxWidth: MediaQuery.of(context).size.width - paddingOfScreen)
-        .backgroundColor(Colors.white)
-        .border(all: 1, color: Colors.grey);
-    final productName = const Text(
-      'Product Name',
-      style: TextStyle(
-        fontWeight: FontWeight.bold,
-        fontSize: 16,
-        color: Colors.black87,
-      ),
-    ).textAlignment(TextAlign.start).padding(bottom: 4).expanded();
-    final productDescription = const Text(
-      'Product Description',
-      style: TextStyle(
-        fontSize: 14,
-        color: Colors.black54,
-      ),
-    ).padding(bottom: 4).expanded();
-    final productPrice = const Text(
-      'Product Price',
-      style: TextStyle(
-        fontWeight: FontWeight.bold,
-        fontSize: 16,
-        color: Colors.red,
-      ),
-    ).padding(bottom: 4).expanded().alignment(Alignment.centerRight);
-    final rightRow = <Widget>[
-      productName,
-      productDescription,
-      productPrice,
-    ]
-        .toColumn(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start)
-        .padding(left: 12)
-        .expanded();
-    final productImage = Image.network(
-      'https://picsum.photos/600/300/?image=12',
-      fit: BoxFit.cover,
-    ).constrained(height: 100, width: 100);
-    return [productImage, rightRow]
-        .toRow(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.start)
-        .parent(page);
   }
 }

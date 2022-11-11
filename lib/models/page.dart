@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 enum PageBlockType {
   slider('slider'),
   imageRow('image_row'),
+  productRow('product_row'),
   ;
 
   final String value;
@@ -67,6 +68,8 @@ abstract class PageBlock extends Equatable {
         return SliderPageBlock.fromJson(json);
       case PageBlockType.imageRow:
         return ImageRowPageBlock.fromJson(json);
+      case PageBlockType.productRow:
+        return ProductRowPageBlock.fromJson(json);
     }
   }
 
@@ -221,6 +224,99 @@ class ImageRowPageBlock extends PageBlock {
       'sort': sort,
       'data': data.map((e) => e.toJson()).toList(),
       'title': title,
+      'width': width,
+      'height': height,
+      'platform': platform,
+    };
+  }
+}
+
+class ProductData extends Equatable {
+  final int sort;
+  final String id;
+  final String name;
+  final String description;
+  final String price;
+  final String image;
+
+  const ProductData({
+    required this.sort,
+    required this.id,
+    required this.name,
+    required this.description,
+    required this.price,
+    required this.image,
+  });
+
+  factory ProductData.fromJson(Map<String, dynamic> json) {
+    return ProductData(
+      sort: json['sort'],
+      id: json['id'],
+      name: json['name'],
+      description: json['description'],
+      price: json['price'],
+      image: json['image'],
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'sort': sort,
+      'id': id,
+      'name': name,
+      'description': description,
+      'price': price,
+      'image': image,
+    };
+  }
+
+  @override
+  List<Object?> get props => [sort, id, name, description, price, image];
+}
+
+class ProductRowPageBlock extends PageBlock {
+  final int? width;
+  final int? height;
+  final List<ProductData> data;
+
+  const ProductRowPageBlock({
+    required int id,
+    required int sort,
+    required String platform,
+    this.width,
+    this.height,
+    required this.data,
+  }) : super(
+          id: id,
+          type: PageBlockType.productRow,
+          sort: sort,
+          platform: platform,
+        );
+
+  @override
+  List<Object?> get props => [id, type, sort, data, width, height, platform];
+
+  factory ProductRowPageBlock.fromJson(Map<String, dynamic> json) {
+    return ProductRowPageBlock(
+      id: json['id'],
+      sort: json['sort'],
+      data: (json['data'] as List)
+          .map((e) => ProductData.fromJson(e))
+          .toList()
+          .cast<ProductData>(),
+      width: json['width'],
+      height: json['height'],
+      platform: json['platform'],
+    );
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'type': type.value,
+      'sort': sort,
+      'data': data.map((e) => e.toJson()).toList(),
       'width': width,
       'height': height,
       'platform': platform,

@@ -122,7 +122,7 @@
       "type": "image_row",
       "width": 400,
       "height": 90,
-      "sort": 3,
+      "sort": 4,
       "platform": "mobile",
       "data": [
         {
@@ -157,6 +157,52 @@
           },
           "width": 120,
           "height": 90
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "title": "one row one product",
+      "type": "product_row",
+      "width": 400,
+      "height": 120,
+      "sort": 5,
+      "platform": "mobile",
+      "data": [
+        {
+          "id": "PD_123456",
+          "sort": 1,
+          "name": "iPhone 5",
+          "description": "iPhone 5 is a smartphone that was designed and marketed by Apple Inc.",
+          "image": "https://picsum.photos/600/300/?image=12",
+          "price": "100.23"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "title": "one row two products",
+      "type": "product_row",
+      "width": 400,
+      "height": 180,
+      "sort": 6,
+      "platform": "mobile",
+      "data": [
+        {
+          "id": "PD_1234567",
+          "sort": 1,
+          "name": "Macbook Pro bla bla bla bla bla bla bla ",
+          "description": "MacBook Pro is a line of Macintosh portable computers introduced in January 2006 by Apple Inc.",
+          "image": "https://picsum.photos/600/300/?image=13",
+          "price": "1020.23"
+        },
+        {
+          "id": "PD_1234568",
+          "sort": 2,
+          "name": "HP EliteBook",
+          "description": "The HP EliteBook is a brand of premium business-class notebooks and mobile workstations made by Hewlett-Packard.",
+          "image": "https://picsum.photos/600/300/?image=14",
+          "price": "2000.23"
         }
       ]
     }
