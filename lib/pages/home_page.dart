@@ -7,9 +7,9 @@ import 'package:demo/repositories/all.dart';
 import 'package:demo/widgets/extended_nested_scroll_view/extended_nested_scroll_view.dart';
 import 'package:demo/widgets/page_blocks/all.dart';
 import 'package:demo/widgets/page_blocks/image_row.dart';
-import 'package:extended_sliver/extended_sliver.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:styled_widget/styled_widget.dart';
 
 part './home_page_desktop.dart';
 part './home_page_mobile.dart';
