@@ -1,14 +1,19 @@
 part of 'product_row.dart';
 
 class ProductCardOneRowOneWidget extends StatelessWidget {
-  const ProductCardOneRowOneWidget(
-      {super.key,
-      required this.product,
-      required this.width,
-      required this.height});
+  const ProductCardOneRowOneWidget({
+    super.key,
+    required this.product,
+    required this.width,
+    required this.height,
+    this.addToCart,
+    this.onTap,
+  });
   final ProductData product;
   final double width;
   final double height;
+  final void Function()? addToCart;
+  final void Function()? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -53,13 +58,24 @@ class ProductCardOneRowOneWidget extends StatelessWidget {
     // 商品价格
     final productPrice = product.price
         .toPriceWithDecimalSize(defaultFontSize: 16, decimalFontSize: 12)
-        .padding(bottom: spaceVertical)
+        .padding(bottom: spaceVertical, right: 8)
         .alignment(Alignment.centerRight);
-    final priceRow = [productOriginalPrice, productPrice].toRow(
+    // 购物车图标
+    const double buttonSize = 30.0;
+    final cartBtn = const Icon(Icons.add_shopping_cart, color: Colors.white)
+        .rounded(size: buttonSize, color: Colors.red)
+        .gestures(onTap: addToCart);
+
+    final priceRow = [
+      productOriginalPrice,
+      productPrice,
+      IgnorePointer(ignoring: addToCart == null, child: cartBtn)
+    ].toRow(
       mainAxisAlignment: MainAxisAlignment.end,
       crossAxisAlignment: CrossAxisAlignment.baseline,
       textBaseline: TextBaseline.alphabetic,
     );
+
     // 商品名称和描述形成一列
     final nameAndDescColumn = <Widget>[
       productName,
@@ -86,6 +102,7 @@ class ProductCardOneRowOneWidget extends StatelessWidget {
         .toRow(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.start)
-        .parent(page);
+        .parent(page)
+        .gestures(onTap: onTap);
   }
 }

@@ -1,5 +1,5 @@
 import 'package:demo/config.dart';
-import 'package:demo/extensions/string_extensions.dart';
+import 'package:demo/extensions/all.dart';
 import 'package:demo/models/all.dart';
 import 'package:flutter/material.dart';
 import 'package:styled_widget/styled_widget.dart';
@@ -31,6 +31,9 @@ class ProductRowWidget extends StatelessWidget {
                 product: pageBlock.data.first,
                 width: width,
                 height: height,
+                addToCart: () => debugPrint(
+                    'add to cart ${pageBlock.data.first.toString()}'),
+                onTap: () => debugPrint('on tap ${pageBlock.data.first.id}'),
               )));
     }
     return IntrinsicHeight(
@@ -40,6 +43,8 @@ class ProductRowWidget extends StatelessWidget {
                 product: el,
                 width: (width - spaceBetweenListItems) / 2,
                 height: height - spaceBetweenListItems,
+                addToCart: () => debugPrint('add to cart ${el.toString()}'),
+                onTap: () => debugPrint('on tap ${el.id}'),
               ))
           .toList()
           .toRow(

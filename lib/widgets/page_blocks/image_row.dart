@@ -21,13 +21,16 @@ class ImageRowWidget extends StatelessWidget {
           child: Row(
             children: pageBlock.data.map((el) {
               return Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 4),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: NetworkImage(el.image),
-                        fit: BoxFit.cover,
+                child: GestureDetector(
+                  onTap: () => debugPrint('on tap ${el.link}'),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 4),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: NetworkImage(el.image),
+                          fit: BoxFit.cover,
+                        ),
                       ),
                     ),
                   ),
