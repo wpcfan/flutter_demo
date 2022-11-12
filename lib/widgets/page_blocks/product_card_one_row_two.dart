@@ -42,15 +42,13 @@ class ProductCardOneRowTwoWidget extends StatelessWidget {
       maxLines: 1,
       overflow: TextOverflow.ellipsis,
     ).padding(bottom: spaceVertical);
+    // 商品原价：划线价
+    final productOriginalPrice = product.originalPrice != null
+        ? product.originalPrice!.lineThru().padding(bottom: spaceVertical)
+        : const SizedBox();
     // 商品价格
-    final productPrice = Text(
-      product.price,
-      style: const TextStyle(
-        fontWeight: FontWeight.bold,
-        fontSize: 14,
-        color: Colors.red,
-      ),
-    ).padding(bottom: spaceVertical);
+    final productPrice = product.price
+        .toPriceWithDecimalSize(defaultFontSize: 14, decimalFontSize: 10);
     // 商品图片
     final productImage = Image.network(
       product.image,
@@ -70,8 +68,11 @@ class ProductCardOneRowTwoWidget extends StatelessWidget {
     ].toColumn(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start);
-
-    final nameDescAndPrice = [imageNameAndDesc, productPrice].toColumn(
+    final priceRow = [productOriginalPrice, productPrice].toColumn(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+    );
+    final nameDescAndPrice = [imageNameAndDesc, priceRow].toColumn(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.start);
 

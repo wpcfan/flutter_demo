@@ -1,4 +1,5 @@
 import 'package:demo/config.dart';
+import 'package:demo/extensions/string_extensions.dart';
 import 'package:demo/models/all.dart';
 import 'package:flutter/material.dart';
 import 'package:styled_widget/styled_widget.dart';
@@ -24,12 +25,12 @@ class ProductRowWidget extends StatelessWidget {
           height: height,
           child: Padding(
               padding: const EdgeInsets.symmetric(
-                  horizontal: listHorizontalPadding,
+                  horizontal: screenHorizontalPadding,
                   vertical: spaceBetweenListItems / 2),
               child: ProductCardOneRowOneWidget(
                 product: pageBlock.data.first,
-                width: width - listHorizontalPadding * 2,
-                height: height - spaceBetweenListItems,
+                width: width,
+                height: height,
               )));
     }
     return IntrinsicHeight(

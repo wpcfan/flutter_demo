@@ -175,7 +175,8 @@
           "name": "iPhone 5",
           "description": "iPhone 5 is a smartphone that was designed and marketed by Apple Inc.",
           "image": "https://picsum.photos/600/300/?image=12",
-          "price": "100.23"
+          "originalPrice": "$123.43",
+          "price": "$100.23"
         }
       ]
     },
@@ -194,7 +195,8 @@
           "name": "Macbook Pro bla bla bla bla bla bla bla ",
           "description": "MacBook Pro is a line of Macintosh portable computers introduced in January 2006 by Apple Inc.",
           "image": "https://picsum.photos/600/300/?image=13",
-          "price": "1020.23"
+          "originalPrice": "$1050.23",
+          "price": "$1020.23"
         },
         {
           "id": "PD_1234568",
@@ -202,7 +204,7 @@
           "name": "HP EliteBook",
           "description": "The HP EliteBook is a brand of premium business-class notebooks and mobile workstations made by Hewlett-Packard.",
           "image": "https://picsum.photos/600/300/?image=14",
-          "price": "2000.23"
+          "price": "$2000.23"
         }
       ]
     }

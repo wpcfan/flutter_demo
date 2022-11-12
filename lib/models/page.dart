@@ -237,6 +237,7 @@ class ProductData extends Equatable {
   final String name;
   final String description;
   final String price;
+  final String? originalPrice;
   final String image;
 
   const ProductData({
@@ -245,6 +246,7 @@ class ProductData extends Equatable {
     required this.name,
     required this.description,
     required this.price,
+    this.originalPrice,
     required this.image,
   });
 
@@ -255,6 +257,7 @@ class ProductData extends Equatable {
       name: json['name'],
       description: json['description'],
       price: json['price'],
+      originalPrice: json['originalPrice'],
       image: json['image'],
     );
   }
@@ -266,12 +269,14 @@ class ProductData extends Equatable {
       'name': name,
       'description': description,
       'price': price,
+      'originalPrice': originalPrice,
       'image': image,
     };
   }
 
   @override
-  List<Object?> get props => [sort, id, name, description, price, image];
+  List<Object?> get props =>
+      [sort, id, name, description, price, originalPrice, image];
 }
 
 class ProductRowPageBlock extends PageBlock {

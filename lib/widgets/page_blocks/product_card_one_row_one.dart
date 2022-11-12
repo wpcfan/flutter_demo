@@ -15,6 +15,8 @@ class ProductCardOneRowOneWidget extends StatelessWidget {
     final imageHeight = height - 2 * listHorizontalPadding;
     const double spaceVertical = 4;
     page({required Widget child}) => Styled.widget(child: child)
+        .padding(
+            horizontal: listHorizontalPadding, vertical: listVerticalPadding)
         .constrained(maxWidth: width)
         .backgroundColor(Colors.white)
         .border(all: 1, color: Colors.grey);
@@ -41,15 +43,23 @@ class ProductCardOneRowOneWidget extends StatelessWidget {
       maxLines: 1,
       overflow: TextOverflow.ellipsis,
     ).padding(bottom: spaceVertical);
+    // 商品原价：划线价
+    final productOriginalPrice = product.originalPrice != null
+        ? product.originalPrice!
+            .lineThru()
+            .padding(bottom: spaceVertical, right: 8)
+            .alignment(Alignment.centerRight)
+        : const SizedBox();
     // 商品价格
-    final productPrice = Text(
-      product.price,
-      style: const TextStyle(
-        fontWeight: FontWeight.bold,
-        fontSize: 16,
-        color: Colors.red,
-      ),
-    ).padding(bottom: spaceVertical).alignment(Alignment.centerRight);
+    final productPrice = product.price
+        .toPriceWithDecimalSize(defaultFontSize: 16, decimalFontSize: 12)
+        .padding(bottom: spaceVertical)
+        .alignment(Alignment.centerRight);
+    final priceRow = [productOriginalPrice, productPrice].toRow(
+      mainAxisAlignment: MainAxisAlignment.end,
+      crossAxisAlignment: CrossAxisAlignment.baseline,
+      textBaseline: TextBaseline.alphabetic,
+    );
     // 商品名称和描述形成一列
     final nameAndDescColumn = <Widget>[
       productName,
@@ -58,7 +68,7 @@ class ProductCardOneRowOneWidget extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start);
     // 商品名称和描述和价格形成一列，价格需要沉底，所以使用Expanded
-    final right = [nameAndDescColumn, productPrice]
+    final right = [nameAndDescColumn, priceRow]
         .toColumn(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.start)
