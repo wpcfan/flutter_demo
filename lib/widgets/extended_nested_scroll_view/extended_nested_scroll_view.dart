@@ -1311,7 +1311,7 @@ class _NestedScrollCoordinator
         // Now deal with any overscroll
         for (int i = 0; i < innerPositions.length; ++i) {
           final double remainingDelta = overscrolls[i] - outerDelta;
-          if (remainingDelta > 0.0) {
+          if (remainingDelta > precisionErrorTolerance) {
             innerPositions[i].applyFullDragUpdate(remainingDelta);
           }
         }

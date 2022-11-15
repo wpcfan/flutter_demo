@@ -26,3 +26,17 @@ class CustomScrollController extends ScrollController {
     }
   }
 }
+
+class MyScrollController extends ScrollController {
+  final Function(double) onScroll;
+
+  MyScrollController({
+    required this.onScroll,
+  });
+
+  @override
+  void notifyListeners() {
+    super.notifyListeners();
+    onScroll(position.pixels);
+  }
+}

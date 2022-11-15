@@ -9,75 +9,57 @@ class MobileHomePage extends StatefulWidget {
 
 class _MobileHomePageState extends State<MobileHomePage>
     with TickerProviderStateMixin {
-  TabController? tabController;
-  final tabs = const [
-    Tab(
-      icon: Icon(Icons.home),
-      text: 'Home',
-    ),
-    Tab(
-      icon: Icon(Icons.calculate),
-      text: 'Counter',
-    ),
-    Tab(
-      icon: Icon(Icons.list),
-      text: 'Todo',
-    ),
-  ];
-  @override
-  void initState() {
-    tabController = TabController(
-      initialIndex: 0,
-      length: 3,
-      vsync: this,
-    );
-    super.initState();
-  }
-
+  double offsetY = 0.0;
+  double dragDelta = 0.0;
   @override
   Widget build(BuildContext context) {
-    return Container(
-      alignment: Alignment.topCenter,
-      child: Center(
-        child: BlocBuilder<PageBlockBloc, PageBlockState>(
-          builder: (_, state) {
-            if (state.status == PageBlockStatus.initial) {
-              return const CircularProgressIndicator();
-            }
-            if (state.status == PageBlockStatus.failure) {
-              return Text(state.error ?? 'Something went wrong');
-            }
-            return HomeWidget(
-                tabs: tabs, tabController: tabController!, state: state);
-          },
-        ),
-      ),
+    return BlocBuilder<PageBlockBloc, PageBlockState>(
+      builder: (_, state) {
+        if (state.status == PageBlockStatus.initial) {
+          return const Center(child: CircularProgressIndicator());
+        }
+        if (state.status == PageBlockStatus.failure) {
+          return Center(child: Text(state.error ?? 'Something went wrong'));
+        }
+        return NotificationListener<ScrollNotification>(
+            onNotification: (notification) {
+              if (notification is ScrollStartNotification) {
+                debugPrint('ScrollStartNotification: ');
+              }
+              if (notification is ScrollUpdateNotification) {
+                debugPrint('''
+                  ScrollUpdateNotification: ${notification.scrollDelta}\n 
+                  depth: ${notification.depth}
+                  ''');
+              }
+              return true;
+            },
+            child: NotificationListener<OverscrollIndicatorNotification>(
+              onNotification: ((notification) {
+                return false;
+              }),
+              child: HomeWidget(state: state),
+            ));
+      },
     );
   }
 }
 
 class HomeWidget extends StatelessWidget {
-  final List<Tab> tabs;
-  final TabController tabController;
   final PageBlockState state;
-  const HomeWidget(
-      {super.key,
-      required this.tabs,
-      required this.tabController,
-      required this.state});
+  const HomeWidget({super.key, required this.state});
 
   @override
   Widget build(BuildContext context) {
-    // statusBar height
-    // final double statusBarHeight = MediaQuery.of(context).padding.top;
-    const double pinnedHeaderHeight = kToolbarHeight;
-    return ExtendedNestedScrollView(
-        headerSliverBuilder: (context, innerBoxIsScrolled) {
+    return DefaultTabController(
+      length: 2,
+      child: NestedScrollView(
+        physics: const BouncingScrollPhysics(),
+        headerSliverBuilder: (contextOuter, innerBoxIsScrolled) {
           return <Widget>[
             SliverPersistentHeader(
               pinned: true,
-              floating: false,
-              delegate: HomePageHeaderDelegate(maxExtent: 350, minExtent: 0),
+              delegate: HomePageHeaderDelegate(maxExtent: 350, minExtent: 100),
             ),
             SliverList(
               delegate: SliverChildBuilderDelegate(
@@ -101,115 +83,77 @@ class HomeWidget extends StatelessWidget {
                 childCount: state.pageBlocks.length,
               ),
             ),
-            SliverGrid(
-              delegate: SliverChildBuilderDelegate(
-                (context, index) => Container(
-                  alignment: Alignment.center,
-                  color: Colors.purple[100 * (index % 9)],
-                  child: Text('grid item $index'),
+            SliverOverlapAbsorber(
+              handle:
+                  NestedScrollView.sliverOverlapAbsorberHandleFor(contextOuter),
+              sliver: SliverAppBar(
+                title: const Text('NestedScrollView'),
+                pinned: true,
+                forceElevated: innerBoxIsScrolled,
+                bottom: const TabBar(
+                  tabs: <Widget>[
+                    Tab(text: 'Tab 1'),
+                    Tab(text: 'Tab 2'),
+                  ],
                 ),
-                childCount: 10,
-              ),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                mainAxisSpacing: 10,
-                crossAxisSpacing: 10,
-                childAspectRatio: 1.5,
               ),
             ),
           ];
         },
-        //1.[pinned sliver header issue](https://github.com/flutter/flutter/issues/22393)
-        pinnedHeaderSliverHeightBuilder: () {
-          return pinnedHeaderHeight;
-        },
-        //2.[inner scrollables in tabview sync issue](https://github.com/flutter/flutter/issues/21868)
-        onlyOneScrollInBody: true,
-        body: Column(
-          children: [
-            TabBar(
-              controller: tabController,
-              tabs: tabs,
-              isScrollable: false,
-              labelColor: Colors.black,
-              unselectedLabelColor: Colors.grey,
-              indicatorColor: Colors.black,
-            ),
-            Expanded(
-              child: TabBarView(
-                controller: tabController,
-                children: <Widget>[
-                  SafeArea(
-                    top: false,
-                    bottom: false,
-                    child: Builder(
-                      builder: (context) => CustomScrollView(
-                        key: const PageStorageKey<String>('Tab1'),
-                        slivers: <Widget>[
-                          SliverPadding(
-                            padding: const EdgeInsets.all(8),
-                            sliver: SliverFixedExtentList(
-                              itemExtent: 48,
-                              delegate: SliverChildBuilderDelegate(
-                                (context, index) => ListTile(
-                                  title: Text('Item $index'),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
+        body: TabBarView(
+          children: <Widget>[
+            Builder(builder: (context) {
+              return CustomScrollView(
+                key: const PageStorageKey<String>('Tab2'),
+                slivers: <Widget>[
+                  SliverOverlapInjector(
+                    handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
+                        context),
+                  ),
+                  SliverPadding(
+                    padding: const EdgeInsets.all(8),
+                    sliver: SliverFixedExtentList(
+                      itemExtent: 32,
+                      delegate: SliverChildBuilderDelegate(
+                        (context, index) => ListTile(
+                          title: Text('Item $index'),
+                          tileColor:
+                              Colors.accents[index % Colors.accents.length],
+                        ),
                       ),
                     ),
                   ),
-                  SafeArea(
-                    top: false,
-                    bottom: false,
-                    child: Builder(
-                      builder: (context) => CustomScrollView(
-                        key: const PageStorageKey<String>('Tab2'),
-                        slivers: <Widget>[
-                          SliverPadding(
-                            padding: const EdgeInsets.all(8),
-                            sliver: SliverFixedExtentList(
-                              itemExtent: 48,
-                              delegate: SliverChildBuilderDelegate(
-                                (context, index) => ListTile(
-                                  title: Text('Item $index'),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  SafeArea(
-                    top: false,
-                    bottom: false,
-                    child: Builder(
-                      builder: (context) => CustomScrollView(
-                        key: const PageStorageKey<String>('Tab3'),
-                        slivers: <Widget>[
-                          SliverPadding(
-                            padding: const EdgeInsets.all(8),
-                            sliver: SliverFixedExtentList(
-                              itemExtent: 48,
-                              delegate: SliverChildBuilderDelegate(
-                                (context, index) => ListTile(
-                                  title: Text('Item $index'),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  )
                 ],
-              ),
-            ),
+              );
+            }),
+            Builder(builder: (context) {
+              return CustomScrollView(
+                key: const PageStorageKey<String>('Tab1'),
+                slivers: <Widget>[
+                  SliverOverlapInjector(
+                    handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
+                        context),
+                  ),
+                  SliverPadding(
+                    padding: const EdgeInsets.all(8),
+                    sliver: SliverFixedExtentList(
+                      itemExtent: 48,
+                      delegate: SliverChildBuilderDelegate(
+                        (context, index) => ListTile(
+                          title: Text('Item $index'),
+                          tileColor:
+                              Colors.primaries[index % Colors.primaries.length],
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              );
+            }),
           ],
-        ));
+        ),
+      ),
+    );
   }
 }
 
