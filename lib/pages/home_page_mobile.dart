@@ -47,7 +47,7 @@ class HomeWidget extends StatelessWidget {
                 pushPinnedChildren: false,
                 children: [
                   SliverPersistentHeader(
-                    pinned: true,
+                    floating: innerBoxIsScrolled,
                     delegate:
                         HomePageHeaderDelegate(maxExtent: 350, minExtent: 0),
                   ),
