@@ -11,6 +11,8 @@ class _MobileHomePageState extends State<MobileHomePage>
     with TickerProviderStateMixin {
   double offsetY = 0.0;
   double dragDelta = 0.0;
+  final outerScroller = GlobalKey<ScrollableState>();
+  final innerScroller = GlobalKey<ScrollableState>();
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<PageBlockBloc, PageBlockState>(
@@ -21,25 +23,7 @@ class _MobileHomePageState extends State<MobileHomePage>
         if (state.status == PageBlockStatus.failure) {
           return Center(child: Text(state.error ?? 'Something went wrong'));
         }
-        return NotificationListener<ScrollNotification>(
-            onNotification: (notification) {
-              if (notification is ScrollStartNotification) {
-                debugPrint('ScrollStartNotification: ');
-              }
-              if (notification is ScrollUpdateNotification) {
-                debugPrint('''
-                  ScrollUpdateNotification: ${notification.scrollDelta}\n 
-                  depth: ${notification.depth}
-                  ''');
-              }
-              return true;
-            },
-            child: NotificationListener<OverscrollIndicatorNotification>(
-              onNotification: ((notification) {
-                return false;
-              }),
-              child: HomeWidget(state: state),
-            ));
+        return HomeWidget(state: state);
       },
     );
   }
@@ -55,102 +39,126 @@ class HomeWidget extends StatelessWidget {
       length: 2,
       child: NestedScrollView(
         physics: const BouncingScrollPhysics(),
-        headerSliverBuilder: (contextOuter, innerBoxIsScrolled) {
+        headerSliverBuilder: (context, innerBoxIsScrolled) {
           return <Widget>[
-            SliverPersistentHeader(
-              pinned: true,
-              delegate: HomePageHeaderDelegate(maxExtent: 350, minExtent: 100),
-            ),
-            SliverList(
-              delegate: SliverChildBuilderDelegate(
-                (_, index) {
-                  final pageBlock = state.pageBlocks[index];
-                  switch (pageBlock.type) {
-                    case PageBlockType.slider:
-                      return ImageSliderWidget(
-                        pageBlock: pageBlock as SliderPageBlock,
-                      );
-                    case PageBlockType.imageRow:
-                      return ImageRowWidget(
-                        pageBlock: pageBlock as ImageRowPageBlock,
-                      );
-                    case PageBlockType.productRow:
-                      return ProductRowWidget(
-                        pageBlock: pageBlock as ProductRowPageBlock,
-                      );
-                  }
-                },
-                childCount: state.pageBlocks.length,
-              ),
-            ),
             SliverOverlapAbsorber(
-              handle:
-                  NestedScrollView.sliverOverlapAbsorberHandleFor(contextOuter),
-              sliver: SliverAppBar(
-                title: const Text('NestedScrollView'),
-                pinned: true,
-                forceElevated: innerBoxIsScrolled,
-                bottom: const TabBar(
-                  tabs: <Widget>[
-                    Tab(text: 'Tab 1'),
-                    Tab(text: 'Tab 2'),
-                  ],
-                ),
+              handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+              sliver: MultiSliver(
+                pushPinnedChildren: false,
+                children: [
+                  SliverPersistentHeader(
+                    pinned: true,
+                    delegate:
+                        HomePageHeaderDelegate(maxExtent: 350, minExtent: 0),
+                  ),
+                  SliverList(
+                    delegate: SliverChildBuilderDelegate(
+                      (_, index) {
+                        final pageBlock = state.pageBlocks[index];
+                        switch (pageBlock.type) {
+                          case PageBlockType.slider:
+                            return ImageSliderWidget(
+                              pageBlock: pageBlock as SliderPageBlock,
+                            );
+                          case PageBlockType.imageRow:
+                            return ImageRowWidget(
+                              pageBlock: pageBlock as ImageRowPageBlock,
+                            );
+                          case PageBlockType.productRow:
+                            return ProductRowWidget(
+                              pageBlock: pageBlock as ProductRowPageBlock,
+                            );
+                        }
+                      },
+                      childCount: state.pageBlocks.length,
+                    ),
+                  ),
+                  SliverAppBar(
+                    title: const Text('Home'),
+                    pinned: true,
+                    forceElevated: innerBoxIsScrolled,
+                    flexibleSpace: Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        TabBar(
+                          isScrollable: true,
+                          unselectedLabelColor: Colors.white.withOpacity(0.3),
+                          labelPadding: const EdgeInsets.symmetric(
+                              horizontal: 30), // Space between tabs
+                          indicator: const UnderlineTabIndicator(
+                            borderSide: BorderSide(
+                                color: Colors.white,
+                                width: 2), // Indicator height
+                            insets: EdgeInsets.symmetric(
+                                horizontal: 48), // Indicator width
+                          ),
+                          tabs: const <Widget>[
+                            Tab(text: 'Tab 1'),
+                            Tab(text: 'Tab 2'),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
             ),
           ];
         },
-        body: TabBarView(
-          children: <Widget>[
-            Builder(builder: (context) {
-              return CustomScrollView(
-                key: const PageStorageKey<String>('Tab2'),
-                slivers: <Widget>[
-                  SliverOverlapInjector(
-                    handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
-                        context),
-                  ),
-                  SliverPadding(
-                    padding: const EdgeInsets.all(8),
-                    sliver: SliverFixedExtentList(
-                      itemExtent: 32,
-                      delegate: SliverChildBuilderDelegate(
-                        (context, index) => ListTile(
-                          title: Text('Item $index'),
-                          tileColor:
-                              Colors.accents[index % Colors.accents.length],
+        body: SafeArea(
+          child: TabBarView(
+            children: <Widget>[
+              Builder(builder: (context) {
+                return CustomScrollView(
+                  key: const PageStorageKey<String>('Tab2'),
+                  slivers: <Widget>[
+                    SliverOverlapInjector(
+                      handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
+                          context),
+                    ),
+                    SliverPadding(
+                      padding: const EdgeInsets.all(8),
+                      sliver: SliverFixedExtentList(
+                        itemExtent: 50,
+                        delegate: SliverChildBuilderDelegate(
+                          (context, index) => ListTile(
+                            title: Text('Item $index'),
+                            tileColor:
+                                Colors.accents[index % Colors.accents.length],
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ],
-              );
-            }),
-            Builder(builder: (context) {
-              return CustomScrollView(
-                key: const PageStorageKey<String>('Tab1'),
-                slivers: <Widget>[
-                  SliverOverlapInjector(
-                    handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
-                        context),
-                  ),
-                  SliverPadding(
-                    padding: const EdgeInsets.all(8),
-                    sliver: SliverFixedExtentList(
-                      itemExtent: 48,
-                      delegate: SliverChildBuilderDelegate(
-                        (context, index) => ListTile(
-                          title: Text('Item $index'),
-                          tileColor:
-                              Colors.primaries[index % Colors.primaries.length],
+                  ],
+                );
+              }),
+              Builder(builder: (context) {
+                return CustomScrollView(
+                  key: const PageStorageKey<String>('Tab1'),
+                  slivers: <Widget>[
+                    SliverOverlapInjector(
+                      handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
+                          context),
+                    ),
+                    SliverPadding(
+                      padding: const EdgeInsets.all(8),
+                      sliver: SliverFixedExtentList(
+                        itemExtent: 50,
+                        delegate: SliverChildBuilderDelegate(
+                          (context, index) => ListTile(
+                            title: Text('Item $index'),
+                            tileColor: Colors
+                                .primaries[index % Colors.primaries.length],
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ],
-              );
-            }),
-          ],
+                  ],
+                );
+              }),
+            ],
+          ),
         ),
       ),
     );

@@ -7,6 +7,7 @@ import 'package:demo/repositories/all.dart';
 import 'package:demo/widgets/page_blocks/all.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sliver_tools/sliver_tools.dart';
 
 part './home_page_desktop.dart';
 part './home_page_mobile.dart';
