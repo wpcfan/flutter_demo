@@ -1,18 +1,8 @@
 part of './home_page.dart';
 
-class MobileHomePage extends StatefulWidget {
+class MobileHomePage extends StatelessWidget {
   const MobileHomePage({super.key});
 
-  @override
-  State<MobileHomePage> createState() => _MobileHomePageState();
-}
-
-class _MobileHomePageState extends State<MobileHomePage>
-    with TickerProviderStateMixin {
-  double offsetY = 0.0;
-  double dragDelta = 0.0;
-  final outerScroller = GlobalKey<ScrollableState>();
-  final innerScroller = GlobalKey<ScrollableState>();
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<PageBlockBloc, PageBlockState>(
@@ -35,8 +25,36 @@ class HomeWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    try {
+      final waterfallBlock = state.pageBlocks
+              .firstWhere((el) => el.type == PageBlockType.waterfall)
+          as WaterfallPageBlock;
+      final blocksWithoutWaterfall = state.pageBlocks
+          .where((el) => el.type != PageBlockType.waterfall)
+          .toList();
+      return WaterfallLayout(
+          waterfallBlock: waterfallBlock,
+          blocksWithoutWaterfall: blocksWithoutWaterfall);
+    } catch (e) {
+      return NoWaterfallLayout(state: state);
+    }
+  }
+}
+
+class WaterfallLayout extends StatelessWidget {
+  const WaterfallLayout({
+    Key? key,
+    required this.waterfallBlock,
+    required this.blocksWithoutWaterfall,
+  }) : super(key: key);
+
+  final WaterfallPageBlock waterfallBlock;
+  final List<PageBlock> blocksWithoutWaterfall;
+
+  @override
+  Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 2,
+      length: waterfallBlock.data.length,
       child: NestedScrollView(
         physics: const BouncingScrollPhysics(),
         headerSliverBuilder: (context, innerBoxIsScrolled) {
@@ -54,7 +72,7 @@ class HomeWidget extends StatelessWidget {
                   SliverList(
                     delegate: SliverChildBuilderDelegate(
                       (_, index) {
-                        final pageBlock = state.pageBlocks[index];
+                        final pageBlock = blocksWithoutWaterfall[index];
                         switch (pageBlock.type) {
                           case PageBlockType.slider:
                             return ImageSliderWidget(
@@ -68,38 +86,16 @@ class HomeWidget extends StatelessWidget {
                             return ProductRowWidget(
                               pageBlock: pageBlock as ProductRowPageBlock,
                             );
+                          default:
+                            return Container();
                         }
                       },
-                      childCount: state.pageBlocks.length,
+                      childCount: blocksWithoutWaterfall.length,
                     ),
                   ),
-                  SliverAppBar(
-                    title: const Text('Home'),
-                    pinned: true,
-                    forceElevated: innerBoxIsScrolled,
-                    flexibleSpace: Column(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        TabBar(
-                          isScrollable: true,
-                          unselectedLabelColor: Colors.white.withOpacity(0.3),
-                          labelPadding: const EdgeInsets.symmetric(
-                              horizontal: 30), // Space between tabs
-                          indicator: const UnderlineTabIndicator(
-                            borderSide: BorderSide(
-                                color: Colors.white,
-                                width: 2), // Indicator height
-                            insets: EdgeInsets.symmetric(
-                                horizontal: 48), // Indicator width
-                          ),
-                          tabs: const <Widget>[
-                            Tab(text: 'Tab 1'),
-                            Tab(text: 'Tab 2'),
-                          ],
-                        ),
-                      ],
-                    ),
+                  WaterfallTabbarWidget(
+                    innerBoxIsScrolled: innerBoxIsScrolled,
+                    data: waterfallBlock.data,
                   ),
                 ],
               ),
@@ -108,56 +104,20 @@ class HomeWidget extends StatelessWidget {
         },
         body: SafeArea(
           child: TabBarView(
-            children: <Widget>[
-              Builder(builder: (context) {
+            children: waterfallBlock.data.map((data) {
+              return Builder(builder: (context) {
                 return CustomScrollView(
-                  key: const PageStorageKey<String>('Tab2'),
-                  slivers: <Widget>[
+                  key: PageStorageKey<String>(data.title),
+                  slivers: [
                     SliverOverlapInjector(
                       handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
                           context),
                     ),
-                    SliverPadding(
-                      padding: const EdgeInsets.all(8),
-                      sliver: SliverFixedExtentList(
-                        itemExtent: 50,
-                        delegate: SliverChildBuilderDelegate(
-                          (context, index) => ListTile(
-                            title: Text('Item $index'),
-                            tileColor:
-                                Colors.accents[index % Colors.accents.length],
-                          ),
-                        ),
-                      ),
-                    ),
+                    WaterfallMasonryWidget(data: data)
                   ],
                 );
-              }),
-              Builder(builder: (context) {
-                return CustomScrollView(
-                  key: const PageStorageKey<String>('Tab1'),
-                  slivers: <Widget>[
-                    SliverOverlapInjector(
-                      handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
-                          context),
-                    ),
-                    SliverPadding(
-                      padding: const EdgeInsets.all(8),
-                      sliver: SliverFixedExtentList(
-                        itemExtent: 50,
-                        delegate: SliverChildBuilderDelegate(
-                          (context, index) => ListTile(
-                            title: Text('Item $index'),
-                            tileColor: Colors
-                                .primaries[index % Colors.primaries.length],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                );
-              }),
-            ],
+              });
+            }).toList(),
           ),
         ),
       ),
@@ -165,62 +125,50 @@ class HomeWidget extends StatelessWidget {
   }
 }
 
-class HomePageHeaderDelegate extends SliverPersistentHeaderDelegate {
-  @override
-  final double minExtent;
-  @override
-  final double maxExtent;
-  HomePageHeaderDelegate({
-    required this.minExtent,
-    required this.maxExtent,
-  }) : assert(minExtent <= maxExtent);
+class NoWaterfallLayout extends StatelessWidget {
+  const NoWaterfallLayout({
+    Key? key,
+    required this.state,
+  }) : super(key: key);
+
+  final PageBlockState state;
 
   @override
-  Widget build(
-      BuildContext context, double shrinkOffset, bool overlapsContent) {
-    return Stack(
-      fit: StackFit.expand,
-      children: [
-        Image.network(
-          'https://picsum.photos/600/300/?image=12',
-          fit: BoxFit.cover,
-        ),
-        Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              colors: [Colors.transparent, Colors.black54],
-              stops: [0.5, 1.0],
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              tileMode: TileMode.repeated,
-            ),
+  Widget build(BuildContext context) {
+    return CustomScrollView(
+      slivers: [
+        SliverPersistentHeader(
+          pinned: true,
+          delegate: HomePageHeaderDelegate(
+            minExtent: 56.0,
+            maxExtent: 200.0,
           ),
         ),
-        Positioned(
-          left: 16.0,
-          right: 16.0,
-          bottom: 16.0,
-          child: Text(
-            'Lorem ipsum',
-            style: TextStyle(
-              fontSize: 32.0,
-              color: Colors.white.withOpacity(titleOpacity(shrinkOffset)),
-            ),
+        SliverList(
+          delegate: SliverChildBuilderDelegate(
+            (_, index) {
+              final pageBlock = state.pageBlocks[index];
+              switch (pageBlock.type) {
+                case PageBlockType.slider:
+                  return ImageSliderWidget(
+                    pageBlock: pageBlock as SliderPageBlock,
+                  );
+                case PageBlockType.imageRow:
+                  return ImageRowWidget(
+                    pageBlock: pageBlock as ImageRowPageBlock,
+                  );
+                case PageBlockType.productRow:
+                  return ProductRowWidget(
+                    pageBlock: pageBlock as ProductRowPageBlock,
+                  );
+                default:
+                  return null;
+              }
+            },
+            childCount: state.pageBlocks.length,
           ),
         ),
       ],
     );
-  }
-
-  double titleOpacity(double shrinkOffset) {
-    // simple formula: fade out text as soon as shrinkOffset > 0
-    return 1.0 - max(0.0, shrinkOffset) / maxExtent;
-    // more complex formula: starts fading out text when shrinkOffset > minExtent
-    //return 1.0 - max(0.0, (shrinkOffset - minExtent)) / (maxExtent - minExtent);
-  }
-
-  @override
-  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) {
-    return true;
   }
 }
