@@ -1,14 +1,16 @@
 part of 'home_page.dart';
 
-class HomePageHeaderDelegate extends SliverPersistentHeaderDelegate {
+class PinnedHeaderDelegate extends SliverPersistentHeaderDelegate {
   @override
-  final double minExtent;
+  double get minExtent => pageBlock.minHeight.toDouble();
   @override
-  final double maxExtent;
-  HomePageHeaderDelegate({
-    required this.minExtent,
-    required this.maxExtent,
-  }) : assert(minExtent <= maxExtent);
+  double get maxExtent => pageBlock.maxHeight.toDouble();
+  final PinnedHeaderPageBlock pageBlock;
+  PinnedHeaderDelegate({
+    required this.pageBlock,
+  })  : assert(pageBlock.minHeight <= pageBlock.maxHeight),
+        assert(pageBlock.minHeight >= 0),
+        assert(pageBlock.data.isNotEmpty);
 
   @override
   Widget build(
@@ -17,7 +19,7 @@ class HomePageHeaderDelegate extends SliverPersistentHeaderDelegate {
       fit: StackFit.expand,
       children: [
         Image.network(
-          'https://picsum.photos/600/300/?image=12',
+          pageBlock.data.first.image,
           fit: BoxFit.cover,
         ),
         Container(

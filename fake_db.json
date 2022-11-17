@@ -19,6 +19,24 @@
   "pages": [
     {
       "id": 1,
+      "sort": 1,
+      "title": "Pinned Header",
+      "maxHeight": 350,
+      "minHeight": 0,
+      "type": "pinned_header",
+      "platform": "mobile",
+      "data": [
+        {
+          "sort": 1,
+          "title": "image 1",
+          "image": "https://picsum.photos/600/300/?image=12",
+          "width": 600,
+          "height": 300
+        }
+      ]
+    },
+    {
+      "id": 2,
       "title": "json-server",
       "type": "slider",
       "width": 400,
@@ -62,7 +80,7 @@
       ]
     },
     {
-      "id": 2,
+      "id": 3,
       "title": "one row one column",
       "type": "image_row",
       "width": 400,
@@ -84,7 +102,7 @@
       ]
     },
     {
-      "id": 3,
+      "id": 4,
       "title": "one row two columns",
       "type": "image_row",
       "width": 400,
@@ -117,7 +135,7 @@
       ]
     },
     {
-      "id": 4,
+      "id": 5,
       "title": "one row three columns",
       "type": "image_row",
       "width": 400,
@@ -161,7 +179,7 @@
       ]
     },
     {
-      "id": 5,
+      "id": 6,
       "title": "one row one product",
       "type": "product_row",
       "width": 400,
@@ -181,7 +199,7 @@
       ]
     },
     {
-      "id": 6,
+      "id": 7,
       "title": "one row two products",
       "type": "product_row",
       "width": 400,
@@ -209,7 +227,7 @@
       ]
     },
     {
-      "id": 7,
+      "id": 8,
       "sort": 7,
       "type": "waterfall",
       "platform": "mobile",

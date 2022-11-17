@@ -53,6 +53,12 @@ class WaterfallLayout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final blocksPinned = blocksWithoutWaterfall
+        .where((el) => el.type == PageBlockType.pinnedHeader)
+        .toList();
+    final blocksList = blocksWithoutWaterfall
+        .where((el) => el.type != PageBlockType.pinnedHeader)
+        .toList();
     return DefaultTabController(
       length: waterfallBlock.data.length,
       child: NestedScrollView(
@@ -64,15 +70,15 @@ class WaterfallLayout extends StatelessWidget {
               sliver: MultiSliver(
                 pushPinnedChildren: false,
                 children: [
-                  SliverPersistentHeader(
-                    floating: innerBoxIsScrolled,
-                    delegate:
-                        HomePageHeaderDelegate(maxExtent: 350, minExtent: 0),
-                  ),
+                  ...blocksPinned.map((el) => SliverPersistentHeader(
+                        pinned: true,
+                        delegate: PinnedHeaderDelegate(
+                            pageBlock: el as PinnedHeaderPageBlock),
+                      )),
                   SliverList(
                     delegate: SliverChildBuilderDelegate(
                       (_, index) {
-                        final pageBlock = blocksWithoutWaterfall[index];
+                        final pageBlock = blocksList[index];
                         switch (pageBlock.type) {
                           case PageBlockType.slider:
                             return ImageSliderWidget(
@@ -90,7 +96,7 @@ class WaterfallLayout extends StatelessWidget {
                             return Container();
                         }
                       },
-                      childCount: blocksWithoutWaterfall.length,
+                      childCount: blocksList.length,
                     ),
                   ),
                   WaterfallTabbarWidget(
@@ -135,19 +141,23 @@ class NoWaterfallLayout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final blocksPinned = state.pageBlocks
+        .where((el) => el.type == PageBlockType.pinnedHeader)
+        .toList();
+    final blocksList = state.pageBlocks
+        .where((el) => el.type != PageBlockType.pinnedHeader)
+        .toList();
     return CustomScrollView(
       slivers: [
-        SliverPersistentHeader(
-          pinned: true,
-          delegate: HomePageHeaderDelegate(
-            minExtent: 56.0,
-            maxExtent: 200.0,
-          ),
-        ),
+        ...blocksPinned.map((el) => SliverPersistentHeader(
+              pinned: true,
+              delegate:
+                  PinnedHeaderDelegate(pageBlock: el as PinnedHeaderPageBlock),
+            )),
         SliverList(
           delegate: SliverChildBuilderDelegate(
             (_, index) {
-              final pageBlock = state.pageBlocks[index];
+              final pageBlock = blocksList[index];
               switch (pageBlock.type) {
                 case PageBlockType.slider:
                   return ImageSliderWidget(
@@ -165,7 +175,7 @@ class NoWaterfallLayout extends StatelessWidget {
                   return null;
               }
             },
-            childCount: state.pageBlocks.length,
+            childCount: blocksList.length,
           ),
         ),
       ],

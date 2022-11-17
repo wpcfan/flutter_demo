@@ -2,6 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 
 enum PageBlockType {
+  pinnedHeader('pinned_header'),
   slider('slider'),
   imageRow('image_row'),
   productRow('product_row'),
@@ -65,6 +66,8 @@ abstract class PageBlock extends Equatable {
     final type =
         PageBlockType.values.firstWhere((e) => e.value == json['type']);
     switch (type) {
+      case PageBlockType.pinnedHeader:
+        return PinnedHeaderPageBlock.fromJson(json);
       case PageBlockType.slider:
         return SliderPageBlock.fromJson(json);
       case PageBlockType.imageRow:
@@ -82,25 +85,24 @@ abstract class PageBlock extends Equatable {
 class ImageData extends Equatable {
   const ImageData({
     required this.image,
-    required this.link,
     required this.sort,
+    this.link,
     this.title,
     this.width,
     this.height,
   });
 
   final String image;
-  final Link link;
+  final Link? link;
   final int sort;
   final String? title;
   final int? width;
   final int? height;
 
   factory ImageData.fromJson(Map<String, dynamic> json) {
-    debugPrint('ImageData.fromJson: $json');
     return ImageData(
       image: json['image'],
-      link: Link.fromJson(json['link']),
+      link: json['link'] != null ? Link.fromJson(json['link']) : null,
       sort: json['sort'],
       title: json['title'],
       width: json['width'],
@@ -111,7 +113,7 @@ class ImageData extends Equatable {
   Map<String, dynamic> toJson() {
     return {
       'image': image,
-      'link': link.toJson(),
+      'link': link?.toJson(),
       'sort': sort,
       'title': title,
       'width': width,
@@ -413,6 +415,61 @@ class WaterfallPageBlock extends PageBlock {
       'data': data.map((e) => e.toJson()).toList(),
       'width': width,
       'height': height,
+      'platform': platform,
+    };
+  }
+}
+
+class PinnedHeaderPageBlock extends PageBlock {
+  final int maxHeight;
+  final int minHeight;
+  final String title;
+  final List<ImageData> data;
+
+  const PinnedHeaderPageBlock({
+    required int id,
+    required int sort,
+    required String platform,
+    required this.maxHeight,
+    required this.minHeight,
+    required this.title,
+    required this.data,
+  }) : super(
+          id: id,
+          type: PageBlockType.pinnedHeader,
+          sort: sort,
+          platform: platform,
+        );
+
+  @override
+  List<Object?> get props =>
+      [id, type, sort, maxHeight, minHeight, title, data, platform];
+
+  factory PinnedHeaderPageBlock.fromJson(Map<String, dynamic> json) {
+    return PinnedHeaderPageBlock(
+      id: json['id'],
+      sort: json['sort'],
+      maxHeight: json['maxHeight'],
+      minHeight: json['minHeight'],
+      title: json['title'],
+      data: (json['data'] as List)
+          .map((e) => ImageData.fromJson(e))
+          .toList()
+          .cast<ImageData>(),
+      platform: json['platform'],
+    );
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'type': type.value,
+      'sort': sort,
+      'maxHeight': maxHeight,
+      'minHeight': minHeight,
+      'title': title,
+      'data': data.map((e) => e.toJson()).toList(),
       'platform': platform,
     };
   }
