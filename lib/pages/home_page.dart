@@ -22,16 +22,11 @@ class HomePage extends StatelessWidget implements AutoRouteWrapper {
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(builder: (context, constraints) {
-      final bloc = context.read<PageBlockBloc>();
-      if (constraints.maxWidth < 600) {
-        bloc.add(const PageBlockFetched('mobile'));
-        return const MobileHomePage();
-      } else {
-        bloc.add(const PageBlockFetched('desktop'));
-        return const DesktopHomePage();
-      }
-    });
+    if (MediaQuery.of(context).size.width > 600) {
+      return const DesktopHomePage();
+    } else {
+      return const MobileHomePage();
+    }
   }
 
   @override
