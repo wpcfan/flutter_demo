@@ -24,6 +24,8 @@ class WaterfallGridWidget extends StatelessWidget {
             product: product,
             width: itemWidth,
             height: itemHeight,
+            onTap: () => debugPrint('onTap'),
+            addToCart: () => debugPrint('addToCart'),
           );
         },
         childCount: data.data.length,

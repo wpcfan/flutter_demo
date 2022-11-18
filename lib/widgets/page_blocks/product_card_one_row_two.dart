@@ -20,7 +20,9 @@ class ProductCardOneRowTwoWidget extends StatelessWidget {
     const double spaceVertical = 4;
     page({required Widget child}) => Styled.widget(child: child)
         .padding(
-            horizontal: listHorizontalPadding, vertical: listVerticalPadding)
+          horizontal: listHorizontalPadding,
+          vertical: listVerticalPadding,
+        )
         .constrained(maxWidth: width)
         .backgroundColor(Colors.white)
         .border(all: 1, color: Colors.grey);
