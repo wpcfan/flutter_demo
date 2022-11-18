@@ -37,11 +37,11 @@
     },
     {
       "id": 2,
+      "sort": 2,
       "title": "json-server",
       "type": "slider",
       "width": 400,
       "height": 150,
-      "sort": 1,
       "platform": "mobile",
       "data": [
         {
@@ -81,11 +81,11 @@
     },
     {
       "id": 3,
+      "sort": 3,
       "title": "one row one column",
       "type": "image_row",
       "width": 400,
       "height": 120,
-      "sort": 2,
       "platform": "mobile",
       "data": [
         {
@@ -103,11 +103,11 @@
     },
     {
       "id": 4,
+      "sort": 4,
       "title": "one row two columns",
       "type": "image_row",
       "width": 400,
       "height": 120,
-      "sort": 3,
       "platform": "mobile",
       "data": [
         {
@@ -136,11 +136,11 @@
     },
     {
       "id": 5,
+      "sort": 5,
       "title": "one row three columns",
       "type": "image_row",
       "width": 400,
       "height": 90,
-      "sort": 4,
       "platform": "mobile",
       "data": [
         {
@@ -180,11 +180,11 @@
     },
     {
       "id": 6,
+      "sort": 6,
       "title": "one row one product",
       "type": "product_row",
       "width": 400,
       "height": 120,
-      "sort": 5,
       "platform": "mobile",
       "data": [
         {
@@ -200,11 +200,11 @@
     },
     {
       "id": 7,
+      "sort": 7,
       "title": "one row two products",
       "type": "product_row",
       "width": 400,
       "height": 180,
-      "sort": 6,
       "platform": "mobile",
       "data": [
         {
@@ -228,7 +228,7 @@
     },
     {
       "id": 8,
-      "sort": 7,
+      "sort": 8,
       "type": "waterfall",
       "platform": "mobile",
       "data": [

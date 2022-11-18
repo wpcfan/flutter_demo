@@ -151,11 +151,12 @@ class SliderPageBlock extends PageBlock {
       [id, type, sort, data, title, width, height, platform];
 
   factory SliderPageBlock.fromJson(Map<String, dynamic> json) {
-    debugPrint(json.toString());
+    final imageData = json['data'] as List;
+    imageData.sort((a, b) => a['sort'] - b['sort']);
     return SliderPageBlock(
       id: json['id'],
       sort: json['sort'],
-      data: (json['data'] as List)
+      data: imageData
           .map((e) => ImageData.fromJson(e))
           .toList()
           .cast<ImageData>(),
@@ -207,10 +208,12 @@ class ImageRowPageBlock extends PageBlock {
       [id, type, sort, data, title, width, height, platform];
 
   factory ImageRowPageBlock.fromJson(Map<String, dynamic> json) {
+    final imageData = json['data'] as List;
+    imageData.sort((a, b) => a['sort'] - b['sort']);
     return ImageRowPageBlock(
       id: json['id'],
       sort: json['sort'],
-      data: (json['data'] as List)
+      data: imageData
           .map((e) => ImageData.fromJson(e))
           .toList()
           .cast<ImageData>(),
@@ -446,13 +449,15 @@ class PinnedHeaderPageBlock extends PageBlock {
       [id, type, sort, maxHeight, minHeight, title, data, platform];
 
   factory PinnedHeaderPageBlock.fromJson(Map<String, dynamic> json) {
+    final imageData = json['data'] as List;
+    imageData.sort((a, b) => a['sort'] - b['sort']);
     return PinnedHeaderPageBlock(
       id: json['id'],
       sort: json['sort'],
       maxHeight: json['maxHeight'],
       minHeight: json['minHeight'],
       title: json['title'],
-      data: (json['data'] as List)
+      data: imageData
           .map((e) => ImageData.fromJson(e))
           .toList()
           .cast<ImageData>(),
