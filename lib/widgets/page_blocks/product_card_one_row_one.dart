@@ -22,7 +22,7 @@ class ProductCardOneRowOneWidget extends StatelessWidget {
     page({required Widget child}) => Styled.widget(child: child)
         .padding(
             horizontal: listHorizontalPadding, vertical: listVerticalPadding)
-        .constrained(maxWidth: width)
+        .constrained(maxWidth: width, maxHeight: height)
         .backgroundColor(Colors.white)
         .border(all: 1, color: Colors.grey);
     // 商品名称

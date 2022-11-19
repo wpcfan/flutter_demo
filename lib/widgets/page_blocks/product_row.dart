@@ -19,14 +19,15 @@ class ProductRowWidget extends StatelessWidget {
     final aspectRatio = pageBlock.width! / pageBlock.height!;
     final width =
         MediaQuery.of(context).size.width - screenHorizontalPadding * 2;
-    final height = width / aspectRatio;
+    final height = (width / aspectRatio).ceilToDouble();
     if (pageBlock.data.length == 1) {
       return SizedBox(
-          height: height,
+          height: height + 2 * spaceBetweenListItems,
           child: Padding(
               padding: const EdgeInsets.symmetric(
-                  horizontal: screenHorizontalPadding,
-                  vertical: spaceBetweenListItems / 2),
+                horizontal: screenHorizontalPadding,
+                vertical: spaceBetweenListItems,
+              ),
               child: ProductCardOneRowOneWidget(
                 product: pageBlock.data.first,
                 width: width,

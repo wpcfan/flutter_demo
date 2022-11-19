@@ -17,10 +17,7 @@ class App extends StatelessWidget {
           create: (context) => sharedPreferences,
         ),
         RepositoryProvider<Dio>(
-          create: (context) => Dio(BaseOptions(
-            connectTimeout: 5000,
-            receiveTimeout: 3000,
-          ))
+          create: (context) => Dio()
             ..interceptors.add(
               LogInterceptor(
                 requestHeader: true,
