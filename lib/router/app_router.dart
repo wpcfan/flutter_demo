@@ -16,7 +16,7 @@ part 'app_router.gr.dart';
         AutoRoute(page: CounterPage, name: 'counter'),
         AutoRoute(page: TodoPage, name: 'todos', path: 'todos'),
         AutoRoute(page: MyPage, name: 'my', path: 'my'),
-        AutoRoute(page: SettingPage, name: 'setting'),
+        AutoRoute(page: SettingsPage, name: 'setting'),
       ],
     ),
     AutoRoute(

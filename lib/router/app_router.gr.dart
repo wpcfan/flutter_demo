@@ -96,7 +96,7 @@ class _$AppRouter extends RootStackRouter {
     Setting.name: (routeData) {
       return MaterialPageX<dynamic>(
         routeData: routeData,
-        child: const SettingPage(),
+        child: const SettingsPage(),
       );
     },
   };
@@ -129,7 +129,7 @@ class _$AppRouter extends RootStackRouter {
             ),
             RouteConfig(
               Setting.name,
-              path: 'setting-page',
+              path: 'settings-page',
               parent: RootRoute.name,
             ),
           ],
@@ -318,12 +318,12 @@ class My extends PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [SettingPage]
+/// [SettingsPage]
 class Setting extends PageRouteInfo<void> {
   const Setting()
       : super(
           Setting.name,
-          path: 'setting-page',
+          path: 'settings-page',
         );
 
   static const String name = 'Setting';
