@@ -1,6 +1,6 @@
 {
-  "helloWorld": "你好，世界！",
-  "@helloWorld": {
-    "description": "传统的程序员问候"
+  "nodata": "没有数据",
+  "@nodata": {
+    "description": "列表中没有数据时的提示"
   }
 }

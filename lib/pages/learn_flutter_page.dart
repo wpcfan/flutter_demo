@@ -1,5 +1,5 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:demo/states/message_cubit.dart';
+import 'package:demo/bloc/all.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:styled_widget/styled_widget.dart';

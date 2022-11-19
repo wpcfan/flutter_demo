@@ -1,6 +1,6 @@
 {
-  "helloWorld": "Hello World!",
-  "@helloWorld": {
-    "description": "The conventional newborn programmer greeting"
+  "nodata": "No data",
+  "@nodata": {
+    "description": "used when there are no available items on the list"
   }
 }

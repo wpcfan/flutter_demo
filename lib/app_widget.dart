@@ -54,6 +54,7 @@ class App extends StatelessWidget {
               debugShowCheckedModeBanner: false,
               theme: theme,
               localizationsDelegates: const [
+                AppLocalizations.delegate,
                 ...GlobalMaterialLocalizations.delegates,
                 FormBuilderLocalizations.delegate,
                 GlobalWidgetsLocalizations.delegate,

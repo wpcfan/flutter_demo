@@ -1,7 +1,6 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:demo/bloc/all.dart';
 import 'package:demo/router/app_router.dart';
-import 'package:demo/states/message_cubit.dart';
-import 'package:demo/states/theme_cubit.dart';
 import 'package:demo/widgets/tabbar_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
