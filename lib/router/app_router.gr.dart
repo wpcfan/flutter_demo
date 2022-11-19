@@ -34,6 +34,12 @@ class _$AppRouter extends RootStackRouter {
         child: const LearnFlutterPage(),
       );
     },
+    Language.name: (routeData) {
+      return MaterialPageX<dynamic>(
+        routeData: routeData,
+        child: const LanguagePage(),
+      );
+    },
     Login.name: (routeData) {
       return MaterialPageX<dynamic>(
         routeData: routeData,
@@ -134,6 +140,10 @@ class _$AppRouter extends RootStackRouter {
           guards: [authGuard],
         ),
         RouteConfig(
+          Language.name,
+          path: '/language',
+        ),
+        RouteConfig(
           Login.name,
           path: '/login',
         ),
@@ -175,6 +185,18 @@ class LearnFlutterRoute extends PageRouteInfo<void> {
         );
 
   static const String name = 'LearnFlutterRoute';
+}
+
+/// generated route for
+/// [LanguagePage]
+class Language extends PageRouteInfo<void> {
+  const Language()
+      : super(
+          Language.name,
+          path: '/language',
+        );
+
+  static const String name = 'Language';
 }
 
 /// generated route for

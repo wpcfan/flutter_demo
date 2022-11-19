@@ -54,10 +54,9 @@ class App extends StatelessWidget {
             return BlocBuilder<LocaleCubit, Locale>(
               builder: (context, locale) {
                 return MaterialApp.router(
-                  locale: locale,
-                  builder: LoadingScreen.init(),
+                  builder: FlutterSmartDialog.init(),
                   debugShowCheckedModeBanner: false,
-                  theme: theme,
+                  locale: locale,
                   localizationsDelegates: const [
                     AppLocalizations.delegate,
                     ...GlobalMaterialLocalizations.delegates,
@@ -69,9 +68,11 @@ class App extends StatelessWidget {
                     appRouter,
                     navigatorObservers: () => [
                       NavObserver(),
+                      FlutterSmartDialog.observer,
                     ],
                   ),
                   routeInformationParser: appRouter.defaultRouteParser(),
+                  theme: theme,
                 );
               },
             );

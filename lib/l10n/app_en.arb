@@ -3,12 +3,36 @@
   "@nodata": {
     "description": "used when there are no available items on the list"
   },
-  "home": "Home",
-  "@home": {
+  "tab_home": "Home",
+  "@tab_home": {
     "description": "used as a tabbar link to the home page"
   },
-  "language": "Language",
-  "@language": {
+  "tab_counter": "Counter",
+  "@tab_counter": {
+    "description": "used as a tabbar link to the counter page"
+  },
+  "tab_todo": "Todo",
+  "@tab_todo": {
+    "description": "used as a tabbar link to the todo page"
+  },
+  "tab_my": "My",
+  "@tab_my": {
+    "description": "used as a tabbar link to the my page"
+  },
+  "tab_settings": "Settings",
+  "@tab_settings": {
+    "description": "used as a tabbar link to the settings page"
+  },
+  "settings_language": "Language",
+  "@settings_language": {
     "description": "used as a title for the language settings"
+  },
+  "settings_language_description": "Switch Language",
+  "@settings_language_description": {
+    "description": "used as a description for the language settings"
+  },
+  "language_title": "Switch language",
+  "@language_title": {
+    "description": "used as a title for the language switcher"
   }
 }

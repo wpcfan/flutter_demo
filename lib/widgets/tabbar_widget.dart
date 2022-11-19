@@ -13,23 +13,23 @@ class TabbarWidget extends StatelessWidget {
       items: [
         BottomNavigationBarItem(
           icon: const Icon(Icons.home),
-          label: AppLocalizations.of(context)!.home,
+          label: AppLocalizations.of(context)!.tab_home,
         ),
-        const BottomNavigationBarItem(
-          icon: Icon(Icons.calculate),
-          label: 'Counter',
+        BottomNavigationBarItem(
+          icon: const Icon(Icons.calculate),
+          label: AppLocalizations.of(context)!.tab_counter,
         ),
-        const BottomNavigationBarItem(
-          icon: Icon(Icons.list),
-          label: 'Todo',
+        BottomNavigationBarItem(
+          icon: const Icon(Icons.list),
+          label: AppLocalizations.of(context)!.tab_todo,
         ),
-        const BottomNavigationBarItem(
-          icon: Icon(Icons.person),
-          label: 'My',
+        BottomNavigationBarItem(
+          icon: const Icon(Icons.person),
+          label: AppLocalizations.of(context)!.tab_my,
         ),
-        const BottomNavigationBarItem(
-          icon: Icon(Icons.settings),
-          label: 'Setting',
+        BottomNavigationBarItem(
+          icon: const Icon(Icons.settings),
+          label: AppLocalizations.of(context)!.tab_settings,
         ),
       ],
       onTap: (index) {

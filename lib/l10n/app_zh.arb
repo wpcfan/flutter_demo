@@ -3,12 +3,36 @@
   "@nodata": {
     "description": "列表中没有数据时的提示"
   },
-  "home": "首页",
-  "@home": {
+  "tab_home": "首页",
+  "@tab_home": {
     "description": "底部 Tab 首页链接文字"
   },
-  "language": "语言",
-  "@language": {
+  "tab_counter": "计数器",
+  "@tab_counter": {
+    "description": "底部 Tab 计数器链接文字"
+  },
+  "tab_todo": "待办事项",
+  "@tab_todo": {
+    "description": "底部 Tab 待办事项链接文字"
+  },
+  "tab_my": "我的",
+  "@tab_my": {
+    "description": "底部 Tab 我的链接文字"
+  },
+  "tab_settings": "设置",
+  "@tab_settings": {
+    "description": "底部 Tab 设置链接文字"
+  },
+  "settings_language": "语言",
+  "@settings_language": {
     "description": "用于个人设置中切换语言的按钮文字"
+  },
+  "settings_language_description": "切换语言",
+  "@settings_language_description": {
+    "description": "用于个人设置中切换语言的按钮描述"
+  },
+  "language_title": "选择语言",
+  "@language_title": {
+    "description": "用于切换语言的弹窗标题"
   }
 }

@@ -6,16 +6,16 @@ class LocaleCubit extends Cubit<Locale> {
   final SharedPreferences perfs;
 
   LocaleCubit({required this.perfs}) : super(const Locale('en')) {
-    final locale = perfs.getString('locale');
-    if (locale != null) {
-      emit(Locale(locale));
+    final languageCode = perfs.getString('locale');
+    if (languageCode != null) {
+      emit(Locale(languageCode));
     } else {
       perfs.setString('locale', 'en');
     }
   }
 
-  void changeLocale(String languageCode) {
-    perfs.setString('locale', languageCode);
-    emit(Locale(languageCode));
+  void changeLocale(Locale locale) {
+    perfs.setString('locale', locale.languageCode);
+    emit(locale);
   }
 }

@@ -1,6 +1,5 @@
-import 'package:demo/bloc/all.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:styled_widget/styled_widget.dart';
 
@@ -144,52 +143,51 @@ class SettingsItemModel {
   });
 }
 
-List<SettingsItemModel> settingsItems(context) {
-  return [
-    const SettingsItemModel(
-      key: Key('address'),
-      icon: Icons.location_on,
-      color: Color(0xff8D7AEE),
-      title: 'Address',
-      description: 'Ensure your harvesting address',
-    ),
-    const SettingsItemModel(
-      key: Key('privacy'),
-      icon: Icons.lock,
-      color: Color(0xffF468B7),
-      title: 'Privacy',
-      description: 'System permission change',
-    ),
-    const SettingsItemModel(
-      key: Key('general'),
-      icon: Icons.menu,
-      color: Color(0xffFEC85C),
-      title: 'General',
-      description: 'Basic functional settings',
-    ),
-    const SettingsItemModel(
-      key: Key('notification'),
-      icon: Icons.notifications,
-      color: Color(0xff5FD0D3),
-      title: 'Notifications',
-      description: 'Take over the news in time',
-    ),
-    const SettingsItemModel(
-      key: Key('support'),
-      icon: Icons.question_answer,
-      color: Color(0xffBFACAA),
-      title: 'Support',
-      description: 'We are here to help',
-    ),
-    SettingsItemModel(
-      key: const Key('language'),
-      icon: Icons.question_answer,
-      color: const Color(0xffBBCCAA),
-      title: AppLocalizations.of(context)!.language,
-      description: 'Switch language',
-    ),
-  ];
-}
+List<SettingsItemModel> settingsItems(context) => [
+      const SettingsItemModel(
+        key: Key('address'),
+        icon: Icons.location_on,
+        color: Color(0xff8D7AEE),
+        title: 'Address',
+        description: 'Ensure your harvesting address',
+      ),
+      const SettingsItemModel(
+        key: Key('privacy'),
+        icon: Icons.lock,
+        color: Color(0xffF468B7),
+        title: 'Privacy',
+        description: 'System permission change',
+      ),
+      const SettingsItemModel(
+        key: Key('general'),
+        icon: Icons.menu,
+        color: Color(0xffFEC85C),
+        title: 'General',
+        description: 'Basic functional settings',
+      ),
+      const SettingsItemModel(
+        key: Key('notification'),
+        icon: Icons.notifications,
+        color: Color(0xff5FD0D3),
+        title: 'Notifications',
+        description: 'Take over the news in time',
+      ),
+      const SettingsItemModel(
+        key: Key('support'),
+        icon: Icons.question_answer,
+        color: Color(0xffBFACAA),
+        title: 'Support',
+        description: 'We are here to help',
+      ),
+      SettingsItemModel(
+        key: const Key('language'),
+        icon: Icons.question_answer,
+        color: const Color(0xffBBCCAA),
+        title: AppLocalizations.of(context)!.settings_language,
+        description:
+            AppLocalizations.of(context)!.settings_language_description,
+      ),
+    ];
 
 class Settings extends StatelessWidget {
   const Settings({super.key});
@@ -244,10 +242,7 @@ class _SettingsItemState extends State<SettingsItem> {
           onTap: () {
             debugPrint('onTap: ${widget.key}');
             if (widget.key == const Key('language')) {
-              context.read<LocaleCubit>().changeLocale(
-                  AppLocalizations.of(context)!.localeName == 'en'
-                      ? 'zh'
-                      : 'en');
+              context.router.pushNamed('/language');
             }
           },
         )
