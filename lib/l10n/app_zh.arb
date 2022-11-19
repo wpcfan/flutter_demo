@@ -2,5 +2,13 @@
   "nodata": "没有数据",
   "@nodata": {
     "description": "列表中没有数据时的提示"
+  },
+  "home": "首页",
+  "@home": {
+    "description": "底部 Tab 首页链接文字"
+  },
+  "language": "语言",
+  "@language": {
+    "description": "用于个人设置中切换语言的按钮文字"
   }
 }

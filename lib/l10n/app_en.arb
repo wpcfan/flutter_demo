@@ -2,5 +2,13 @@
   "nodata": "No data",
   "@nodata": {
     "description": "used when there are no available items on the list"
+  },
+  "home": "Home",
+  "@home": {
+    "description": "used as a tabbar link to the home page"
+  },
+  "language": "Language",
+  "@language": {
+    "description": "used as a title for the language settings"
   }
 }

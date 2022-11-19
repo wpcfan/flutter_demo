@@ -1,4 +1,7 @@
+import 'package:demo/bloc/all.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:styled_widget/styled_widget.dart';
 
 class SettingPage extends StatelessWidget {
@@ -9,6 +12,7 @@ class SettingPage extends StatelessWidget {
     page({required Widget child}) => Styled.widget(child: child)
         .padding(vertical: 30, horizontal: 20)
         .constrained(minHeight: MediaQuery.of(context).size.height - (2 * 30))
+        .safeArea()
         .scrollable();
 
     return <Widget>[
@@ -126,11 +130,13 @@ class ActionsRow extends StatelessWidget {
 }
 
 class SettingsItemModel {
+  final Key key;
   final IconData icon;
   final Color color;
   final String title;
   final String description;
   const SettingsItemModel({
+    required this.key,
     required this.color,
     required this.description,
     required this.icon,
@@ -138,45 +144,60 @@ class SettingsItemModel {
   });
 }
 
-const List<SettingsItemModel> settingsItems = [
-  SettingsItemModel(
-    icon: Icons.location_on,
-    color: Color(0xff8D7AEE),
-    title: 'Address',
-    description: 'Ensure your harvesting address',
-  ),
-  SettingsItemModel(
-    icon: Icons.lock,
-    color: Color(0xffF468B7),
-    title: 'Privacy',
-    description: 'System permission change',
-  ),
-  SettingsItemModel(
-    icon: Icons.menu,
-    color: Color(0xffFEC85C),
-    title: 'General',
-    description: 'Basic functional settings',
-  ),
-  SettingsItemModel(
-    icon: Icons.notifications,
-    color: Color(0xff5FD0D3),
-    title: 'Notifications',
-    description: 'Take over the news in time',
-  ),
-  SettingsItemModel(
-    icon: Icons.question_answer,
-    color: Color(0xffBFACAA),
-    title: 'Support',
-    description: 'We are here to help',
-  ),
-];
+List<SettingsItemModel> settingsItems(context) {
+  return [
+    const SettingsItemModel(
+      key: Key('address'),
+      icon: Icons.location_on,
+      color: Color(0xff8D7AEE),
+      title: 'Address',
+      description: 'Ensure your harvesting address',
+    ),
+    const SettingsItemModel(
+      key: Key('privacy'),
+      icon: Icons.lock,
+      color: Color(0xffF468B7),
+      title: 'Privacy',
+      description: 'System permission change',
+    ),
+    const SettingsItemModel(
+      key: Key('general'),
+      icon: Icons.menu,
+      color: Color(0xffFEC85C),
+      title: 'General',
+      description: 'Basic functional settings',
+    ),
+    const SettingsItemModel(
+      key: Key('notification'),
+      icon: Icons.notifications,
+      color: Color(0xff5FD0D3),
+      title: 'Notifications',
+      description: 'Take over the news in time',
+    ),
+    const SettingsItemModel(
+      key: Key('support'),
+      icon: Icons.question_answer,
+      color: Color(0xffBFACAA),
+      title: 'Support',
+      description: 'We are here to help',
+    ),
+    SettingsItemModel(
+      key: const Key('language'),
+      icon: Icons.question_answer,
+      color: const Color(0xffBBCCAA),
+      title: AppLocalizations.of(context)!.language,
+      description: 'Switch language',
+    ),
+  ];
+}
 
 class Settings extends StatelessWidget {
   const Settings({super.key});
 
   @override
-  Widget build(BuildContext context) => settingsItems
+  Widget build(BuildContext context) => settingsItems(context)
       .map((settingsItem) => SettingsItem(
+            key: settingsItem.key,
             settingsItem.icon,
             settingsItem.color,
             settingsItem.title,
@@ -189,7 +210,6 @@ class Settings extends StatelessWidget {
 class SettingsItem extends StatefulWidget {
   const SettingsItem(this.icon, this.iconBgColor, this.title, this.description,
       {super.key});
-
   final IconData icon;
   final Color iconBgColor;
   final String title;
@@ -221,7 +241,15 @@ class _SettingsItemState extends State<SettingsItem> {
         .gestures(
           onTapChange: (tapStatus) => setState(() => pressed = tapStatus),
           onTapDown: (details) => debugPrint('tapDown'),
-          onTap: () => debugPrint('onTap'),
+          onTap: () {
+            debugPrint('onTap: ${widget.key}');
+            if (widget.key == const Key('language')) {
+              context.read<LocaleCubit>().changeLocale(
+                  AppLocalizations.of(context)!.localeName == 'en'
+                      ? 'zh'
+                      : 'en');
+            }
+          },
         )
         .scale(all: pressed ? 0.95 : 1.0, animate: true)
         .animate(const Duration(milliseconds: 150), Curves.easeOut);

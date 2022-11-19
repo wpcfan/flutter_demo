@@ -1,4 +1,5 @@
 export './counter_cubit.dart';
+export './locale_cubit.dart';
 export './login_cubit.dart';
 export './message_cubit.dart';
 export './page_block_bloc.dart';

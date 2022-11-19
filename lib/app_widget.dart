@@ -45,28 +45,35 @@ class App extends StatelessWidget {
       child: MultiBlocProvider(
         providers: [
           BlocProvider(create: (context) => ThemeCubit()),
+          BlocProvider(
+              create: (context) => LocaleCubit(perfs: sharedPreferences)),
           BlocProvider(create: (context) => MessageCubit()),
         ],
         child: BlocBuilder<ThemeCubit, ThemeData>(
           builder: (_, theme) {
-            return MaterialApp.router(
-              builder: LoadingScreen.init(),
-              debugShowCheckedModeBanner: false,
-              theme: theme,
-              localizationsDelegates: const [
-                AppLocalizations.delegate,
-                ...GlobalMaterialLocalizations.delegates,
-                FormBuilderLocalizations.delegate,
-                GlobalWidgetsLocalizations.delegate,
-              ],
-              supportedLocales: AppLocalizations.supportedLocales,
-              routerDelegate: AutoRouterDelegate(
-                appRouter,
-                navigatorObservers: () => [
-                  NavObserver(),
-                ],
-              ),
-              routeInformationParser: appRouter.defaultRouteParser(),
+            return BlocBuilder<LocaleCubit, Locale>(
+              builder: (context, locale) {
+                return MaterialApp.router(
+                  locale: locale,
+                  builder: LoadingScreen.init(),
+                  debugShowCheckedModeBanner: false,
+                  theme: theme,
+                  localizationsDelegates: const [
+                    AppLocalizations.delegate,
+                    ...GlobalMaterialLocalizations.delegates,
+                    FormBuilderLocalizations.delegate,
+                    GlobalWidgetsLocalizations.delegate,
+                  ],
+                  supportedLocales: AppLocalizations.supportedLocales,
+                  routerDelegate: AutoRouterDelegate(
+                    appRouter,
+                    navigatorObservers: () => [
+                      NavObserver(),
+                    ],
+                  ),
+                  routeInformationParser: appRouter.defaultRouteParser(),
+                );
+              },
             );
           },
         ),
