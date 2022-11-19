@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:demo/widgets/all.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:styled_widget/styled_widget.dart';
@@ -15,10 +16,6 @@ class SettingPage extends StatelessWidget {
         .scrollable();
 
     return <Widget>[
-      const Text(
-        'User settings',
-        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 32),
-      ).alignment(Alignment.center).padding(bottom: 20),
       const UserCard(),
       const ActionsRow(),
       const Settings(),
@@ -31,13 +28,11 @@ class UserCard extends StatelessWidget {
 
   Widget _buildUserRow() {
     return <Widget>[
-      const Icon(Icons.account_circle)
-          .decorated(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(30),
-          )
-          .constrained(height: 50, width: 50)
-          .padding(right: 10),
+      const RoundIcon(
+        icon: Icons.account_circle,
+        iconSize: 30,
+        backgroundColor: Colors.white,
+      ).padding(right: 10),
       <Widget>[
         const Text(
           'Rein Gundersen Bentdal',
@@ -60,19 +55,14 @@ class UserCard extends StatelessWidget {
 
   Widget _buildUserStats() {
     return <Widget>[
-      _buildUserStatsItem('846', 'Collect'),
-      _buildUserStatsItem('51', 'Attention'),
-      _buildUserStatsItem('267', 'Track'),
-      _buildUserStatsItem('39', 'Coupons'),
+      const StatItem(title: '846', subtitle: 'Collect'),
+      const StatItem(title: '1.2k', subtitle: 'Followers'),
+      const StatItem(title: '267', subtitle: 'Track'),
+      const StatItem(title: '39', subtitle: 'Coupons'),
     ]
         .toRow(mainAxisAlignment: MainAxisAlignment.spaceAround)
         .padding(vertical: 10);
   }
-
-  Widget _buildUserStatsItem(String value, String text) => <Widget>[
-        Text(value).fontSize(20).textColor(Colors.white).padding(bottom: 5),
-        Text(text).textColor(Colors.white.withOpacity(0.6)).fontSize(12),
-      ].toColumn();
 
   @override
   Widget build(BuildContext context) {
@@ -96,14 +86,7 @@ class ActionsRow extends StatelessWidget {
   const ActionsRow({super.key});
 
   Widget _buildActionItem(String name, IconData icon) {
-    final Widget actionIcon =
-        Icon(icon, size: 20, color: const Color(0xFF42526F))
-            .alignment(Alignment.center)
-            .ripple()
-            .constrained(width: 50, height: 50)
-            .backgroundColor(const Color(0xfff6f5f8))
-            .clipOval()
-            .padding(bottom: 5);
+    final Widget actionIcon = RoundIcon(icon: icon).padding(bottom: 5);
 
     final Widget actionText = Text(
       name,
@@ -131,12 +114,12 @@ class ActionsRow extends StatelessWidget {
 class SettingsItemModel {
   final Key key;
   final IconData icon;
-  final Color color;
+  final Color bgColor;
   final String title;
   final String description;
   const SettingsItemModel({
     required this.key,
-    required this.color,
+    required this.bgColor,
     required this.description,
     required this.icon,
     required this.title,
@@ -147,42 +130,42 @@ List<SettingsItemModel> settingsItems(context) => [
       const SettingsItemModel(
         key: Key('address'),
         icon: Icons.location_on,
-        color: Color(0xff8D7AEE),
+        bgColor: Color(0xff8D7AEE),
         title: 'Address',
         description: 'Ensure your harvesting address',
       ),
       const SettingsItemModel(
         key: Key('privacy'),
         icon: Icons.lock,
-        color: Color(0xffF468B7),
+        bgColor: Color(0xffF468B7),
         title: 'Privacy',
         description: 'System permission change',
       ),
       const SettingsItemModel(
         key: Key('general'),
         icon: Icons.menu,
-        color: Color(0xffFEC85C),
+        bgColor: Color(0xffFEC85C),
         title: 'General',
         description: 'Basic functional settings',
       ),
       const SettingsItemModel(
         key: Key('notification'),
         icon: Icons.notifications,
-        color: Color(0xff5FD0D3),
+        bgColor: Color(0xff5FD0D3),
         title: 'Notifications',
         description: 'Take over the news in time',
       ),
       const SettingsItemModel(
         key: Key('support'),
         icon: Icons.question_answer,
-        color: Color(0xffBFACAA),
+        bgColor: Color(0xffBFACAA),
         title: 'Support',
         description: 'We are here to help',
       ),
       SettingsItemModel(
         key: const Key('language'),
-        icon: Icons.question_answer,
-        color: const Color(0xffBBCCAA),
+        icon: Icons.language,
+        bgColor: const Color(0xffBBCCAA),
         title: AppLocalizations.of(context)!.settings_language,
         description:
             AppLocalizations.of(context)!.settings_language_description,
@@ -196,95 +179,16 @@ class Settings extends StatelessWidget {
   Widget build(BuildContext context) => settingsItems(context)
       .map((settingsItem) => SettingsItem(
             key: settingsItem.key,
-            settingsItem.icon,
-            settingsItem.color,
-            settingsItem.title,
-            settingsItem.description,
+            icon: settingsItem.icon,
+            iconBgColor: settingsItem.bgColor,
+            title: settingsItem.title,
+            subtitle: settingsItem.description,
+            onTap: () {
+              if (settingsItem.key == const Key('language')) {
+                context.router.pushNamed('/language');
+              }
+            },
           ))
       .toList()
       .toColumn();
-}
-
-class SettingsItem extends StatefulWidget {
-  const SettingsItem(this.icon, this.iconBgColor, this.title, this.description,
-      {super.key});
-  final IconData icon;
-  final Color iconBgColor;
-  final String title;
-  final String description;
-
-  @override
-  State<SettingsItem> createState() => _SettingsItemState();
-}
-
-class _SettingsItemState extends State<SettingsItem> {
-  bool pressed = false;
-
-  @override
-  Widget build(BuildContext context) {
-    settingsItem({required Widget child}) => Styled.widget(child: child)
-        .alignment(Alignment.center)
-        .borderRadius(all: 15)
-        .ripple()
-        .backgroundColor(Colors.white, animate: true)
-        .clipRRect(all: 25) // clip ripple
-        .borderRadius(all: 25, animate: true)
-        .elevation(
-          pressed ? 0 : 20,
-          borderRadius: BorderRadius.circular(25),
-          shadowColor: const Color(0x30000000),
-        ) // shadow borderRadius
-        .constrained(height: 80)
-        .padding(vertical: 12) // margin
-        .gestures(
-          onTapChange: (tapStatus) => setState(() => pressed = tapStatus),
-          onTapDown: (details) => debugPrint('tapDown'),
-          onTap: () {
-            debugPrint('onTap: ${widget.key}');
-            if (widget.key == const Key('language')) {
-              context.router.pushNamed('/language');
-            }
-          },
-        )
-        .scale(all: pressed ? 0.95 : 1.0, animate: true)
-        .animate(const Duration(milliseconds: 150), Curves.easeOut);
-
-    final Widget icon = Icon(widget.icon, size: 20, color: Colors.white)
-        .padding(all: 12)
-        .decorated(
-          color: widget.iconBgColor,
-          borderRadius: BorderRadius.circular(30),
-        )
-        .padding(left: 15, right: 10);
-
-    final Widget title = Text(
-      widget.title,
-      style: const TextStyle(
-        fontWeight: FontWeight.bold,
-        fontSize: 16,
-      ),
-    ).padding(bottom: 5);
-
-    final Widget description = Text(
-      widget.description,
-      style: const TextStyle(
-        color: Colors.black26,
-        fontWeight: FontWeight.bold,
-        fontSize: 12,
-      ),
-    );
-
-    return settingsItem(
-      child: <Widget>[
-        icon,
-        <Widget>[
-          title,
-          description,
-        ].toColumn(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.start,
-        ),
-      ].toRow(),
-    );
-  }
 }
