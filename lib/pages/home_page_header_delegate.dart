@@ -38,12 +38,20 @@ class PinnedHeaderDelegate extends SliverPersistentHeaderDelegate {
             left: 16,
             bottom: 32,
             child: SearchBoxWidget(
+              right2IconData: null,
               width: screenWidth - 32.0,
               hints: const [
                 'Search for a movie',
                 'Search for a TV show',
                 'Search for a person',
               ],
+              onTapHint: (hint) {
+                context.router.push(
+                  Search(
+                    query: hint,
+                  ),
+                );
+              },
             )),
         Positioned(
           left: 16.0 + shrinkOffset * 1.2,
@@ -70,110 +78,5 @@ class PinnedHeaderDelegate extends SliverPersistentHeaderDelegate {
   @override
   bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) {
     return true;
-  }
-}
-
-class SearchBoxWidget extends StatelessWidget {
-  const SearchBoxWidget(
-      {super.key,
-      this.bgColor = Colors.white,
-      this.iconSize = 32.0,
-      this.spaceBetween = 12.0,
-      this.height = 50,
-      this.hints,
-      this.hintFontSize = 14.0,
-      required this.width,
-      this.hintFontFamily = 'Horizon'});
-  final Color bgColor;
-  final double iconSize;
-  final double spaceBetween;
-  final double height;
-  final double width;
-  final List<String>? hints;
-  final double hintFontSize;
-  final String hintFontFamily;
-  @override
-  Widget build(BuildContext context) {
-    final searchIcon = const Icon(
-      Icons.search,
-      color: Colors.grey,
-    )
-        .alignment(Alignment.center)
-        .constrained(width: iconSize, height: iconSize)
-        .padding(horizontal: spaceBetween);
-    final hintTextStyle = TextStyle(
-      color: Colors.grey,
-      fontSize: hintFontSize,
-      fontFamily: hintFontFamily,
-      fontWeight: FontWeight.w500,
-    );
-    final rotateHint = hints == null || hints!.isEmpty
-        ? Container()
-        : hints!.length == 1
-            ? Text(
-                hints!.first,
-                style: hintTextStyle,
-              )
-            : DefaultTextStyle(
-                style: hintTextStyle,
-                child: AnimatedTextKit(
-                  repeatForever: true,
-                  animatedTexts: hints!
-                      .map((el) => RotateAnimatedText(el, topToBottom: false))
-                      .toList(),
-                  onTap: () {
-                    debugPrint("Tap Event");
-                  },
-                ),
-              );
-
-    final cameraIcon = const Icon(
-      Icons.camera_alt,
-      color: Colors.grey,
-    )
-        .alignment(Alignment.center)
-        .constrained(width: iconSize, height: iconSize);
-
-    final divider = VerticalDivider(
-      color: Colors.grey.withOpacity(0.4),
-      thickness: 1.0,
-      width: 1.0,
-    ).constrained(height: iconSize * 0.8).padding(horizontal: spaceBetween);
-
-    final scanIcon = const Icon(
-      Icons.qr_code_scanner,
-      color: Colors.grey,
-    )
-        .alignment(Alignment.center)
-        .constrained(width: iconSize, height: iconSize);
-
-    final rightGroup = [
-      cameraIcon,
-      divider,
-      scanIcon,
-    ].toRow(mainAxisSize: MainAxisSize.min).padding(horizontal: spaceBetween);
-
-    final leftGroup = [
-      searchIcon,
-      rotateHint,
-    ].toRow(mainAxisSize: MainAxisSize.min);
-
-    return Container(
-      height: height,
-      decoration: BoxDecoration(
-        color: bgColor,
-        borderRadius: BorderRadius.circular(height / 2),
-      ),
-      child: [
-        leftGroup,
-        rightGroup,
-      ]
-          .toRow(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.center,
-          )
-          .constrained(width: width),
-    );
   }
 }

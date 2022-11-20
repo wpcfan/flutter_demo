@@ -167,7 +167,7 @@ class _AnimatedTextKitState extends State<AnimatedTextKit>
     final completeText = _currentAnimatedText.completeText(context);
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
-      onTap: _onTap,
+      onTap: widget.onTap != null ? _onTap : null,
       child: _isCurrentlyPausing || !_controller.isAnimating
           ? completeText
           : AnimatedBuilder(

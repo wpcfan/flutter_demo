@@ -5,13 +5,12 @@ import 'package:demo/bloc/all.dart';
 import 'package:demo/config.dart';
 import 'package:demo/models/all.dart';
 import 'package:demo/repositories/all.dart';
-import 'package:demo/widgets/animation/all.dart';
-import 'package:demo/widgets/page_blocks/all.dart';
+import 'package:demo/router/app_router.dart';
+import 'package:demo/widgets/all.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:sliver_tools/sliver_tools.dart';
-import 'package:styled_widget/styled_widget.dart';
 
 part './home_page_desktop.dart';
 part './home_page_header_delegate.dart';

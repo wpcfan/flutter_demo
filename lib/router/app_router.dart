@@ -23,6 +23,7 @@ part 'app_router.gr.dart';
       page: LearnFlutterPage,
       guards: [AuthGuard],
     ),
+    AutoRoute(page: SearchPage, name: 'search', path: '/search'),
     AutoRoute(page: LanguagePage, name: 'language', path: '/language'),
     AutoRoute(page: LoginPage, name: 'login', path: '/login'),
     AutoRoute(page: RegisterPage, name: 'register', path: '/register'),
