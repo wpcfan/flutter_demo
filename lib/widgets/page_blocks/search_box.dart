@@ -1,4 +1,4 @@
-import 'package:demo/widgets/animation/all.dart';
+import 'package:demo/widgets/all.dart';
 import 'package:flutter/material.dart';
 import 'package:styled_widget/styled_widget.dart';
 
@@ -9,6 +9,7 @@ class SearchBoxWidget extends StatefulWidget {
     this.iconSize = 32.0,
     this.spaceBetween = 12.0,
     this.height = 50,
+    this.tag,
     this.hints,
     this.hintFontSize = 14.0,
     required this.width,
@@ -24,8 +25,11 @@ class SearchBoxWidget extends StatefulWidget {
     this.onTapLeftIcon,
     this.onTapRight1Icon,
     this.onTapRight2Icon,
-    this.editable = false,
+    this.onTagClose,
     this.onChanged,
+    this.borderColor = Colors.grey,
+    this.borderWidth = 1,
+    this.editable = false,
   });
   final Color bgColor;
   final double iconSize;
@@ -33,6 +37,7 @@ class SearchBoxWidget extends StatefulWidget {
   final double height;
   final double width;
   final List<String>? hints;
+  final String? tag;
   final double hintFontSize;
   final String hintFontFamily;
   final Color hintColor;
@@ -46,7 +51,10 @@ class SearchBoxWidget extends StatefulWidget {
   final VoidCallback? onTapLeftIcon;
   final VoidCallback? onTapRight1Icon;
   final VoidCallback? onTapRight2Icon;
+  final VoidCallback? onTagClose;
   final void Function(String?)? onChanged;
+  final Color borderColor;
+  final double borderWidth;
   final bool editable;
 
   @override
@@ -74,44 +82,53 @@ class _SearchBoxWidgetState extends State<SearchBoxWidget> {
       fontFamily: widget.hintFontFamily,
       fontWeight: FontWeight.w500,
     );
-    final rotateHint = (widget.hints == null || widget.hints!.isEmpty
-            ? Container()
-            : widget.hints!.length == 1
-                ? TextFormField(
-                    autofocus: true,
-                    style: hintTextStyle,
-                    decoration: InputDecoration(
-                      hintText: widget.hints!.first,
-                    ),
-                    autovalidateMode: AutovalidateMode.always,
-                    onChanged: widget.onChanged,
-                  )
-                : DefaultTextStyle(
-                    style: hintTextStyle,
-                    child: AnimatedTextKit(
-                      repeatForever: true,
-                      animatedTexts: widget.hints!
-                          .map((el) => RotateAnimatedText(
-                                el,
-                                topToBottom: false,
-                                rotateOut: true,
-                                transitionHeight: widget.height,
-                                textAlign: TextAlign.start,
-                                alignment: Alignment.centerLeft,
-                                duration: const Duration(seconds: 2),
-                              ))
-                          .toList(),
-                      onNext: (index, isLast) => setState(() {
-                        _hintIndex =
-                            index < widget.hints!.length - 1 ? index + 1 : 0;
-                      }),
-                    ),
+    Widget rotateHint;
+    if (widget.tag != null) {
+      rotateHint = TagWidget(
+        title: widget.tag!,
+        closable: true,
+        onClose: widget.onTagClose,
+      );
+    } else if (widget.hints != null && widget.hints!.length == 1) {
+      rotateHint = TextFormField(
+        autofocus: true,
+        style: hintTextStyle,
+        decoration: InputDecoration(
+          hintText: widget.hints!.first,
+          hintStyle: hintTextStyle,
+          border: InputBorder.none,
+        ),
+        autovalidateMode: AutovalidateMode.always,
+        onChanged: widget.onChanged,
+      ).expanded();
+    } else {
+      rotateHint = DefaultTextStyle(
+        style: hintTextStyle,
+        child: AnimatedTextKit(
+          repeatForever: true,
+          animatedTexts: widget.hints!
+              .map((el) => RotateAnimatedText(
+                    el,
+                    topToBottom: false,
+                    rotateOut: true,
+                    transitionHeight: widget.height,
+                    textAlign: TextAlign.start,
+                    alignment: Alignment.centerLeft,
+                    duration: const Duration(seconds: 2),
                   ))
-        .gestures(
-      onTap: widget.onTapHint == null
-          ? null
-          : () => widget.onTapHint!(widget.hints![_hintIndex]),
-    );
+              .toList(),
+          onNext: (index, isLast) => setState(() {
+            _hintIndex = index < widget.hints!.length - 1 ? index + 1 : 0;
+          }),
+        ),
+      )
+          .gestures(
+            onTap: widget.onTapHint == null
+                ? null
+                : () => widget.onTapHint!(widget.hints![_hintIndex]),
+          )
+          .expanded();
+    }
 
     final right1Icon = widget.right1IconData == null
         ? Container()
@@ -154,7 +171,7 @@ class _SearchBoxWidgetState extends State<SearchBoxWidget> {
 
     final leftGroup = [
       searchIcon,
-      rotateHint.expanded(),
+      rotateHint,
     ].toRow(
         mainAxisSize: MainAxisSize.max,
         crossAxisAlignment: CrossAxisAlignment.center);
@@ -174,6 +191,8 @@ class _SearchBoxWidgetState extends State<SearchBoxWidget> {
           borderRadius: widget.borderRadius == null
               ? BorderRadius.circular(widget.height / 2)
               : BorderRadius.circular(widget.borderRadius!),
+          border:
+              Border.all(color: widget.borderColor, width: widget.borderWidth),
         );
   }
 }

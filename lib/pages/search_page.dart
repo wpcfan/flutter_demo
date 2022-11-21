@@ -40,6 +40,9 @@ class SearchPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
+        elevation: double.minPositive,
+        foregroundColor: Colors.black87,
+        backgroundColor: Colors.white,
         title: SearchBoxWidget(
           width: width,
           height: 32,
@@ -57,7 +60,7 @@ class SearchPage extends StatelessWidget {
                 final value = bloc.state.query ?? query;
                 context.router.replace(Result(query: value));
               },
-              child: const Text('搜索', style: TextStyle(color: Colors.white))),
+              child: const Text('搜索', style: TextStyle(color: Colors.black87))),
         ],
       ),
       body: BlocBuilder<SearchBloc, SearchState>(builder: (context, state) {
