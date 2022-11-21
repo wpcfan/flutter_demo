@@ -41,6 +41,8 @@ class App extends StatelessWidget {
             create: (context) => AuthRepository(context.read<Dio>())),
         RepositoryProvider<PageBlockRepository>(
             create: (context) => PageBlockRepository(context.read<Dio>())),
+        RepositoryProvider<HistoryRepository>(
+            create: (context) => HistoryRepository(sharedPreferences)),
       ],
       child: MultiBlocProvider(
         providers: [
@@ -48,6 +50,9 @@ class App extends StatelessWidget {
           BlocProvider(
               create: (context) => LocaleCubit(perfs: sharedPreferences)),
           BlocProvider(create: (context) => MessageCubit()),
+          BlocProvider<SearchBloc>(
+            create: (context) => SearchBloc(context.read<HistoryRepository>()),
+          )
         ],
         child: BlocBuilder<ThemeCubit, ThemeData>(
           builder: (_, theme) {

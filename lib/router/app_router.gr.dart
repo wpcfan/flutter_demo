@@ -34,14 +34,25 @@ class _$AppRouter extends RootStackRouter {
         child: const LearnFlutterPage(),
       );
     },
+    Result.name: (routeData) {
+      final args = routeData.argsAs<ResultArgs>();
+      return MaterialPageX<dynamic>(
+        routeData: routeData,
+        child: ResultPage(
+          key: args.key,
+          query: args.query,
+        ),
+      );
+    },
     Search.name: (routeData) {
       final args = routeData.argsAs<SearchArgs>();
       return MaterialPageX<dynamic>(
         routeData: routeData,
-        child: SearchPage(
+        child: WrappedRoute(
+            child: SearchPage(
           query: args.query,
           key: args.key,
-        ),
+        )),
       );
     },
     Language.name: (routeData) {
@@ -150,6 +161,10 @@ class _$AppRouter extends RootStackRouter {
           guards: [authGuard],
         ),
         RouteConfig(
+          Result.name,
+          path: '/result/:query',
+        ),
+        RouteConfig(
           Search.name,
           path: '/search',
         ),
@@ -199,6 +214,40 @@ class LearnFlutterRoute extends PageRouteInfo<void> {
         );
 
   static const String name = 'LearnFlutterRoute';
+}
+
+/// generated route for
+/// [ResultPage]
+class Result extends PageRouteInfo<ResultArgs> {
+  Result({
+    Key? key,
+    required String query,
+  }) : super(
+          Result.name,
+          path: '/result/:query',
+          args: ResultArgs(
+            key: key,
+            query: query,
+          ),
+        );
+
+  static const String name = 'Result';
+}
+
+class ResultArgs {
+  const ResultArgs({
+    this.key,
+    required this.query,
+  });
+
+  final Key? key;
+
+  final String query;
+
+  @override
+  String toString() {
+    return 'ResultArgs{key: $key, query: $query}';
+  }
 }
 
 /// generated route for

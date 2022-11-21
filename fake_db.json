@@ -21,8 +21,8 @@
       "id": 1,
       "sort": 1,
       "title": "Pinned Header",
-      "maxHeight": 350,
-      "minHeight": 0,
+      "maxHeight": 300,
+      "minHeight": 66,
       "type": "pinned_header",
       "platform": "mobile",
       "data": [

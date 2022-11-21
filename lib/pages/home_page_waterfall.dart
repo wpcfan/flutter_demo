@@ -7,14 +7,14 @@ class WaterfallGridWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
+    const double spacing = 10.0;
     final double itemWidth =
-        (screenWidth - screenHorizontalPadding * 2 - 10 - 10) / 2;
-    final itemHeight = itemWidth * 4 / 3;
+        (screenWidth - screenHorizontalPadding * 2 - spacing * 2) / 2;
     return SliverGrid(
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
-        mainAxisSpacing: 10,
-        crossAxisSpacing: 10,
+        mainAxisSpacing: spacing,
+        crossAxisSpacing: spacing,
         childAspectRatio: 11 / 15,
       ),
       delegate: SliverChildBuilderDelegate(
@@ -23,7 +23,6 @@ class WaterfallGridWidget extends StatelessWidget {
           return ProductCardOneRowTwoWidget(
             product: product,
             width: itemWidth,
-            height: itemHeight,
             onTap: () => debugPrint('onTap'),
             addToCart: () => debugPrint('addToCart'),
           );
@@ -41,18 +40,18 @@ class WaterfallMasonryWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
+    const double spacing = 8;
     final double itemWidth =
-        (screenWidth - screenHorizontalPadding * 2 - 8) / 2;
+        (screenWidth - screenHorizontalPadding * 2 - spacing) / 2;
     return SliverMasonryGrid.extent(
-      maxCrossAxisExtent: 300,
-      mainAxisSpacing: 8,
-      crossAxisSpacing: 8,
+      maxCrossAxisExtent: screenWidth / 2,
+      mainAxisSpacing: spacing,
+      crossAxisSpacing: spacing,
       childCount: data.data.length,
       itemBuilder: (context, index) {
         return ProductCardOneRowTwoWidget(
           product: data.data[index],
           width: itemWidth,
-          height: 400,
         );
       },
     );

@@ -43,7 +43,6 @@ class ProductRowWidget extends StatelessWidget {
           .map((el) => ProductCardOneRowTwoWidget(
                 product: el,
                 width: (width - spaceBetweenListItems) / 2,
-                height: height - spaceBetweenListItems,
                 addToCart: () => debugPrint('add to cart ${el.toString()}'),
                 onTap: () => debugPrint('on tap ${el.id}'),
               ))

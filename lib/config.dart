@@ -9,6 +9,7 @@ bool get restoreLastRouteBeforeLogin => true;
 const int splashDuration = 5;
 const bool hasSplash = false;
 const int pageSize = 20;
+const int maxHistoryLength = 20;
 // 距离屏幕边缘的水平距离
 const double screenHorizontalPadding = 12;
 // 距离列表边缘的水平距离

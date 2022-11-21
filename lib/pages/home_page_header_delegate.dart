@@ -2,12 +2,14 @@ part of 'home_page.dart';
 
 class PinnedHeaderDelegate extends SliverPersistentHeaderDelegate {
   @override
-  double get minExtent => pageBlock.minHeight.toDouble();
+  double get minExtent => pageBlock.minHeight.toDouble() + topPadding;
   @override
   double get maxExtent => pageBlock.maxHeight.toDouble();
   final PinnedHeaderPageBlock pageBlock;
+  final double topPadding;
   PinnedHeaderDelegate({
     required this.pageBlock,
+    required this.topPadding,
   })  : assert(pageBlock.minHeight <= pageBlock.maxHeight),
         assert(pageBlock.minHeight >= 0),
         assert(pageBlock.data.isNotEmpty);
@@ -36,7 +38,7 @@ class PinnedHeaderDelegate extends SliverPersistentHeaderDelegate {
         ),
         Positioned(
             left: 16,
-            bottom: 32,
+            bottom: 16,
             child: SearchBoxWidget(
               right2IconData: null,
               width: screenWidth - 32.0,
@@ -53,17 +55,6 @@ class PinnedHeaderDelegate extends SliverPersistentHeaderDelegate {
                 );
               },
             )),
-        Positioned(
-          left: 16.0 + shrinkOffset * 1.2,
-          bottom: 16.0 + shrinkOffset * 1.05,
-          child: Text(
-            'Lorem ipsum',
-            style: TextStyle(
-              fontSize: 32.0 + shrinkOffset * 1.2,
-              color: Colors.white.withOpacity(titleOpacity(shrinkOffset)),
-            ),
-          ),
-        ),
       ],
     );
   }

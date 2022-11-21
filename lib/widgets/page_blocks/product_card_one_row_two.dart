@@ -5,13 +5,11 @@ class ProductCardOneRowTwoWidget extends StatelessWidget {
     super.key,
     required this.product,
     required this.width,
-    required this.height,
     this.addToCart,
     this.onTap,
   });
   final ProductData product;
   final double width;
-  final double height;
   final void Function()? addToCart;
   final void Function()? onTap;
 

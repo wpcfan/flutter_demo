@@ -24,6 +24,8 @@ class SearchBoxWidget extends StatefulWidget {
     this.onTapLeftIcon,
     this.onTapRight1Icon,
     this.onTapRight2Icon,
+    this.editable = false,
+    this.onChanged,
   });
   final Color bgColor;
   final double iconSize;
@@ -44,6 +46,8 @@ class SearchBoxWidget extends StatefulWidget {
   final VoidCallback? onTapLeftIcon;
   final VoidCallback? onTapRight1Icon;
   final VoidCallback? onTapRight2Icon;
+  final void Function(String?)? onChanged;
+  final bool editable;
 
   @override
   State<SearchBoxWidget> createState() => _SearchBoxWidgetState();
@@ -51,43 +55,6 @@ class SearchBoxWidget extends StatefulWidget {
 
 class _SearchBoxWidgetState extends State<SearchBoxWidget> {
   int _hintIndex = 0;
-
-  double get textFieldWidth => {
-        if (widget.leftIconData != null &&
-            widget.right1IconData != null &&
-            widget.right2IconData != null)
-          widget.width -
-              widget.iconSize * 3 -
-              widget.spaceBetween * 6 -
-              widget.dividerWidth,
-        if (widget.leftIconData != null &&
-            widget.right1IconData != null &&
-            widget.right2IconData == null)
-          widget.width - widget.iconSize * 2 - widget.spaceBetween * 4,
-        if (widget.leftIconData != null &&
-            widget.right1IconData == null &&
-            widget.right2IconData == null)
-          widget.width - widget.iconSize - widget.spaceBetween * 2,
-        if (widget.leftIconData == null &&
-            widget.right1IconData != null &&
-            widget.right2IconData != null)
-          widget.width -
-              widget.iconSize * 2 -
-              widget.spaceBetween * 4 -
-              widget.dividerWidth,
-        if (widget.leftIconData == null &&
-            widget.right1IconData != null &&
-            widget.right2IconData == null)
-          widget.width - widget.iconSize - widget.spaceBetween * 2,
-        if (widget.leftIconData == null &&
-            widget.right1IconData == null &&
-            widget.right2IconData != null)
-          widget.width - widget.iconSize - widget.spaceBetween * 2,
-        if (widget.leftIconData == null &&
-            widget.right1IconData == null &&
-            widget.right2IconData == null)
-          widget.width - widget.spaceBetween * 2,
-      }.first;
 
   @override
   Widget build(BuildContext context) {
@@ -110,9 +77,14 @@ class _SearchBoxWidgetState extends State<SearchBoxWidget> {
     final rotateHint = (widget.hints == null || widget.hints!.isEmpty
             ? Container()
             : widget.hints!.length == 1
-                ? Text(
-                    widget.hints!.first,
+                ? TextFormField(
+                    autofocus: true,
                     style: hintTextStyle,
+                    decoration: InputDecoration(
+                      hintText: widget.hints!.first,
+                    ),
+                    autovalidateMode: AutovalidateMode.always,
+                    onChanged: widget.onChanged,
                   )
                 : DefaultTextStyle(
                     style: hintTextStyle,
@@ -130,16 +102,16 @@ class _SearchBoxWidgetState extends State<SearchBoxWidget> {
                               ))
                           .toList(),
                       onNext: (index, isLast) => setState(() {
-                        _hintIndex = index;
+                        _hintIndex =
+                            index < widget.hints!.length - 1 ? index + 1 : 0;
                       }),
                     ),
                   ))
-        .constrained(width: textFieldWidth, height: widget.height)
         .gestures(
-          onTap: widget.onTapHint == null
-              ? null
-              : () => widget.onTapHint!(widget.hints![_hintIndex]),
-        );
+      onTap: widget.onTapHint == null
+          ? null
+          : () => widget.onTapHint!(widget.hints![_hintIndex]),
+    );
 
     final right1Icon = widget.right1IconData == null
         ? Container()
@@ -182,27 +154,26 @@ class _SearchBoxWidgetState extends State<SearchBoxWidget> {
 
     final leftGroup = [
       searchIcon,
-      rotateHint,
-    ].toRow(mainAxisSize: MainAxisSize.max);
+      rotateHint.expanded(),
+    ].toRow(
+        mainAxisSize: MainAxisSize.max,
+        crossAxisAlignment: CrossAxisAlignment.center);
 
-    return Container(
-      height: widget.height,
-      decoration: BoxDecoration(
-        color: widget.bgColor,
-        borderRadius: widget.borderRadius == null
-            ? BorderRadius.circular(widget.height / 2)
-            : BorderRadius.circular(widget.borderRadius!),
-      ),
-      child: [
-        leftGroup.expanded(),
-        rightGroup,
-      ]
-          .toRow(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
-          )
-          .constrained(width: widget.width, height: widget.height),
-    );
+    return [
+      leftGroup.expanded(),
+      rightGroup,
+    ]
+        .toRow(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+        )
+        .constrained(width: widget.width, height: widget.height)
+        .decorated(
+          color: widget.bgColor,
+          borderRadius: widget.borderRadius == null
+              ? BorderRadius.circular(widget.height / 2)
+              : BorderRadius.circular(widget.borderRadius!),
+        );
   }
 }

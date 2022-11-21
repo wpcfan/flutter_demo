@@ -5,6 +5,7 @@ export './learn_flutter_page.dart';
 export './login_page.dart';
 export './my_page.dart';
 export './register_page.dart';
+export './result_page.dart';
 export './root_page.dart';
 export './search_page.dart';
 export './settings/all.dart';
