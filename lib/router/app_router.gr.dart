@@ -48,11 +48,10 @@ class _$AppRouter extends RootStackRouter {
       final args = routeData.argsAs<SearchArgs>();
       return MaterialPageX<dynamic>(
         routeData: routeData,
-        child: WrappedRoute(
-            child: SearchPage(
+        child: SearchPage(
           query: args.query,
           key: args.key,
-        )),
+        ),
       );
     },
     Language.name: (routeData) {

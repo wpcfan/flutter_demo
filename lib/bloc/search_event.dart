@@ -11,6 +11,8 @@ class SearchEventLoadHistory extends SearchEvent {}
 
 class SearchEventAddHistory extends SearchEvent {}
 
+class SearchEventToggleHistoryExpand extends SearchEvent {}
+
 class SearchEventAddQuery extends SearchEvent {
   final String query;
 

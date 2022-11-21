@@ -16,6 +16,8 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
         transformer: throttleDroppable(throttleDuration));
     on<SearchEventAddQuery>(_onSearchEventAddQuery,
         transformer: throttleDroppable(throttleDuration));
+    on<SearchEventToggleHistoryExpand>(_onSearchEventToggleHistoryExpand,
+        transformer: throttleDroppable(throttleDuration));
   }
   final HistoryRepository historyRepository;
 
@@ -93,6 +95,15 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
   ) async {
     return emit(state.copyWith(
       query: event.query,
+    ));
+  }
+
+  Future<void> _onSearchEventToggleHistoryExpand(
+    SearchEventToggleHistoryExpand event,
+    Emitter<SearchState> emit,
+  ) async {
+    return emit(state.copyWith(
+      isHistoryExpanded: !state.isHistoryExpanded,
     ));
   }
 }

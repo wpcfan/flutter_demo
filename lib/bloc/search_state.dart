@@ -9,12 +9,14 @@ class SearchState extends Equatable {
     this.error,
     this.status = SearchStatus.initial,
     this.isFetching = false,
+    this.isHistoryExpanded = false,
   });
   final String? query;
   final List<String> history;
   final String? error;
   final SearchStatus status;
   final bool isFetching;
+  final bool isHistoryExpanded;
   @override
   List<Object?> get props => [
         history,
@@ -22,6 +24,7 @@ class SearchState extends Equatable {
         status,
         isFetching,
         query,
+        isHistoryExpanded,
       ];
 
   SearchState copyWith({
@@ -30,6 +33,7 @@ class SearchState extends Equatable {
     SearchStatus? status,
     bool? isFetching,
     String? query,
+    bool? isHistoryExpanded,
   }) {
     return SearchState(
       history: history ?? this.history,
@@ -37,6 +41,7 @@ class SearchState extends Equatable {
       status: status ?? this.status,
       isFetching: isFetching ?? this.isFetching,
       query: query ?? this.query,
+      isHistoryExpanded: isHistoryExpanded ?? this.isHistoryExpanded,
     );
   }
 
@@ -48,6 +53,7 @@ class SearchState extends Equatable {
       error: $error,
       isFetching: $isFetching,
       query: $query,
+      isHistoryExpanded: $isHistoryExpanded,
     }''';
   }
 }

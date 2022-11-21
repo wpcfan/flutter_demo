@@ -10,13 +10,14 @@ import 'package:styled_widget/styled_widget.dart';
 part 'search_page_history.dart';
 part 'search_page_suggestion.dart';
 
-class SearchPage extends StatelessWidget implements AutoRouteWrapper {
+class SearchPage extends StatelessWidget {
   const SearchPage({required this.query, super.key});
 
   @override
   Widget build(BuildContext context) {
-    context.read<SearchBloc>().add(SearchEventAddQuery(query));
-    context.read<SearchBloc>().add(SearchEventLoadHistory());
+    final bloc = context.read<SearchBloc>();
+    bloc.add(SearchEventAddQuery(query));
+    bloc.add(SearchEventLoadHistory());
     final screenWidth = MediaQuery.of(context).size.width;
     final width = screenWidth - 32;
     page({required Widget child}) => Styled.widget(child: child)
@@ -24,18 +25,19 @@ class SearchPage extends StatelessWidget implements AutoRouteWrapper {
             vertical: listVerticalPadding, horizontal: screenHorizontalPadding)
         .safeArea()
         .scrollable();
-    history({required List<String> historyList}) => SearchHistoryWidget(
+    history({required List<String> historyList, required bool isExpanded}) =>
+        SearchHistoryWidget(
           title: '搜索历史',
           tags: historyList.map((el) => TagWidget(title: el)).toList(),
-          isExpanded: false,
-          onToggleExpand: () {},
+          isExpanded: isExpanded,
+          onToggleExpand: () {
+            bloc.add(SearchEventToggleHistoryExpand());
+          },
           onClearHistory: () {
-            context.read<SearchBloc>().add(SearchEventClearHistory());
+            bloc.add(SearchEventClearHistory());
           },
         );
 
-    final historyList =
-        context.select<SearchBloc, List<String>>((bloc) => bloc.state.history);
     return Scaffold(
       appBar: AppBar(
         title: SearchBoxWidget(
@@ -44,32 +46,28 @@ class SearchPage extends StatelessWidget implements AutoRouteWrapper {
           hints: [query],
           right2IconData: null,
           onChanged: (value) {
-            context.read<SearchBloc>().add(SearchEventAddQuery(value ?? query));
+            bloc.add(SearchEventAddQuery(value ?? query));
             return;
           },
         ),
         actions: [
           TextButton(
               onPressed: () {
-                context.read<SearchBloc>().add(SearchEventAddHistory());
-                final value = context.read<SearchBloc>().state.query ?? query;
+                bloc.add(SearchEventAddHistory());
+                final value = bloc.state.query ?? query;
                 context.router.replace(Result(query: value));
               },
               child: const Text('搜索', style: TextStyle(color: Colors.white))),
         ],
       ),
-      body: history(historyList: historyList).parent(page),
+      body: BlocBuilder<SearchBloc, SearchState>(builder: (context, state) {
+        final historyList = state.history;
+        final isExpanded = state.isHistoryExpanded;
+        return history(historyList: historyList, isExpanded: isExpanded)
+            .parent(page);
+      }),
     );
   }
 
   final String query;
-
-  @override
-  Widget wrappedRoute(BuildContext context) {
-    return BlocBuilder<SearchBloc, SearchState>(
-      builder: (context, state) {
-        return this;
-      },
-    );
-  }
 }
