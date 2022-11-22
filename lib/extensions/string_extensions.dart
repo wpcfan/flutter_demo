@@ -61,4 +61,19 @@ extension StringExtension on String {
           decoration: TextDecoration.lineThrough,
         ));
   }
+
+  double widthOfText(
+      {double fontSize = 12.0, FontWeight fontWeight = FontWeight.w600}) {
+    final textPainter = TextPainter(
+      text: TextSpan(
+        text: this,
+        style: TextStyle(
+          fontWeight: fontWeight,
+          fontSize: fontSize,
+        ),
+      ),
+      textDirection: TextDirection.ltr,
+    )..layout();
+    return textPainter.width;
+  }
 }
