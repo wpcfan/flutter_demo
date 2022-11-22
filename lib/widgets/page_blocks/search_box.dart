@@ -102,25 +102,30 @@ class _SearchBoxWidgetState extends State<SearchBoxWidget> {
         onChanged: widget.onChanged,
       ).expanded();
     } else {
-      rotateHint = DefaultTextStyle(
-        style: hintTextStyle,
-        child: AnimatedTextKit(
-          repeatForever: true,
-          animatedTexts: widget.hints!
-              .map((el) => RotateAnimatedText(
-                    el,
-                    topToBottom: false,
-                    rotateOut: true,
-                    transitionHeight: widget.height,
-                    textAlign: TextAlign.start,
-                    alignment: Alignment.centerLeft,
-                    duration: const Duration(seconds: 2),
-                  ))
-              .toList(),
-          onNext: (index, isLast) => setState(() {
-            _hintIndex = index < widget.hints!.length - 1 ? index + 1 : 0;
-          }),
-        ),
+      rotateHint = Flex(
+        direction: Axis.vertical,
+        children: [
+          DefaultTextStyle(
+            style: hintTextStyle,
+            child: AnimatedTextKit(
+              repeatForever: true,
+              animatedTexts: widget.hints!
+                  .map((el) => RotateAnimatedText(
+                        el,
+                        topToBottom: false,
+                        rotateOut: true,
+                        transitionHeight: widget.height,
+                        textAlign: TextAlign.start,
+                        alignment: Alignment.centerLeft,
+                        duration: const Duration(seconds: 2),
+                      ))
+                  .toList(),
+              onNext: (index, isLast) => setState(() {
+                _hintIndex = index < widget.hints!.length - 1 ? index + 1 : 0;
+              }),
+            ),
+          ),
+        ],
       )
           .gestures(
             onTap: widget.onTapHint == null
