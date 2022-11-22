@@ -100,6 +100,7 @@ class _SearchBoxWidgetState extends State<SearchBoxWidget> {
           hintText: widget.hints!.first,
           hintStyle: hintTextStyle,
           border: InputBorder.none,
+          contentPadding: const EdgeInsets.only(bottom: 12),
         ),
         autovalidateMode: AutovalidateMode.always,
         onChanged: widget.onChanged,
@@ -181,7 +182,8 @@ class _SearchBoxWidgetState extends State<SearchBoxWidget> {
       rotateHint,
     ].toRow(
         mainAxisSize: MainAxisSize.max,
-        crossAxisAlignment: CrossAxisAlignment.center);
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start);
 
     return [
       leftGroup.expanded(),
