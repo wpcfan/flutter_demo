@@ -5,28 +5,47 @@ class TagWidget extends StatelessWidget {
   const TagWidget({
     super.key,
     required this.title,
+    required this.tagColor,
     this.closable = false,
     this.onClose,
     this.closeIcon = Icons.close,
+    this.iconSize = 16,
+    this.iconColor = Colors.grey,
+    this.iconPadding = 4,
+    this.fontSize = 12,
+    this.fontColor = Colors.grey,
+    this.tagHorizontalPadding = 8,
+    this.tagVerticalPadding = 4,
+    required this.borderRadius,
   });
   final String title;
   final bool closable;
   final VoidCallback? onClose;
   final IconData? closeIcon;
+  final double iconSize;
+  final Color iconColor;
+  final double iconPadding;
+  final double fontSize;
+  final Color fontColor;
+  final Color tagColor;
+  final double tagHorizontalPadding;
+  final double tagVerticalPadding;
+  final BorderRadius borderRadius;
+
   @override
   Widget build(BuildContext context) {
     page({required Widget child}) => Styled.widget(child: child)
-        .padding(vertical: 4, horizontal: 8)
+        .padding(vertical: tagVerticalPadding, horizontal: tagHorizontalPadding)
         .decorated(
-          color: Colors.grey[200],
-          borderRadius: BorderRadius.circular(12),
+          color: tagColor,
+          borderRadius: borderRadius,
         );
 
     final tagText = Text(
       title,
-      style: const TextStyle(
-        fontSize: 12,
-        color: Colors.grey,
+      style: TextStyle(
+        fontSize: fontSize,
+        color: fontColor,
       ),
       softWrap: false,
       overflow: TextOverflow.ellipsis,
@@ -34,9 +53,9 @@ class TagWidget extends StatelessWidget {
     );
 
     if (closable) {
-      final closeBtn = Icon(closeIcon, size: 16, color: Colors.grey)
+      final closeBtn = Icon(closeIcon, size: iconSize, color: iconColor)
           .gestures(onTap: onClose)
-          .padding(horizontal: 4);
+          .padding(horizontal: iconPadding);
       return [tagText, closeBtn]
           .toRow(mainAxisSize: MainAxisSize.min)
           .parent(page);

@@ -81,6 +81,7 @@ class _SearchBoxWidgetState extends State<SearchBoxWidget> {
       fontSize: widget.hintFontSize,
       fontFamily: widget.hintFontFamily,
       fontWeight: FontWeight.w500,
+      overflow: TextOverflow.ellipsis,
     );
     Widget rotateHint;
     if (widget.tag != null) {
@@ -88,6 +89,8 @@ class _SearchBoxWidgetState extends State<SearchBoxWidget> {
         title: widget.tag!,
         closable: true,
         onClose: widget.onTagClose,
+        tagColor: widget.bgColor,
+        borderRadius: BorderRadius.circular(widget.borderRadius ?? 0),
       );
     } else if (widget.hints != null && widget.hints!.length == 1) {
       rotateHint = TextFormField(

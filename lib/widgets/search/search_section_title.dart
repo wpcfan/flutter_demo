@@ -52,6 +52,6 @@ class SearchSectionTitle extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.center,
     );
-    return titleBar.padding(horizontal: 12, vertical: 12);
+    return titleBar;
   }
 }

@@ -28,13 +28,18 @@ class SearchPage extends StatelessWidget {
     history({required List<String> historyList, required bool isExpanded}) =>
         SearchHistoryWidget(
           title: '搜索历史',
-          tags: historyList.map((el) => TagWidget(title: el)).toList(),
+          tags: historyList,
           isExpanded: isExpanded,
           onToggleExpand: () {
             bloc.add(SearchEventToggleHistoryExpand());
           },
           onClearHistory: () {
             bloc.add(SearchEventClearHistory());
+          },
+          onTapTag: (value) {
+            bloc.add(SearchEventAddQuery(value));
+            bloc.add(SearchEventAddHistory());
+            context.router.replace(Result(query: value));
           },
         );
 

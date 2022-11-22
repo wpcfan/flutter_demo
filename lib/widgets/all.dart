@@ -1,6 +1,6 @@
 export './action_item.dart';
 export './animation/all.dart';
-export './extended_wrap/extend_wrap.dart';
+export './flex_tags.dart';
 export './loading_overlay/all.dart';
 export './loading_scroll_list/all.dart';
 export './no_data_widget.dart';

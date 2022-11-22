@@ -6,6 +6,7 @@ class SearchHistoryWidget extends StatelessWidget {
     this.isExpanded = false,
     this.onToggleExpand,
     this.onClearHistory,
+    this.onTapTag,
     this.expandedLines = 30,
     this.collapseLines = 2,
     this.tags = const [],
@@ -16,32 +17,34 @@ class SearchHistoryWidget extends StatelessWidget {
   final bool isExpanded;
   final VoidCallback? onToggleExpand;
   final VoidCallback? onClearHistory;
+  final void Function(String)? onTapTag;
   final int expandedLines;
   final int collapseLines;
-  final List<Widget> tags;
+  final List<String> tags;
   final double horizontalSpacing;
   final double verticalSpacing;
   final String title;
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final width = screenWidth - 24;
     final searchHistoryTitle = SearchSectionTitle(
       title: title,
       leftIcon: isExpanded ? Icons.expand_less : Icons.expand_more,
       onLeftTap: onToggleExpand,
       onRightTap: onClearHistory,
     );
-    final tagFlexWrap = ExtendedWrap(
-      maxLines: isExpanded ? expandedLines : collapseLines,
-      minLines: collapseLines,
-      alignment: WrapAlignment.start,
-      direction: Axis.horizontal,
-      spacing: horizontalSpacing,
-      runSpacing: verticalSpacing,
-      children: tags,
+
+    final tagFlexWrap = FlexTags(
+      tags: tags,
+      width: width,
+      isCollapsed: !isExpanded,
+      displayToggleIcon: true,
+      onToggle: onToggleExpand,
+      onTap: onTapTag,
     );
     return [searchHistoryTitle, tagFlexWrap]
-        .toColumn(crossAxisAlignment: CrossAxisAlignment.start)
-        .padding(horizontal: 12);
+        .toColumn(crossAxisAlignment: CrossAxisAlignment.start);
   }
 }
