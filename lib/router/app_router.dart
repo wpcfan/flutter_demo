@@ -28,7 +28,7 @@ part 'app_router.gr.dart';
       path: '/result/:query',
       name: 'result',
     ),
-    AutoRoute(page: SearchPage, name: 'search', path: '/search'),
+    AutoRoute(page: SearchPage, name: 'search', path: '/search/:query'),
     AutoRoute(page: LanguagePage, name: 'language', path: '/language'),
     AutoRoute(page: LoginPage, name: 'login', path: '/login'),
     AutoRoute(page: RegisterPage, name: 'register', path: '/register'),

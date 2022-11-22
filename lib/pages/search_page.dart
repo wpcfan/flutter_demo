@@ -11,7 +11,8 @@ part 'search_page_history.dart';
 part 'search_page_suggestion.dart';
 
 class SearchPage extends StatelessWidget {
-  const SearchPage({required this.query, super.key});
+  final String query;
+  const SearchPage({@pathParam required this.query, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -76,6 +77,4 @@ class SearchPage extends StatelessWidget {
       }),
     );
   }
-
-  final String query;
 }

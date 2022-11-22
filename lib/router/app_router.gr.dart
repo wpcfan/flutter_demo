@@ -35,7 +35,9 @@ class _$AppRouter extends RootStackRouter {
       );
     },
     Result.name: (routeData) {
-      final args = routeData.argsAs<ResultArgs>();
+      final pathParams = routeData.inheritedPathParams;
+      final args = routeData.argsAs<ResultArgs>(
+          orElse: () => ResultArgs(query: pathParams.getString('query')));
       return MaterialPageX<dynamic>(
         routeData: routeData,
         child: ResultPage(
@@ -45,7 +47,9 @@ class _$AppRouter extends RootStackRouter {
       );
     },
     Search.name: (routeData) {
-      final args = routeData.argsAs<SearchArgs>();
+      final pathParams = routeData.inheritedPathParams;
+      final args = routeData.argsAs<SearchArgs>(
+          orElse: () => SearchArgs(query: pathParams.getString('query')));
       return MaterialPageX<dynamic>(
         routeData: routeData,
         child: SearchPage(
@@ -165,7 +169,7 @@ class _$AppRouter extends RootStackRouter {
         ),
         RouteConfig(
           Search.name,
-          path: '/search',
+          path: '/search/:query',
         ),
         RouteConfig(
           Language.name,
@@ -228,6 +232,7 @@ class Result extends PageRouteInfo<ResultArgs> {
             key: key,
             query: query,
           ),
+          rawPathParams: {'query': query},
         );
 
   static const String name = 'Result';
@@ -257,11 +262,12 @@ class Search extends PageRouteInfo<SearchArgs> {
     Key? key,
   }) : super(
           Search.name,
-          path: '/search',
+          path: '/search/:query',
           args: SearchArgs(
             query: query,
             key: key,
           ),
+          rawPathParams: {'query': query},
         );
 
   static const String name = 'Search';

@@ -4,7 +4,7 @@ import 'package:demo/widgets/all.dart';
 import 'package:flutter/material.dart';
 
 class ResultPage extends StatelessWidget {
-  const ResultPage({super.key, required this.query});
+  const ResultPage({super.key, @pathParam required this.query});
   final String query;
   @override
   Widget build(BuildContext context) {
