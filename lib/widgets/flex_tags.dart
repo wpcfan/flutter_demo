@@ -61,7 +61,12 @@ class FlexTags extends StatelessWidget {
         tags, width, horizontalSpacing, tagHorizontalPadding, textFontSize);
     List<String> tagsToDisplay = tags;
     if (isCollapsed && tagLines.lines > collapsedLines) {
-      tagsToDisplay = tags.sublist(0, tagLines.indexOfCollapsedLine);
+      tagsToDisplay = tags.sublist(
+        0,
+        tagLines.indexOfCollapsedLine < tags.length - 1
+            ? tagLines.indexOfCollapsedLine + 1
+            : tagLines.indexOfCollapsedLine,
+      );
     }
     final tagWidgets = tagsToDisplay
         .map((tag) => GestureDetector(
@@ -121,21 +126,21 @@ class FlexTags extends StatelessWidget {
       if (lineWidth + tagTotalWidth > width) {
         lines++;
         lineWidth = tagTotalWidth;
+      } else if (displayToggleIcon &&
+          i == tags.length - 1 &&
+          lineWidth + tagTotalWidth + iconSize > width) {
+        lines++;
+        lineWidth = tagTotalWidth;
       } else {
-        if (displayToggleIcon &&
-            i == tags.length - 1 &&
-            lineWidth + tagTotalWidth + iconSize > width) {
-          lines++;
-          lineWidth = tagTotalWidth;
-        } else {
-          lineWidth += tagTotalWidth;
-        }
+        lineWidth += tagTotalWidth;
       }
       if (lines == collapsedLines) {
         indexOfCollapsedLine = i;
       }
     }
     return FlexTagLine(
-        lines: lines, indexOfCollapsedLine: indexOfCollapsedLine);
+      lines: lines,
+      indexOfCollapsedLine: indexOfCollapsedLine,
+    );
   }
 }
