@@ -1,17 +1,17 @@
+import 'package:demo/config.dart';
 import 'package:demo/models/all.dart';
 import 'package:dio/dio.dart';
 
 class PageBlockRepository {
-  final String _url = '192.168.50.225:3000';
   final Dio dio;
 
   PageBlockRepository(this.dio);
 
   Future<List<PageBlock>> getPageBlocks([String platform = 'mobile']) async {
-    final response =
-        await dio.getUri(Uri.http(_url, '/pages', {'platform': platform}));
+    final response = await dio.getUri(Uri.https(lcApiBase, '/1.1/classes/Pages',
+        {'where': '{"platform": "$platform"}'}));
     if (response.statusCode == 200) {
-      final json = response.data as List;
+      final json = response.data['results'] as List;
       // 区块排序
       json.sort((a, b) => a['sort'] - b['sort']);
       final pages = json.map((e) => PageBlock.fromJson(e)).toList();

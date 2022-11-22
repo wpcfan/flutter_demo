@@ -25,6 +25,7 @@
       "minHeight": 66,
       "type": "pinned_header",
       "platform": "mobile",
+      "target": "home",
       "data": [
         {
           "sort": 1,
@@ -43,6 +44,7 @@
       "width": 400,
       "height": 150,
       "platform": "mobile",
+      "target": "home",
       "data": [
         {
           "sort": 1,
@@ -87,6 +89,7 @@
       "width": 400,
       "height": 120,
       "platform": "mobile",
+      "target": "home",
       "data": [
         {
           "sort": 1,
@@ -109,6 +112,7 @@
       "width": 400,
       "height": 120,
       "platform": "mobile",
+      "target": "home",
       "data": [
         {
           "sort": 1,
@@ -142,6 +146,7 @@
       "width": 400,
       "height": 90,
       "platform": "mobile",
+      "target": "home",
       "data": [
         {
           "sort": 1,
@@ -186,6 +191,7 @@
       "width": 400,
       "height": 120,
       "platform": "mobile",
+      "target": "home",
       "data": [
         {
           "id": "PD_123456",
@@ -206,6 +212,7 @@
       "width": 400,
       "height": 180,
       "platform": "mobile",
+      "target": "home",
       "data": [
         {
           "id": "PD_1234567",
@@ -231,6 +238,7 @@
       "sort": 8,
       "type": "waterfall",
       "platform": "mobile",
+      "target": "home",
       "data": [
         {
           "title": "Tab 1",
