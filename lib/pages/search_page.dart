@@ -31,6 +31,8 @@ class SearchPage extends StatelessWidget {
           title: '搜索历史',
           tags: historyList,
           isExpanded: isExpanded,
+          tagColor: Colors.grey[200]!,
+          textColor: Colors.grey,
           onToggleExpand: () {
             bloc.add(SearchEventToggleHistoryExpand());
           },

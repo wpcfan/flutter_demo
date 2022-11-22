@@ -12,6 +12,8 @@ class SearchHistoryWidget extends StatelessWidget {
     this.tags = const [],
     this.horizontalSpacing = 12,
     this.verticalSpacing = 8,
+    this.textColor = Colors.grey,
+    required this.tagColor,
     required this.title,
   });
   final bool isExpanded;
@@ -24,7 +26,8 @@ class SearchHistoryWidget extends StatelessWidget {
   final double horizontalSpacing;
   final double verticalSpacing;
   final String title;
-
+  final Color tagColor;
+  final Color textColor;
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
@@ -39,6 +42,10 @@ class SearchHistoryWidget extends StatelessWidget {
     final tagFlexWrap = FlexTags(
       tags: tags,
       width: width,
+      tagColor: tagColor,
+      textColor: textColor,
+      tagHorizontalPadding: 8,
+      tagVerticalPadding: 4,
       isCollapsed: !isExpanded,
       displayToggleIcon: true,
       onToggle: onToggleExpand,
