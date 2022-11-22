@@ -2,7 +2,7 @@ import 'package:demo/models/all.dart';
 import 'package:dio/dio.dart';
 
 class PageBlockRepository {
-  final String _url = 'localhost:3000';
+  final String _url = '192.168.50.225:3000';
   final Dio dio;
 
   PageBlockRepository(this.dio);

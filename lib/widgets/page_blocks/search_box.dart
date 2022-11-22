@@ -102,10 +102,10 @@ class _SearchBoxWidgetState extends State<SearchBoxWidget> {
         onChanged: widget.onChanged,
       ).expanded();
     } else {
-      rotateHint = Flex(
-        direction: Axis.vertical,
-        children: [
-          DefaultTextStyle(
+      rotateHint = Expanded(
+        child: SizedBox(
+          height: widget.height,
+          child: DefaultTextStyle(
             style: hintTextStyle,
             child: AnimatedTextKit(
               repeatForever: true,
@@ -125,14 +125,13 @@ class _SearchBoxWidgetState extends State<SearchBoxWidget> {
               }),
             ),
           ),
-        ],
-      )
-          .gestures(
-            onTap: widget.onTapHint == null
-                ? null
-                : () => widget.onTapHint!(widget.hints![_hintIndex]),
-          )
-          .expanded();
+        ).gestures(
+          behavior: HitTestBehavior.opaque,
+          onTap: widget.onTapHint == null
+              ? null
+              : () => widget.onTapHint!(widget.hints![_hintIndex]),
+        ),
+      );
     }
 
     final right1Icon = widget.right1IconData == null
