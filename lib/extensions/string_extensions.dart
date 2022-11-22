@@ -52,18 +52,25 @@ extension StringExtension on String {
     );
   }
 
-  Text lineThru({double fontSize = 12.0}) {
+  Text lineThru({
+    double fontSize = 12.0,
+    FontWeight fontWeight = FontWeight.w600,
+    Color fontColor = Colors.grey,
+  }) {
     return Text(this,
         style: TextStyle(
-          fontWeight: FontWeight.w600,
+          fontWeight: fontWeight,
           fontSize: fontSize,
-          color: Colors.grey,
+          color: fontColor,
           decoration: TextDecoration.lineThrough,
         ));
   }
 
-  double widthOfText(
-      {double fontSize = 12.0, FontWeight fontWeight = FontWeight.w600}) {
+  // 根据字体大小计算渲染后的宽度
+  double widthOfText({
+    double fontSize = 12.0,
+    FontWeight fontWeight = FontWeight.normal,
+  }) {
     final textPainter = TextPainter(
       text: TextSpan(
         text: this,
