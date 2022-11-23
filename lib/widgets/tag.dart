@@ -11,7 +11,6 @@ class TagWidget extends StatelessWidget {
     this.closeIcon = Icons.close,
     this.iconSize = 16,
     this.iconColor = Colors.grey,
-    this.iconPadding = 4,
     this.fontSize = 12,
     this.fontColor = Colors.grey,
     this.tagHorizontalPadding = 8,
@@ -25,7 +24,6 @@ class TagWidget extends StatelessWidget {
   final IconData? closeIcon;
   final double iconSize;
   final Color iconColor;
-  final double iconPadding;
   final double fontSize;
   final Color fontColor;
   final Color tagColor;
@@ -52,12 +50,12 @@ class TagWidget extends StatelessWidget {
       softWrap: false,
       overflow: TextOverflow.ellipsis,
       maxLines: 1,
-    ).expanded();
+    );
 
     if (closable) {
       final closeBtn = Icon(closeIcon, size: iconSize, color: iconColor)
           .gestures(onTap: onClose)
-          .padding(horizontal: iconPadding);
+          .expanded();
       return [tagText, closeBtn]
           .toRow(mainAxisSize: MainAxisSize.min)
           .parent(page);

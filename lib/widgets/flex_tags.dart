@@ -123,15 +123,20 @@ class FlexTags extends StatelessWidget {
       final tagWidth = tag.widthOfText(fontSize: textFontSize);
       final tagWidthWithPadding = tagWidth + tagHorizontalPadding * 2;
       final tagTotalWidth = tagWidthWithPadding + horizontalSpacing;
+
       if (lineWidth + tagTotalWidth > width) {
+        // 如果当前行剩余宽度不足以放下当前tag，则换行
         lines++;
-        lineWidth = tagTotalWidth;
+        // 如果长度大于等于容器宽度，则以容器宽度为准
+        lineWidth = tagTotalWidth >= width ? width : tagTotalWidth;
       } else if (displayToggleIcon &&
-          i == tags.length - 1 &&
+          (i == tags.length - 1 || lines == collapsedLines) &&
           lineWidth + tagTotalWidth + iconSize > width) {
+        // 如果启用了显示图标且当前行剩余宽度不足以放下当前tag和展开图标，则换行
         lines++;
         lineWidth = tagTotalWidth;
       } else {
+        // 如果当前行剩余宽度足以放下当前tag，则不换行
         lineWidth += tagTotalWidth;
       }
       if (lines == collapsedLines) {
