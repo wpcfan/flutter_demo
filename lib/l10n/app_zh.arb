@@ -34,5 +34,9 @@
   "language_title": "选择语言",
   "@language_title": {
     "description": "用于切换语言的弹窗标题"
+  },
+  "btn_search": "搜索",
+  "@btn_search": {
+    "description": "搜索按钮文字"
   }
 }

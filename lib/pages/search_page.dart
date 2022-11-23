@@ -5,6 +5,7 @@ import 'package:demo/router/app_router.dart';
 import 'package:demo/widgets/all.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:styled_widget/styled_widget.dart';
 
 part 'search_page_history.dart';
@@ -21,11 +22,13 @@ class SearchPage extends StatelessWidget {
     bloc.add(SearchEventLoadHistory());
     final screenWidth = MediaQuery.of(context).size.width;
     final width = screenWidth - 32;
+    // 构建 body 页面，此函数一般用来设置整体的布局
     page({required Widget child}) => Styled.widget(child: child)
         .padding(
             vertical: listVerticalPadding, horizontal: screenHorizontalPadding)
         .safeArea()
         .scrollable();
+    // 构建搜索历史模块
     history({required List<String> historyList, required bool isExpanded}) =>
         SearchHistoryWidget(
           title: '搜索历史',
@@ -68,7 +71,8 @@ class SearchPage extends StatelessWidget {
                 final value = bloc.state.query ?? query;
                 context.router.replace(Result(query: value));
               },
-              child: const Text('搜索', style: TextStyle(color: Colors.black87))),
+              child: Text(AppLocalizations.of(context)!.btn_search,
+                  style: const TextStyle(color: Colors.black87))),
         ],
       ),
       body: BlocBuilder<SearchBloc, SearchState>(builder: (context, state) {

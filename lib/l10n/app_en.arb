@@ -34,5 +34,9 @@
   "language_title": "Switch language",
   "@language_title": {
     "description": "used as a title for the language switcher"
+  },
+  "btn_search": "Search",
+  "@btn_search": {
+    "description": "used as a button label for the search action"
   }
 }
