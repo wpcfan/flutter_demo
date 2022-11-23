@@ -19,8 +19,9 @@ class SearchPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final keyword = Uri.decodeFull(query);
     final searchBloc = context.read<SearchBloc>();
-    searchBloc.add(SearchEventAddQuery(query));
+    searchBloc.add(SearchEventAddQuery(keyword));
     searchBloc.add(SearchEventLoadHistory());
     searchBloc.add(const SearchEventLoadSuggestions('mobile'));
     final screenWidth = MediaQuery.of(context).size.width;
@@ -32,7 +33,6 @@ class SearchPage extends StatelessWidget {
         .safeArea()
         .scrollable();
     // 构建搜索历史模块
-
     return Scaffold(
       appBar: AppBar(
         elevation: double.minPositive,
@@ -41,10 +41,10 @@ class SearchPage extends StatelessWidget {
         title: SearchBoxWidget(
           width: width,
           height: 32,
-          hints: [query],
+          hints: [keyword],
           right2IconData: null,
           onChanged: (value) {
-            searchBloc.add(SearchEventAddQuery(value ?? query));
+            searchBloc.add(SearchEventAddQuery(value ?? keyword));
             return;
           },
         ),
@@ -52,7 +52,7 @@ class SearchPage extends StatelessWidget {
           TextButton(
               onPressed: () {
                 searchBloc.add(SearchEventAddHistory());
-                final value = searchBloc.state.query ?? query;
+                final value = searchBloc.state.query ?? keyword;
                 context.router.replace(Result(query: value));
               },
               child: Text(AppLocalizations.of(context)!.btn_search,

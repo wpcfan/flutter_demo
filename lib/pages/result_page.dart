@@ -8,6 +8,7 @@ class ResultPage extends StatelessWidget {
   final String query;
   @override
   Widget build(BuildContext context) {
+    final keyword = Uri.decodeFull(query);
     final screenWidth = MediaQuery.of(context).size.width;
     final width = screenWidth - 48 * 2;
     return Scaffold(
@@ -18,12 +19,12 @@ class ResultPage extends StatelessWidget {
         title: SearchBoxWidget(
           width: width,
           height: 32,
-          tag: query,
+          tag: keyword,
           right2IconData: null,
           iconColor: Colors.grey,
           tagColor: Colors.grey[200],
           borderRadius: 12,
-          onTagClose: () => context.router.replace(Search(query: query)),
+          onTagClose: () => context.router.replace(Search(query: keyword)),
         ),
         actions: [
           IconButton(
