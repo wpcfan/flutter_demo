@@ -20,6 +20,9 @@ class ResultPage extends StatelessWidget {
           height: 32,
           tag: query,
           right2IconData: null,
+          iconColor: Colors.grey,
+          tagColor: Colors.grey[200],
+          borderRadius: 12,
           onTagClose: () => context.router.replace(Search(query: query)),
         ),
         actions: [

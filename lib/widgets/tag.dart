@@ -55,7 +55,7 @@ class TagWidget extends StatelessWidget {
     if (closable) {
       final closeBtn = Icon(closeIcon, size: iconSize, color: iconColor)
           .gestures(onTap: onClose)
-          .expanded();
+          .flexible();
       return [tagText, closeBtn]
           .toRow(mainAxisSize: MainAxisSize.min)
           .parent(page);

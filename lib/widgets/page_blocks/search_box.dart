@@ -30,6 +30,7 @@ class SearchBoxWidget extends StatefulWidget {
     this.borderColor = Colors.grey,
     this.borderWidth = 1,
     this.editable = false,
+    this.tagColor,
   });
   final Color bgColor;
   final double iconSize;
@@ -56,6 +57,7 @@ class SearchBoxWidget extends StatefulWidget {
   final Color borderColor;
   final double borderWidth;
   final bool editable;
+  final Color? tagColor;
 
   @override
   State<SearchBoxWidget> createState() => _SearchBoxWidgetState();
@@ -89,9 +91,10 @@ class _SearchBoxWidgetState extends State<SearchBoxWidget> {
         title: widget.tag!,
         closable: true,
         onClose: widget.onTagClose,
-        tagColor: widget.bgColor,
+        tagColor: widget.tagColor ?? widget.bgColor,
+        fontColor: widget.hintColor,
         borderRadius: BorderRadius.circular(widget.borderRadius ?? 0),
-      ).expanded();
+      ).flexible();
     } else if (widget.hints != null && widget.hints!.length == 1) {
       rotateHint = TextFormField(
         autofocus: true,
@@ -100,7 +103,7 @@ class _SearchBoxWidgetState extends State<SearchBoxWidget> {
           hintText: widget.hints!.first,
           hintStyle: hintTextStyle,
           border: InputBorder.none,
-          contentPadding: const EdgeInsets.only(bottom: 12),
+          contentPadding: const EdgeInsets.only(bottom: 16),
         ),
         autovalidateMode: AutovalidateMode.always,
         onChanged: widget.onChanged,
@@ -181,7 +184,7 @@ class _SearchBoxWidgetState extends State<SearchBoxWidget> {
       searchIcon,
       rotateHint,
     ].toRow(
-        mainAxisSize: MainAxisSize.max,
+        mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.start);
 
