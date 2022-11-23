@@ -16,6 +16,7 @@ class TagWidget extends StatelessWidget {
     this.fontColor = Colors.grey,
     this.tagHorizontalPadding = 8,
     this.tagVerticalPadding = 4,
+    this.maxWidth,
     required this.borderRadius,
   });
   final String title;
@@ -31,11 +32,13 @@ class TagWidget extends StatelessWidget {
   final double tagHorizontalPadding;
   final double tagVerticalPadding;
   final BorderRadius borderRadius;
+  final double? maxWidth;
 
   @override
   Widget build(BuildContext context) {
     page({required Widget child}) => Styled.widget(child: child)
         .padding(vertical: tagVerticalPadding, horizontal: tagHorizontalPadding)
+        .constrained(maxWidth: maxWidth ?? double.infinity)
         .decorated(
           color: tagColor,
           borderRadius: borderRadius,
@@ -50,7 +53,7 @@ class TagWidget extends StatelessWidget {
       softWrap: false,
       overflow: TextOverflow.ellipsis,
       maxLines: 1,
-    );
+    ).expanded();
 
     if (closable) {
       final closeBtn = Icon(closeIcon, size: iconSize, color: iconColor)

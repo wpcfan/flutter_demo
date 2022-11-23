@@ -9,7 +9,7 @@ class ResultPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-    final width = screenWidth - 32;
+    final width = screenWidth - 48 * 2;
     return Scaffold(
       appBar: AppBar(
         elevation: double.minPositive,

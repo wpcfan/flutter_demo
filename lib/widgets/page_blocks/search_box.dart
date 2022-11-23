@@ -64,6 +64,57 @@ class SearchBoxWidget extends StatefulWidget {
 class _SearchBoxWidgetState extends State<SearchBoxWidget> {
   int _hintIndex = 0;
 
+  double get tagMaxWidth => {
+        if (widget.leftIconData != null &&
+            widget.right1IconData != null &&
+            widget.right2IconData != null)
+          widget.width -
+              widget.borderWidth * 2 -
+              widget.iconSize * 3 -
+              widget.spaceBetween * 6 -
+              widget.dividerWidth,
+        if (widget.leftIconData != null &&
+            widget.right1IconData != null &&
+            widget.right2IconData == null)
+          widget.width -
+              widget.borderWidth * 2 -
+              widget.iconSize * 2 -
+              widget.spaceBetween * 4,
+        if (widget.leftIconData != null &&
+            widget.right1IconData == null &&
+            widget.right2IconData == null)
+          widget.width -
+              widget.borderWidth * 2 -
+              widget.iconSize -
+              widget.spaceBetween * 2,
+        if (widget.leftIconData == null &&
+            widget.right1IconData != null &&
+            widget.right2IconData != null)
+          widget.width -
+              widget.borderWidth * 2 -
+              widget.iconSize * 2 -
+              widget.spaceBetween * 4 -
+              widget.dividerWidth,
+        if (widget.leftIconData == null &&
+            widget.right1IconData != null &&
+            widget.right2IconData == null)
+          widget.width -
+              widget.borderWidth * 2 -
+              widget.iconSize -
+              widget.spaceBetween * 2,
+        if (widget.leftIconData == null &&
+            widget.right1IconData == null &&
+            widget.right2IconData != null)
+          widget.width -
+              widget.borderWidth * 2 -
+              widget.iconSize -
+              widget.spaceBetween * 2,
+        if (widget.leftIconData == null &&
+            widget.right1IconData == null &&
+            widget.right2IconData == null)
+          widget.width - widget.borderWidth * 2 - widget.spaceBetween * 2,
+      }.first;
+
   @override
   Widget build(BuildContext context) {
     final searchIcon = widget.leftIconData == null
@@ -91,7 +142,8 @@ class _SearchBoxWidgetState extends State<SearchBoxWidget> {
         onClose: widget.onTagClose,
         tagColor: widget.bgColor,
         borderRadius: BorderRadius.circular(widget.borderRadius ?? 0),
-      );
+        maxWidth: tagMaxWidth,
+      ).expanded();
     } else if (widget.hints != null && widget.hints!.length == 1) {
       rotateHint = TextFormField(
         autofocus: true,
