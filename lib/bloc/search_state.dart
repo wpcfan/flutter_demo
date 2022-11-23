@@ -1,15 +1,13 @@
 part of 'search_bloc.dart';
 
-enum SearchStatus { initial, success, failure }
-
 class SearchState extends Equatable {
   const SearchState({
     this.query,
     this.history = const [],
     this.pageBlocks = const [],
     this.error,
-    this.historyStatus = SearchStatus.initial,
-    this.suggestionsStatus = SearchStatus.initial,
+    this.historyStatus = BlocStatus.initial,
+    this.suggestionsStatus = BlocStatus.initial,
     this.isFetching = false,
     this.isHistoryExpanded = false,
   });
@@ -17,8 +15,8 @@ class SearchState extends Equatable {
   final List<String> history;
   final List<PageBlock> pageBlocks;
   final String? error;
-  final SearchStatus historyStatus;
-  final SearchStatus suggestionsStatus;
+  final BlocStatus historyStatus;
+  final BlocStatus suggestionsStatus;
   final bool isFetching;
   final bool isHistoryExpanded;
   @override
@@ -37,8 +35,8 @@ class SearchState extends Equatable {
     List<String>? history,
     List<PageBlock>? pageBlocks,
     String? error,
-    SearchStatus? historyStatus,
-    SearchStatus? suggestionsStatus,
+    BlocStatus? historyStatus,
+    BlocStatus? suggestionsStatus,
     bool? isFetching,
     String? query,
     bool? isHistoryExpanded,

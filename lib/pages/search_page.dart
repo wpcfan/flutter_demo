@@ -4,6 +4,7 @@ import 'package:demo/config.dart';
 import 'package:demo/models/all.dart';
 import 'package:demo/router/app_router.dart';
 import 'package:demo/widgets/all.dart';
+import 'package:demo/widgets/bloc_wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -31,28 +32,6 @@ class SearchPage extends StatelessWidget {
         .safeArea()
         .scrollable();
     // 构建搜索历史模块
-    history({
-      required List<String> historyList,
-      required bool isExpanded,
-    }) =>
-        SearchHistoryWidget(
-          title: AppLocalizations.of(context)!.search_history,
-          tags: historyList,
-          isExpanded: isExpanded,
-          tagColor: Colors.grey[200]!,
-          textColor: Colors.grey,
-          onToggleExpand: () {
-            searchBloc.add(SearchEventToggleHistoryExpand());
-          },
-          onClearHistory: () {
-            searchBloc.add(SearchEventClearHistory());
-          },
-          onTapTag: (value) {
-            searchBloc.add(SearchEventAddQuery(value));
-            searchBloc.add(SearchEventAddHistory());
-            context.router.replace(Result(query: value));
-          },
-        );
 
     return Scaffold(
       appBar: AppBar(
@@ -81,36 +60,51 @@ class SearchPage extends StatelessWidget {
         ],
       ),
       body: BlocBuilder<SearchBloc, SearchState>(
-        builder: (context, searchState) {
-          Widget? historyWidget, categoryRankingWidget;
-          if (searchState.historyStatus == SearchStatus.success) {
-            final historyList = searchState.history;
-            final isExpanded = searchState.isHistoryExpanded;
-            historyWidget = history(
-              historyList: historyList,
-              isExpanded: isExpanded,
+        builder: (context, state) {
+          final historyWidget = BlocWrapperWidget(
+              status: state.historyStatus,
+              loadingWidget: const Center(child: CircularProgressIndicator()),
+              errorWidget:
+                  Center(child: Text(state.error ?? 'Something went wrong')),
+              child: SearchHistoryWidget(
+                title: AppLocalizations.of(context)!.search_history,
+                tags: state.history,
+                isExpanded: state.isHistoryExpanded,
+                tagColor: Colors.grey[200]!,
+                textColor: Colors.grey,
+                onToggleExpand: () {
+                  searchBloc.add(SearchEventToggleHistoryExpand());
+                },
+                onClearHistory: () {
+                  searchBloc.add(SearchEventClearHistory());
+                },
+                onTapTag: (value) {
+                  searchBloc.add(SearchEventAddQuery(value));
+                  searchBloc.add(SearchEventAddHistory());
+                  context.router.replace(Result(query: value));
+                },
+              ));
+
+          Widget categoryRankingWidget;
+          try {
+            categoryRankingWidget = BlocWrapperWidget(
+              status: state.suggestionsStatus,
+              loadingWidget: const Center(child: CircularProgressIndicator()),
+              errorWidget:
+                  Center(child: Text(state.error ?? 'Something went wrong')),
+              child: CategoryRankingWidget(
+                  pageBlock: state.pageBlocks.firstWhere(
+                          (el) => el.type == PageBlockType.categoryRanking)
+                      as CategoryRankingPageBlock),
             );
+          } catch (e) {
+            categoryRankingWidget = Container();
           }
 
-          if (searchState.suggestionsStatus == SearchStatus.success) {
-            final pageBlocks = searchState.pageBlocks;
-
-            final CategoryRankingPageBlock categoryRankingPageBlock =
-                pageBlocks.firstWhere(
-                        (el) => el.type == PageBlockType.categoryRanking)
-                    as CategoryRankingPageBlock;
-            categoryRankingWidget =
-                CategoryRankingWidget(pageBlock: categoryRankingPageBlock);
-          }
-
-          if (historyWidget != null && categoryRankingWidget != null) {
-            return [
-              historyWidget,
-              categoryRankingWidget,
-            ].toColumn().parent(page);
-          } else {
-            return const Center(child: CircularProgressIndicator());
-          }
+          return [
+            historyWidget,
+            categoryRankingWidget,
+          ].toColumn().parent(page);
         },
       ),
     );

@@ -22,13 +22,13 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       emit(state.copyWith(isFetching: true));
       final pageBlocks = await repository.getPageBlocks(event.platform, 'home');
       return emit(HomeState(
-        status: HomeStatus.success,
+        status: BlocStatus.success,
         pageBlocks: pageBlocks,
         isFetching: false,
       ));
     } catch (e) {
       emit(state.copyWith(
-        status: HomeStatus.failure,
+        status: BlocStatus.failure,
         error: e.toString(),
         isFetching: false,
       ));

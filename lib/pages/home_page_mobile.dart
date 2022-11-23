@@ -9,13 +9,13 @@ class MobileHomePage extends StatelessWidget {
     bloc.add(const HomeFetched('mobile'));
     return BlocBuilder<HomeBloc, HomeState>(
       builder: (_, state) {
-        if (state.status == HomeStatus.initial) {
-          return const Center(child: CircularProgressIndicator());
-        }
-        if (state.status == HomeStatus.failure) {
-          return Center(child: Text(state.error ?? 'Something went wrong'));
-        }
-        return HomeWidget(state: state);
+        return BlocWrapperWidget(
+          status: state.status,
+          loadingWidget: const Center(child: CircularProgressIndicator()),
+          errorWidget:
+              Center(child: Text(state.error ?? 'Something went wrong')),
+          child: HomeWidget(state: state),
+        );
       },
     );
   }

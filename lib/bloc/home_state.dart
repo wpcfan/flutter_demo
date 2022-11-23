@@ -1,16 +1,14 @@
 part of 'home_bloc.dart';
 
-enum HomeStatus { initial, success, failure }
-
 class HomeState extends Equatable {
   const HomeState(
       {this.pageBlocks = const [],
       this.error,
-      this.status = HomeStatus.initial,
+      this.status = BlocStatus.initial,
       this.isFetching = false});
   final List<PageBlock> pageBlocks;
   final String? error;
-  final HomeStatus status;
+  final BlocStatus status;
   final bool isFetching;
 
   @override
@@ -19,7 +17,7 @@ class HomeState extends Equatable {
   HomeState copyWith({
     List<PageBlock>? pageBlocks,
     String? error,
-    HomeStatus? status,
+    BlocStatus? status,
     bool? isFetching,
   }) {
     return HomeState(

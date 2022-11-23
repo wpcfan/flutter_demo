@@ -34,13 +34,13 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
       emit(state.copyWith(isFetching: true));
       final history = await historyRepository.getHistory();
       return emit(state.copyWith(
-        historyStatus: SearchStatus.success,
+        historyStatus: BlocStatus.success,
         history: history,
         isFetching: false,
       ));
     } catch (e) {
       emit(state.copyWith(
-        historyStatus: SearchStatus.failure,
+        historyStatus: BlocStatus.failure,
         error: e.toString(),
         isFetching: false,
       ));
@@ -59,13 +59,13 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
       await historyRepository.addHistory(state.query!);
       final history = await historyRepository.getHistory();
       return emit(state.copyWith(
-        historyStatus: SearchStatus.success,
+        historyStatus: BlocStatus.success,
         history: history,
         isFetching: false,
       ));
     } catch (e) {
       emit(state.copyWith(
-        historyStatus: SearchStatus.failure,
+        historyStatus: BlocStatus.failure,
         error: e.toString(),
         isFetching: false,
       ));
@@ -80,14 +80,14 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
       emit(state.copyWith(isFetching: true));
       await historyRepository.clearHistory();
       return emit(state.copyWith(
-        historyStatus: SearchStatus.success,
+        historyStatus: BlocStatus.success,
         history: [],
         isFetching: false,
         error: null,
       ));
     } catch (e) {
       emit(state.copyWith(
-        historyStatus: SearchStatus.failure,
+        historyStatus: BlocStatus.failure,
         error: e.toString(),
         isFetching: false,
       ));
@@ -121,13 +121,13 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
       final suggestions =
           await pageBlockRepository.getPageBlocks(event.platform, 'category');
       return emit(state.copyWith(
-        suggestionsStatus: SearchStatus.success,
+        suggestionsStatus: BlocStatus.success,
         pageBlocks: suggestions,
         isFetching: false,
       ));
     } catch (e) {
       emit(state.copyWith(
-        suggestionsStatus: SearchStatus.failure,
+        suggestionsStatus: BlocStatus.failure,
         error: e.toString(),
         isFetching: false,
       ));
