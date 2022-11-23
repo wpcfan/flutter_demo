@@ -31,7 +31,7 @@ class SearchPage extends StatelessWidget {
     // 构建搜索历史模块
     history({required List<String> historyList, required bool isExpanded}) =>
         SearchHistoryWidget(
-          title: '搜索历史',
+          title: AppLocalizations.of(context)!.search_history,
           tags: historyList,
           isExpanded: isExpanded,
           tagColor: Colors.grey[200]!,

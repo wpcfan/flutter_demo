@@ -38,5 +38,9 @@
   "btn_search": "Search",
   "@btn_search": {
     "description": "used as a button label for the search action"
+  },
+  "search_history": "Search History",
+  "@search_history": {
+    "description": "used as a title for the search history"
   }
 }

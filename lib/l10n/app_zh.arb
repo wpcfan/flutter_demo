@@ -38,5 +38,9 @@
   "btn_search": "搜索",
   "@btn_search": {
     "description": "搜索按钮文字"
+  },
+  "search_history": "搜索历史",
+  "@search_history": {
+    "description": "搜索历史标题"
   }
 }
