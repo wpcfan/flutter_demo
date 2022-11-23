@@ -7,9 +7,10 @@ class PageBlockRepository {
 
   PageBlockRepository(this.dio);
 
-  Future<List<PageBlock>> getPageBlocks([String platform = 'mobile']) async {
+  Future<List<PageBlock>> getPageBlocks(
+      [String platform = 'mobile', String target = 'home']) async {
     final response = await dio.getUri(Uri.https(lcApiBase, '/1.1/classes/Pages',
-        {'where': '{"platform": "$platform"}'}));
+        {'where': '{"platform": "$platform", "target": "$target"}'}));
     if (response.statusCode == 200) {
       final json = response.data['results'] as List;
       // 区块排序

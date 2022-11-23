@@ -6,7 +6,7 @@ class MobileHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bloc = context.read<PageBlockBloc>();
-    bloc.add(const PageBlockFetched('mobile'));
+    bloc.add(const PageBlockFetched('mobile', 'home'));
     return BlocBuilder<PageBlockBloc, PageBlockState>(
       builder: (_, state) {
         if (state.status == PageBlockStatus.initial) {
