@@ -1,12 +1,20 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 
+part 'page_category_ranking.dart';
+part 'page_image_row.dart';
+part 'page_pinned_header.dart';
+part 'page_product_row.dart';
+part 'page_slider.dart';
+part 'page_waterfall.dart';
+
 enum PageBlockType {
   pinnedHeader('pinned_header'),
   slider('slider'),
   imageRow('image_row'),
   productRow('product_row'),
   waterfall('waterfall'),
+  categoryRanking('category_ranking'),
   ;
 
   final String value;
@@ -56,11 +64,13 @@ abstract class PageBlock extends Equatable {
     required this.type,
     required this.sort,
     required this.platform,
+    required this.target,
   });
   final int id;
   final PageBlockType type;
   final int sort;
   final String platform;
+  final String target;
 
   factory PageBlock.fromJson(Map<String, dynamic> json) {
     final type =
@@ -76,6 +86,8 @@ abstract class PageBlock extends Equatable {
         return ProductRowPageBlock.fromJson(json);
       case PageBlockType.waterfall:
         return WaterfallPageBlock.fromJson(json);
+      case PageBlockType.categoryRanking:
+        return CategoryRankingPageBlock.fromJson(json);
     }
   }
 
@@ -125,120 +137,6 @@ class ImageData extends Equatable {
   List<Object?> get props => [image, link, sort, title, width, height];
 }
 
-class SliderPageBlock extends PageBlock {
-  final String? title;
-  final int? width;
-  final int? height;
-  final List<ImageData> data;
-
-  const SliderPageBlock({
-    required int id,
-    required int sort,
-    required String platform,
-    this.title,
-    this.width,
-    this.height,
-    required this.data,
-  }) : super(
-          id: id,
-          type: PageBlockType.slider,
-          sort: sort,
-          platform: platform,
-        );
-
-  @override
-  List<Object?> get props =>
-      [id, type, sort, data, title, width, height, platform];
-
-  factory SliderPageBlock.fromJson(Map<String, dynamic> json) {
-    final imageData = json['data'] as List;
-    imageData.sort((a, b) => a['sort'] - b['sort']);
-    return SliderPageBlock(
-      id: json['id'],
-      sort: json['sort'],
-      data: imageData
-          .map((e) => ImageData.fromJson(e))
-          .toList()
-          .cast<ImageData>(),
-      title: json['title'],
-      width: json['width'],
-      height: json['height'],
-      platform: json['platform'],
-    );
-  }
-
-  @override
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'type': type.value,
-      'sort': sort,
-      'data': data.map((e) => e.toJson()).toList(),
-      'title': title,
-      'width': width,
-      'height': height,
-      'platform': platform,
-    };
-  }
-}
-
-class ImageRowPageBlock extends PageBlock {
-  final String? title;
-  final int? width;
-  final int? height;
-  final List<ImageData> data;
-
-  const ImageRowPageBlock({
-    required int id,
-    required int sort,
-    required String platform,
-    this.title,
-    this.width,
-    this.height,
-    required this.data,
-  }) : super(
-          id: id,
-          type: PageBlockType.imageRow,
-          sort: sort,
-          platform: platform,
-        );
-
-  @override
-  List<Object?> get props =>
-      [id, type, sort, data, title, width, height, platform];
-
-  factory ImageRowPageBlock.fromJson(Map<String, dynamic> json) {
-    final imageData = json['data'] as List;
-    imageData.sort((a, b) => a['sort'] - b['sort']);
-    return ImageRowPageBlock(
-      id: json['id'],
-      sort: json['sort'],
-      data: imageData
-          .map((e) => ImageData.fromJson(e))
-          .toList()
-          .cast<ImageData>(),
-      title: json['title'],
-      width: json['width'],
-      height: json['height'],
-      platform: json['platform'],
-    );
-  }
-
-  @override
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'type': type.value,
-      'sort': sort,
-      'data': data.map((e) => e.toJson()).toList(),
-      'title': title,
-      'width': width,
-      'height': height,
-      'platform': platform,
-    };
-  }
-}
-
 class ProductData extends Equatable {
   final int sort;
   final String id;
@@ -285,197 +183,4 @@ class ProductData extends Equatable {
   @override
   List<Object?> get props =>
       [sort, id, name, description, price, originalPrice, image];
-}
-
-class ProductRowPageBlock extends PageBlock {
-  final int? width;
-  final int? height;
-  final List<ProductData> data;
-
-  const ProductRowPageBlock({
-    required int id,
-    required int sort,
-    required String platform,
-    this.width,
-    this.height,
-    required this.data,
-  }) : super(
-          id: id,
-          type: PageBlockType.productRow,
-          sort: sort,
-          platform: platform,
-        );
-
-  @override
-  List<Object?> get props => [id, type, sort, data, width, height, platform];
-
-  factory ProductRowPageBlock.fromJson(Map<String, dynamic> json) {
-    return ProductRowPageBlock(
-      id: json['id'],
-      sort: json['sort'],
-      data: (json['data'] as List)
-          .map((e) => ProductData.fromJson(e))
-          .toList()
-          .cast<ProductData>(),
-      width: json['width'],
-      height: json['height'],
-      platform: json['platform'],
-    );
-  }
-
-  @override
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'type': type.value,
-      'sort': sort,
-      'data': data.map((e) => e.toJson()).toList(),
-      'width': width,
-      'height': height,
-      'platform': platform,
-    };
-  }
-}
-
-enum WaterfallDataType {
-  category('category'),
-  product('product'),
-  ;
-
-  final String value;
-
-  const WaterfallDataType(this.value);
-}
-
-class WaterfallData extends Equatable {
-  final String title;
-  final List<ProductData> data;
-  const WaterfallData(this.title, this.data);
-
-  @override
-  List<Object?> get props => [title, data];
-
-  factory WaterfallData.fromJson(Map<String, dynamic> json) {
-    return WaterfallData(
-      json['title'],
-      (json['data'] as List)
-          .map((e) => ProductData.fromJson(e))
-          .toList()
-          .cast<ProductData>(),
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'title': title,
-      'data': data.map((e) => e.toJson()).toList(),
-    };
-  }
-}
-
-class WaterfallPageBlock extends PageBlock {
-  final int? width;
-  final int? height;
-  final List<WaterfallData> data;
-
-  const WaterfallPageBlock({
-    required int id,
-    required int sort,
-    required String platform,
-    this.width,
-    this.height,
-    required this.data,
-  }) : super(
-          id: id,
-          type: PageBlockType.waterfall,
-          sort: sort,
-          platform: platform,
-        );
-
-  @override
-  List<Object?> get props => [id, type, sort, data, width, height, platform];
-
-  factory WaterfallPageBlock.fromJson(Map<String, dynamic> json) {
-    return WaterfallPageBlock(
-      id: json['id'],
-      sort: json['sort'],
-      data: (json['data'] as List)
-          .map((e) => WaterfallData.fromJson(e))
-          .toList()
-          .cast<WaterfallData>(),
-      width: json['width'],
-      height: json['height'],
-      platform: json['platform'],
-    );
-  }
-
-  @override
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'type': type.value,
-      'sort': sort,
-      'data': data.map((e) => e.toJson()).toList(),
-      'width': width,
-      'height': height,
-      'platform': platform,
-    };
-  }
-}
-
-class PinnedHeaderPageBlock extends PageBlock {
-  final int maxHeight;
-  final int minHeight;
-  final String title;
-  final List<ImageData> data;
-
-  const PinnedHeaderPageBlock({
-    required int id,
-    required int sort,
-    required String platform,
-    required this.maxHeight,
-    required this.minHeight,
-    required this.title,
-    required this.data,
-  }) : super(
-          id: id,
-          type: PageBlockType.pinnedHeader,
-          sort: sort,
-          platform: platform,
-        );
-
-  @override
-  List<Object?> get props =>
-      [id, type, sort, maxHeight, minHeight, title, data, platform];
-
-  factory PinnedHeaderPageBlock.fromJson(Map<String, dynamic> json) {
-    final imageData = json['data'] as List;
-    imageData.sort((a, b) => a['sort'] - b['sort']);
-    return PinnedHeaderPageBlock(
-      id: json['id'],
-      sort: json['sort'],
-      maxHeight: json['maxHeight'],
-      minHeight: json['minHeight'],
-      title: json['title'],
-      data: imageData
-          .map((e) => ImageData.fromJson(e))
-          .toList()
-          .cast<ImageData>(),
-      platform: json['platform'],
-    );
-  }
-
-  @override
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'type': type.value,
-      'sort': sort,
-      'maxHeight': maxHeight,
-      'minHeight': minHeight,
-      'title': title,
-      'data': data.map((e) => e.toJson()).toList(),
-      'platform': platform,
-    };
-  }
 }

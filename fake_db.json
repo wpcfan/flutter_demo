@@ -303,6 +303,149 @@
           ]
         }
       ]
+    },
+    {
+      "id": 9,
+      "sort": 9,
+      "title": "hot ranking products",
+      "type": "category_product_ranking",
+      "width": 250,
+      "platform": "mobile",
+      "target": "category",
+      "data": [
+        {
+          "id": "RANK_1234567",
+          "sort": 1,
+          "title": "Today's Hot",
+          "link": {
+            "type": "deep_link",
+            "value": "customscheme://twigcodes.com/category/1234567"
+          },
+          "data": [
+            {
+              "id": "CAT_1234567",
+              "sort": 1,
+              "title": "Macbook Pro bla bla bla bla bla bla bla ",
+              "subtitle": "MacBook Pro is a line of Macintosh portable computers introduced in January 2006 by Apple Inc.",
+              "image": "https://picsum.photos/300/300/?image=15",
+              "link": {
+                "type": "deep_link",
+                "value": "customscheme://twigcodes.com/category/1234567"
+              }
+            },
+            {
+              "id": "CAT_1234568",
+              "sort": 2,
+              "title": "Macbook Pro bla bla bla bla bla bla bla ",
+              "subtitle": "MacBook Pro is a line of Macintosh portable computers introduced in January 2006 by Apple Inc.",
+              "image": "https://picsum.photos/300/300/?image=16",
+              "link": {
+                "type": "deep_link",
+                "value": "customscheme://twigcodes.com/category/1234567"
+              }
+            },
+            {
+              "id": "CAT_1234569",
+              "sort": 3,
+              "title": "Macbook Pro bla bla bla bla bla bla bla ",
+              "subtitle": "MacBook Pro is a line of Macintosh portable computers introduced in January 2006 by Apple Inc.",
+              "image": "https://picsum.photos/300/300/?image=17",
+              "link": {
+                "type": "deep_link",
+                "value": "customscheme://twigcodes.com/category/1234567"
+              }
+            }
+          ]
+        },
+        {
+          "id": "RANK_1234568",
+          "sort": 2,
+          "title": "Today's Hot",
+          "link": {
+            "type": "deep_link",
+            "value": "customscheme://twigcodes.com/category/1234567"
+          },
+          "data": [
+            {
+              "id": "CAT_1234567",
+              "sort": 1,
+              "title": "Macbook Pro bla bla bla bla bla bla bla ",
+              "subtitle": "MacBook Pro is a line of Macintosh portable computers introduced in January 2006 by Apple Inc.",
+              "image": "https://picsum.photos/300/300/?image=15",
+              "link": {
+                "type": "deep_link",
+                "value": "customscheme://twigcodes.com/category/1234567"
+              }
+            },
+            {
+              "id": "CAT_1234568",
+              "sort": 2,
+              "title": "Macbook Pro bla bla bla bla bla bla bla ",
+              "subtitle": "MacBook Pro is a line of Macintosh portable computers introduced in January 2006 by Apple Inc.",
+              "image": "https://picsum.photos/300/300/?image=16",
+              "link": {
+                "type": "deep_link",
+                "value": "customscheme://twigcodes.com/category/1234567"
+              }
+            },
+            {
+              "id": "CAT_1234569",
+              "sort": 3,
+              "title": "Macbook Pro bla bla bla bla bla bla bla ",
+              "subtitle": "MacBook Pro is a line of Macintosh portable computers introduced in January 2006 by Apple Inc.",
+              "image": "https://picsum.photos/300/300/?image=17",
+              "link": {
+                "type": "deep_link",
+                "value": "customscheme://twigcodes.com/category/1234567"
+              }
+            }
+          ]
+        },
+        {
+          "id": "RANK_1234569",
+          "sort": 3,
+          "title": "Today's Hot",
+          "link": {
+            "type": "deep_link",
+            "value": "customscheme://twigcodes.com/category/1234567"
+          },
+          "data": [
+            {
+              "id": "CAT_1234567",
+              "sort": 1,
+              "title": "Macbook Pro bla bla bla bla bla bla bla ",
+              "subtitle": "MacBook Pro is a line of Macintosh portable computers introduced in January 2006 by Apple Inc.",
+              "image": "https://picsum.photos/300/300/?image=15",
+              "link": {
+                "type": "deep_link",
+                "value": "customscheme://twigcodes.com/category/1234567"
+              }
+            },
+            {
+              "id": "CAT_1234568",
+              "sort": 2,
+              "title": "Macbook Pro bla bla bla bla bla bla bla ",
+              "subtitle": "MacBook Pro is a line of Macintosh portable computers introduced in January 2006 by Apple Inc.",
+              "image": "https://picsum.photos/300/300/?image=16",
+              "link": {
+                "type": "deep_link",
+                "value": "customscheme://twigcodes.com/category/1234567"
+              }
+            },
+            {
+              "id": "CAT_1234569",
+              "sort": 3,
+              "title": "Macbook Pro bla bla bla bla bla bla bla ",
+              "subtitle": "MacBook Pro is a line of Macintosh portable computers introduced in January 2006 by Apple Inc.",
+              "image": "https://picsum.photos/300/300/?image=17",
+              "link": {
+                "type": "deep_link",
+                "value": "customscheme://twigcodes.com/category/1234567"
+              }
+            }
+          ]
+        }
+      ]
     }
   ]
 }
