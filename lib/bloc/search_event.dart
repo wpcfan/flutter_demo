@@ -24,4 +24,8 @@ class SearchEventAddQuery extends SearchEvent {
 
 class SearchEventClearHistory extends SearchEvent {}
 
-class SearchEventLoadSuggestions extends SearchEvent {}
+class SearchEventLoadSuggestions extends SearchEvent {
+  final String platform;
+
+  const SearchEventLoadSuggestions(this.platform);
+}

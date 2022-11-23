@@ -50,9 +50,16 @@ class App extends StatelessWidget {
           BlocProvider(
               create: (context) => LocaleCubit(perfs: sharedPreferences)),
           BlocProvider(create: (context) => MessageCubit()),
+          BlocProvider<HomeBloc>(
+            create: (context) =>
+                HomeBloc(repository: context.read<PageBlockRepository>()),
+          ),
           BlocProvider<SearchBloc>(
-            create: (context) => SearchBloc(context.read<HistoryRepository>()),
-          )
+            create: (context) => SearchBloc(
+              context.read<HistoryRepository>(),
+              context.read<PageBlockRepository>(),
+            ),
+          ),
         ],
         child: BlocBuilder<ThemeCubit, ThemeData>(
           builder: (_, theme) {

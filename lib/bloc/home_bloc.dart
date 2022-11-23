@@ -4,31 +4,31 @@ import 'package:demo/repositories/all.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-part 'page_block_event.dart';
-part 'page_block_state.dart';
+part 'home_event.dart';
+part 'home_state.dart';
 
-class PageBlockBloc extends Bloc<PageBlockEvent, PageBlockState> {
+class HomeBloc extends Bloc<HomeEvent, HomeState> {
   final PageBlockRepository repository;
-  PageBlockBloc({required this.repository}) : super(const PageBlockState()) {
-    on<PageBlockEvent>(_onPageBlockEvent,
+  HomeBloc({required this.repository}) : super(const HomeState()) {
+    on<HomeEvent>(_onPageBlockEvent,
         transformer: throttleDroppable(throttleDuration));
   }
 
   Future<void> _onPageBlockEvent(
-    PageBlockEvent event,
-    Emitter<PageBlockState> emit,
+    HomeEvent event,
+    Emitter<HomeState> emit,
   ) async {
     try {
       emit(state.copyWith(isFetching: true));
-      final pageBlocks = await repository.getPageBlocks(event.platform);
-      return emit(PageBlockState(
-        status: PageBlockStatus.success,
+      final pageBlocks = await repository.getPageBlocks(event.platform, 'home');
+      return emit(HomeState(
+        status: HomeStatus.success,
         pageBlocks: pageBlocks,
         isFetching: false,
       ));
     } catch (e) {
       emit(state.copyWith(
-        status: PageBlockStatus.failure,
+        status: HomeStatus.failure,
         error: e.toString(),
         isFetching: false,
       ));

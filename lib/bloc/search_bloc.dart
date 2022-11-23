@@ -1,4 +1,5 @@
 import 'package:demo/helpers/all.dart';
+import 'package:demo/models/all.dart';
 import 'package:demo/repositories/all.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,7 +8,8 @@ part 'search_event.dart';
 part 'search_state.dart';
 
 class SearchBloc extends Bloc<SearchEvent, SearchState> {
-  SearchBloc(this.historyRepository) : super(SearchInitial()) {
+  SearchBloc(this.historyRepository, this.pageBlockRepository)
+      : super(SearchInitial()) {
     on<SearchEventLoadHistory>(_onSearchEventLoadHistory,
         transformer: throttleDroppable(throttleDuration));
     on<SearchEventAddHistory>(_onSearchEventAddHistory,
@@ -18,8 +20,11 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
         transformer: throttleDroppable(throttleDuration));
     on<SearchEventToggleHistoryExpand>(_onSearchEventToggleHistoryExpand,
         transformer: throttleDroppable(throttleDuration));
+    on<SearchEventLoadSuggestions>(_onSearchEventLoadSuggestions,
+        transformer: throttleDroppable(throttleDuration));
   }
   final HistoryRepository historyRepository;
+  final PageBlockRepository pageBlockRepository;
 
   Future<void> _onSearchEventLoadHistory(
     SearchEventLoadHistory event,
@@ -29,13 +34,13 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
       emit(state.copyWith(isFetching: true));
       final history = await historyRepository.getHistory();
       return emit(state.copyWith(
-        status: SearchStatus.success,
+        historyStatus: SearchStatus.success,
         history: history,
         isFetching: false,
       ));
     } catch (e) {
       emit(state.copyWith(
-        status: SearchStatus.failure,
+        historyStatus: SearchStatus.failure,
         error: e.toString(),
         isFetching: false,
       ));
@@ -54,13 +59,13 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
       await historyRepository.addHistory(state.query!);
       final history = await historyRepository.getHistory();
       return emit(state.copyWith(
-        status: SearchStatus.success,
+        historyStatus: SearchStatus.success,
         history: history,
         isFetching: false,
       ));
     } catch (e) {
       emit(state.copyWith(
-        status: SearchStatus.failure,
+        historyStatus: SearchStatus.failure,
         error: e.toString(),
         isFetching: false,
       ));
@@ -75,14 +80,14 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
       emit(state.copyWith(isFetching: true));
       await historyRepository.clearHistory();
       return emit(state.copyWith(
-        status: SearchStatus.success,
+        historyStatus: SearchStatus.success,
         history: [],
         isFetching: false,
         error: null,
       ));
     } catch (e) {
       emit(state.copyWith(
-        status: SearchStatus.failure,
+        historyStatus: SearchStatus.failure,
         error: e.toString(),
         isFetching: false,
       ));
@@ -105,5 +110,27 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     return emit(state.copyWith(
       isHistoryExpanded: !state.isHistoryExpanded,
     ));
+  }
+
+  Future<void> _onSearchEventLoadSuggestions(
+    SearchEventLoadSuggestions event,
+    Emitter<SearchState> emit,
+  ) async {
+    try {
+      emit(state.copyWith(isFetching: true));
+      final suggestions =
+          await pageBlockRepository.getPageBlocks(event.platform, 'category');
+      return emit(state.copyWith(
+        suggestionsStatus: SearchStatus.success,
+        pageBlocks: suggestions,
+        isFetching: false,
+      ));
+    } catch (e) {
+      emit(state.copyWith(
+        suggestionsStatus: SearchStatus.failure,
+        error: e.toString(),
+        isFetching: false,
+      ));
+    }
   }
 }

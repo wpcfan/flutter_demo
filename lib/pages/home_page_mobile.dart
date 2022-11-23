@@ -5,14 +5,14 @@ class MobileHomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bloc = context.read<PageBlockBloc>();
-    bloc.add(const PageBlockFetched('mobile', 'home'));
-    return BlocBuilder<PageBlockBloc, PageBlockState>(
+    final bloc = context.read<HomeBloc>();
+    bloc.add(const HomeFetched('mobile'));
+    return BlocBuilder<HomeBloc, HomeState>(
       builder: (_, state) {
-        if (state.status == PageBlockStatus.initial) {
+        if (state.status == HomeStatus.initial) {
           return const Center(child: CircularProgressIndicator());
         }
-        if (state.status == PageBlockStatus.failure) {
+        if (state.status == HomeStatus.failure) {
           return Center(child: Text(state.error ?? 'Something went wrong'));
         }
         return HomeWidget(state: state);
@@ -22,7 +22,7 @@ class MobileHomePage extends StatelessWidget {
 }
 
 class HomeWidget extends StatelessWidget {
-  final PageBlockState state;
+  final HomeState state;
   const HomeWidget({super.key, required this.state});
 
   @override
@@ -182,7 +182,7 @@ class NoWaterfallLayout extends StatelessWidget {
     required this.state,
   }) : super(key: key);
 
-  final PageBlockState state;
+  final HomeState state;
 
   @override
   Widget build(BuildContext context) {

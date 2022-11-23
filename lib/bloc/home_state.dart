@@ -1,28 +1,28 @@
-part of 'page_block_bloc.dart';
+part of 'home_bloc.dart';
 
-enum PageBlockStatus { initial, success, failure }
+enum HomeStatus { initial, success, failure }
 
-class PageBlockState extends Equatable {
-  const PageBlockState(
+class HomeState extends Equatable {
+  const HomeState(
       {this.pageBlocks = const [],
       this.error,
-      this.status = PageBlockStatus.initial,
+      this.status = HomeStatus.initial,
       this.isFetching = false});
   final List<PageBlock> pageBlocks;
   final String? error;
-  final PageBlockStatus status;
+  final HomeStatus status;
   final bool isFetching;
 
   @override
   List<Object?> get props => [pageBlocks, status, error, isFetching];
 
-  PageBlockState copyWith({
+  HomeState copyWith({
     List<PageBlock>? pageBlocks,
     String? error,
-    PageBlockStatus? status,
+    HomeStatus? status,
     bool? isFetching,
   }) {
-    return PageBlockState(
+    return HomeState(
       pageBlocks: pageBlocks ?? this.pageBlocks,
       error: error ?? this.error,
       status: status ?? this.status,
@@ -32,7 +32,7 @@ class PageBlockState extends Equatable {
 
   @override
   String toString() {
-    return '''PageBlockState {
+    return '''HomeState {
       pageBlocks: ${pageBlocks.length},
       status: $status,
       error: $error,
