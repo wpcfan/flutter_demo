@@ -38,7 +38,6 @@ class TagWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     page({required Widget child}) => Styled.widget(child: child)
         .padding(vertical: tagVerticalPadding, horizontal: tagHorizontalPadding)
-        .constrained(maxWidth: maxWidth ?? double.infinity)
         .decorated(
           color: tagColor,
           borderRadius: borderRadius,
