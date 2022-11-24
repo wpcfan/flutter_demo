@@ -1,12 +1,12 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 
-part 'page_category_ranking.dart';
 part 'page_image_data.dart';
 part 'page_image_row.dart';
 part 'page_pinned_header.dart';
 part 'page_product_data.dart';
 part 'page_product_row.dart';
+part 'page_ranking.dart';
 part 'page_slider.dart';
 part 'page_waterfall.dart';
 part 'page_waterfall_data.dart';
@@ -17,7 +17,7 @@ enum PageBlockType {
   imageRow('image_row'),
   productRow('product_row'),
   waterfall('waterfall'),
-  categoryRanking('category_ranking'),
+  ranking('ranking'),
   ;
 
   final String value;
@@ -89,8 +89,8 @@ abstract class PageBlock extends Equatable {
         return ProductRowPageBlock.fromJson(json);
       case PageBlockType.waterfall:
         return WaterfallPageBlock.fromJson(json);
-      case PageBlockType.categoryRanking:
-        return CategoryRankingPageBlock.fromJson(json);
+      case PageBlockType.ranking:
+        return RankingPageBlock.fromJson(json);
     }
   }
 

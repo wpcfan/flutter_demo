@@ -43,14 +43,14 @@ class RankingData extends Equatable {
   }
 }
 
-class CategoryRankingData extends Equatable {
+class RankingListData extends Equatable {
   final String id;
   final String title;
   final int sort;
   final Link link;
   final List<RankingData> data;
 
-  const CategoryRankingData({
+  const RankingListData({
     required this.id,
     required this.title,
     required this.sort,
@@ -61,8 +61,8 @@ class CategoryRankingData extends Equatable {
   @override
   List<Object?> get props => [id, title, sort, link, data];
 
-  factory CategoryRankingData.fromJson(Map<String, dynamic> json) {
-    return CategoryRankingData(
+  factory RankingListData.fromJson(Map<String, dynamic> json) {
+    return RankingListData(
       id: json['id'],
       title: json['title'],
       sort: json['sort'],
@@ -85,12 +85,12 @@ class CategoryRankingData extends Equatable {
   }
 }
 
-class CategoryRankingPageBlock extends PageBlock {
+class RankingPageBlock extends PageBlock {
   final String title;
   final int? width;
-  final List<CategoryRankingData> data;
+  final List<RankingListData> data;
 
-  const CategoryRankingPageBlock({
+  const RankingPageBlock({
     required int id,
     required int sort,
     required String platform,
@@ -100,7 +100,7 @@ class CategoryRankingPageBlock extends PageBlock {
     required this.data,
   }) : super(
           id: id,
-          type: PageBlockType.categoryRanking,
+          type: PageBlockType.ranking,
           sort: sort,
           platform: platform,
           target: target,
@@ -110,16 +110,16 @@ class CategoryRankingPageBlock extends PageBlock {
   List<Object?> get props =>
       [id, type, sort, title, width, data, platform, target];
 
-  factory CategoryRankingPageBlock.fromJson(Map<String, dynamic> json) {
-    return CategoryRankingPageBlock(
+  factory RankingPageBlock.fromJson(Map<String, dynamic> json) {
+    return RankingPageBlock(
       id: json['id'],
       sort: json['sort'],
       title: json['title'],
       width: json['width'],
       data: (json['data'] as List)
-          .map((e) => CategoryRankingData.fromJson(e))
+          .map((e) => RankingListData.fromJson(e))
           .toList()
-          .cast<CategoryRankingData>(),
+          .cast<RankingListData>(),
       platform: json['platform'],
       target: json['target'],
     );

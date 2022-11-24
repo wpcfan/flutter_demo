@@ -10,8 +10,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:styled_widget/styled_widget.dart';
 
-part 'search_page_category_ranking.dart';
 part 'search_page_history.dart';
+part 'search_page_ranking.dart';
+part 'search_page_ranking_card.dart';
+part 'search_page_ranking_item.dart';
+part 'search_page_ranking_item_image.dart';
 
 class SearchPage extends StatelessWidget {
   final String query;
@@ -92,10 +95,10 @@ class SearchPage extends StatelessWidget {
               loadingWidget: const Center(child: CircularProgressIndicator()),
               errorWidget:
                   Center(child: Text(state.error ?? 'Something went wrong')),
-              child: CategoryRankingWidget(
-                  pageBlock: state.pageBlocks.firstWhere(
-                          (el) => el.type == PageBlockType.categoryRanking)
-                      as CategoryRankingPageBlock),
+              child: RankingWidget(
+                  pageBlock: state.pageBlocks
+                          .firstWhere((el) => el.type == PageBlockType.ranking)
+                      as RankingPageBlock),
             );
           } catch (e) {
             categoryRankingWidget = Container();

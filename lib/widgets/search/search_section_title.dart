@@ -9,8 +9,7 @@ class SearchSectionTitle extends StatelessWidget {
     this.titleColor = Colors.black54,
     this.rightIcon = Icons.delete_forever_outlined,
     this.sectionIconColor = Colors.grey,
-    this.leftIcon = Icons.expand_more,
-    this.collapseIcon = Icons.expand_less,
+    this.leftIcon,
     this.iconColor = Colors.grey,
     this.onLeftTap,
     this.onRightTap,
@@ -18,10 +17,9 @@ class SearchSectionTitle extends StatelessWidget {
   final String title;
   final double titleFontSize;
   final Color titleColor;
-  final IconData rightIcon;
+  final IconData? rightIcon;
   final Color sectionIconColor;
-  final IconData leftIcon;
-  final IconData collapseIcon;
+  final IconData? leftIcon;
   final Color iconColor;
   final VoidCallback? onLeftTap;
   final VoidCallback? onRightTap;
@@ -33,25 +31,34 @@ class SearchSectionTitle extends StatelessWidget {
           fontSize: titleFontSize,
           fontWeight: FontWeight.bold,
           color: titleColor,
-        ));
-    final leftBtn = IconButton(
-        onPressed: onLeftTap,
-        icon: Icon(
-          leftIcon,
-          color: iconColor,
-        ));
-    final titleRow = [titleText, leftBtn].toRow(mainAxisSize: MainAxisSize.max);
-    final rightBtn = IconButton(
-      icon: Icon(
-        rightIcon,
-        color: sectionIconColor,
-      ),
-      onPressed: onRightTap,
+        )).alignment(Alignment.centerLeft);
+    if (leftIcon == null && rightIcon == null) {
+      return titleText;
+    }
+    final leftIconWidget = leftIcon == null
+        ? null
+        : Icon(leftIcon, color: iconColor).gestures(onTap: onLeftTap);
+    final rightIconWidget = rightIcon == null
+        ? null
+        : Icon(rightIcon, color: sectionIconColor).gestures(onTap: onRightTap);
+    final left = Row(
+      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        titleText,
+        leftIconWidget,
+      ].whereType<Widget>().toList(),
     );
-    final titleBar = <Widget>[titleRow, rightBtn].toRow(
+    if (rightIcon == null) {
+      return left;
+    }
+    return Row(
+      mainAxisSize: MainAxisSize.max,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        left,
+        rightIconWidget,
+      ].whereType<Widget>().toList(),
     );
-    return titleBar;
   }
 }
