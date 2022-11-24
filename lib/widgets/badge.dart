@@ -9,14 +9,16 @@ class BadgeWidget extends StatelessWidget {
     this.titleFontSize = 12,
     this.titleFontWeight = FontWeight.bold,
     this.backgroundColor = Colors.red,
-    this.padding = 4,
+    this.borderRadius = 0,
+    this.size = 24,
   });
   final String title;
   final Color titleFontColor;
   final double titleFontSize;
   final FontWeight titleFontWeight;
   final Color backgroundColor;
-  final double padding;
+  final double? borderRadius;
+  final double size;
 
   @override
   Widget build(BuildContext context) {
@@ -26,6 +28,13 @@ class BadgeWidget extends StatelessWidget {
           color: titleFontColor,
           fontSize: titleFontSize,
           fontWeight: titleFontWeight),
-    ).padding(all: padding).backgroundColor(backgroundColor);
+      textAlign: TextAlign.center,
+    )
+        .alignment(Alignment.center)
+        .constrained(width: size, height: size)
+        .decorated(
+          color: backgroundColor,
+          borderRadius: BorderRadius.circular(borderRadius ?? 0),
+        );
   }
 }

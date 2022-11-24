@@ -46,6 +46,7 @@ class RankingData extends Equatable {
 class RankingListData extends Equatable {
   final String id;
   final String title;
+  final String? headerImage;
   final int sort;
   final Link link;
   final List<RankingData> data;
@@ -56,15 +57,17 @@ class RankingListData extends Equatable {
     required this.sort,
     required this.link,
     required this.data,
+    this.headerImage,
   });
 
   @override
-  List<Object?> get props => [id, title, sort, link, data];
+  List<Object?> get props => [id, title, sort, link, data, headerImage];
 
   factory RankingListData.fromJson(Map<String, dynamic> json) {
     return RankingListData(
       id: json['id'],
       title: json['title'],
+      headerImage: json['header_image'],
       sort: json['sort'],
       link: Link.fromJson(json['link']),
       data: (json['data'] as List)
@@ -78,6 +81,7 @@ class RankingListData extends Equatable {
     return {
       'id': id,
       'title': title,
+      'header_image': headerImage,
       'sort': sort,
       'link': link.toJson(),
       'data': data.map((e) => e.toJson()).toList(),

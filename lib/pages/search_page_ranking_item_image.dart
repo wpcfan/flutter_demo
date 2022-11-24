@@ -4,8 +4,11 @@ class RankItemWithImage extends StatelessWidget {
   const RankItemWithImage({
     super.key,
     required this.item,
+    this.onTap,
   });
   final RankingData item;
+  final void Function(Link)? onTap;
+
   @override
   Widget build(BuildContext context) {
     final image = Image.network(
@@ -15,16 +18,14 @@ class RankItemWithImage extends StatelessWidget {
     );
     final badge = BadgeWidget(title: item.sort.toString());
 
-    final imageWithBadge = Stack(
-      children: [
-        image,
-        Positioned(
-          top: 0,
-          left: 0,
-          child: badge,
-        ),
-      ],
-    );
+    final imageWithBadge = [
+      image,
+      Positioned(
+        top: 0,
+        left: 0,
+        child: badge,
+      ),
+    ].toStack();
 
     final title = Text(
       item.title,
@@ -55,6 +56,7 @@ class RankItemWithImage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
         )
-        .padding(all: 8);
+        .padding(all: 8)
+        .gestures(onTap: () => onTap?.call(item.link));
   }
 }

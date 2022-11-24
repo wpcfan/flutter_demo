@@ -6,6 +6,7 @@ class RankingWidget extends StatelessWidget {
     required this.pageBlock,
   });
   final RankingPageBlock pageBlock;
+
   @override
   Widget build(BuildContext context) {
     const title = SearchSectionTitle(
@@ -22,6 +23,7 @@ class RankingWidget extends StatelessWidget {
                 onTapMoreLink: () {
                   debugPrint('onTapMoreLink');
                 },
+                onTapItem: (link) => debugPrint('onTapItem: $link'),
               ))
           .toList()
           .toRow(

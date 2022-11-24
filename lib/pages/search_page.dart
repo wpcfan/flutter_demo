@@ -13,6 +13,7 @@ import 'package:styled_widget/styled_widget.dart';
 part 'search_page_history.dart';
 part 'search_page_ranking.dart';
 part 'search_page_ranking_card.dart';
+part 'search_page_ranking_header.dart';
 part 'search_page_ranking_item.dart';
 part 'search_page_ranking_item_image.dart';
 
@@ -88,9 +89,9 @@ class SearchPage extends StatelessWidget {
                 },
               ));
 
-          Widget categoryRankingWidget;
+          Widget rankingWidget;
           try {
-            categoryRankingWidget = BlocWrapperWidget(
+            rankingWidget = BlocWrapperWidget(
               status: state.suggestionsStatus,
               loadingWidget: const Center(child: CircularProgressIndicator()),
               errorWidget:
@@ -101,12 +102,12 @@ class SearchPage extends StatelessWidget {
                       as RankingPageBlock),
             );
           } catch (e) {
-            categoryRankingWidget = Container();
+            rankingWidget = Container();
           }
 
           return [
             historyWidget,
-            categoryRankingWidget,
+            rankingWidget,
           ].toColumn().parent(page);
         },
       ),
