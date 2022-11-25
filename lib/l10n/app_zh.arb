@@ -7,9 +7,9 @@
   "@tab_home": {
     "description": "底部 Tab 首页链接文字"
   },
-  "tab_counter": "计数器",
-  "@tab_counter": {
-    "description": "底部 Tab 计数器链接文字"
+  "tab_cart": "购物车",
+  "@tab_cart": {
+    "description": "底部 Tab 购物车链接文字"
   },
   "tab_todo": "待办事项",
   "@tab_todo": {

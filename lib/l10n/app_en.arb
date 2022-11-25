@@ -7,9 +7,9 @@
   "@tab_home": {
     "description": "used as a tabbar link to the home page"
   },
-  "tab_counter": "Counter",
-  "@tab_counter": {
-    "description": "used as a tabbar link to the counter page"
+  "tab_cart": "Cart",
+  "@tab_cart": {
+    "description": "used as a tabbar link to the cart page"
   },
   "tab_todo": "Todo",
   "@tab_todo": {

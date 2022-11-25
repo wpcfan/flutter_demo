@@ -1,6 +1,8 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:demo/widgets/all.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:styled_widget/styled_widget.dart';
 
 class TabbarWidget extends StatelessWidget {
   final TabsRouter tabsRouter;
@@ -16,8 +18,16 @@ class TabbarWidget extends StatelessWidget {
           label: AppLocalizations.of(context)!.tab_home,
         ),
         BottomNavigationBarItem(
-          icon: const Icon(Icons.calculate),
-          label: AppLocalizations.of(context)!.tab_counter,
+          icon: [
+            const Icon(Icons.shopping_cart),
+            const BadgeWidget(
+              title: '1',
+              size: 12,
+              titleFontSize: 8,
+              borderRadius: 6,
+            ).positioned(top: 0, right: 0)
+          ].toStack(),
+          label: AppLocalizations.of(context)!.tab_cart,
         ),
         BottomNavigationBarItem(
           icon: const Icon(Icons.list),

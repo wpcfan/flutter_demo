@@ -23,17 +23,6 @@ class RootPage extends StatelessWidget {
         builder: (context, child, animation) {
           final tabsRouter = AutoTabsRouter.of(context);
           return Scaffold(
-            appBar: tabsRouter.activeIndex == 1
-                ? AppBar(
-                    title: const Text('Flutter Demo Home Page'),
-                  )
-                : null,
-            floatingActionButton: tabsRouter.activeIndex == 0
-                ? FloatingActionButton(
-                    onPressed: () => context.read<ThemeCubit>().toggleTheme(),
-                    child: const Icon(Icons.toggle_on),
-                  )
-                : null,
             body: FadeTransition(
               opacity: animation,
               // the passed child is techinaclly our animated selected-tab page

@@ -1,7 +1,9 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:demo/bloc/all.dart';
 import 'package:demo/config.dart';
 import 'package:demo/widgets/all.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:styled_widget/styled_widget.dart';
 

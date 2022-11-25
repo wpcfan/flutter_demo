@@ -51,6 +51,13 @@ List<SettingsItemModel> settingsItems(context) => [
         title: 'Support',
         description: 'We are here to help',
       ),
+      const SettingsItemModel(
+        key: Key('theme'),
+        icon: Icons.color_lens_outlined,
+        bgColor: Color(0xff5FD0D3),
+        title: 'Theme',
+        description: 'Toggle theme',
+      ),
       SettingsItemModel(
         key: const Key('language'),
         icon: Icons.language,
@@ -75,6 +82,9 @@ class Settings extends StatelessWidget {
             onTap: () {
               if (settingsItem.key == const Key('language')) {
                 context.router.pushNamed('/language');
+              }
+              if (settingsItem.key == const Key('theme')) {
+                context.read<ThemeCubit>().toggleTheme();
               }
             },
           ))
