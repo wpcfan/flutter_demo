@@ -99,10 +99,10 @@ class _$AppRouter extends RootStackRouter {
         child: const HomePage(),
       );
     },
-    Counter.name: (routeData) {
+    Cart.name: (routeData) {
       return MaterialPageX<dynamic>(
         routeData: routeData,
-        child: WrappedRoute(child: const CounterPage()),
+        child: const CartPage(),
       );
     },
     Todos.name: (routeData) {
@@ -137,8 +137,8 @@ class _$AppRouter extends RootStackRouter {
               parent: RootRoute.name,
             ),
             RouteConfig(
-              Counter.name,
-              path: 'counter-page',
+              Cart.name,
+              path: 'cart-page',
               parent: RootRoute.name,
             ),
             RouteConfig(
@@ -384,15 +384,15 @@ class Home extends PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [CounterPage]
-class Counter extends PageRouteInfo<void> {
-  const Counter()
+/// [CartPage]
+class Cart extends PageRouteInfo<void> {
+  const Cart()
       : super(
-          Counter.name,
-          path: 'counter-page',
+          Cart.name,
+          path: 'cart-page',
         );
 
-  static const String name = 'Counter';
+  static const String name = 'Cart';
 }
 
 /// generated route for

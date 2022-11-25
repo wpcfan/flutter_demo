@@ -13,7 +13,7 @@ part 'app_router.gr.dart';
       initial: true,
       children: [
         AutoRoute(page: HomePage, name: 'home', initial: true),
-        AutoRoute(page: CounterPage, name: 'counter'),
+        AutoRoute(page: CartPage, name: 'cart'),
         AutoRoute(page: TodoPage, name: 'todos', path: 'todos'),
         AutoRoute(page: MyPage, name: 'my', path: 'my'),
         AutoRoute(page: SettingsPage, name: 'setting'),

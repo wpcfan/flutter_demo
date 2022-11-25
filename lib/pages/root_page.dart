@@ -15,7 +15,7 @@ class RootPage extends StatelessWidget {
       child: AutoTabsRouter(
         routes: const [
           Home(),
-          Counter(),
+          Cart(),
           Todos(),
           My(),
           Setting(),
