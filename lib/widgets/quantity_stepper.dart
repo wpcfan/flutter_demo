@@ -10,13 +10,13 @@ class QuantityStepper extends StatefulWidget {
     this.minusIcon = Icons.remove,
     this.plusIcon = Icons.add,
     this.iconSize = 16,
-    this.iconColor = Colors.black87,
+    this.iconColor = Colors.blue,
     this.iconDisabledColor = Colors.grey,
-    this.iconBackgroundColor = Colors.white,
-    this.iconBorderColor = Colors.grey,
-    this.iconDisabledBorderColor = Colors.white70,
-    this.iconBorderWidth = 1,
-    this.iconBorderRadius = 4,
+    this.iconBackgroundColor = Colors.transparent,
+    this.iconBorderColor = Colors.transparent,
+    this.iconDisabledBorderColor = Colors.transparent,
+    this.iconBorderWidth = 0,
+    this.iconBorderRadius = 0,
     this.iconPadding = 0,
     this.textFontSize = 12,
     this.textPadding = 4,
@@ -185,6 +185,8 @@ class QuantityStepperState extends State<QuantityStepper> {
       crossAxisAlignment: CrossAxisAlignment.start,
     );
 
-    return stepper;
+    return Material(
+      child: stepper,
+    );
   }
 }
