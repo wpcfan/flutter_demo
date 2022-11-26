@@ -8,6 +8,7 @@ export 'loading_overlay/all.dart';
 export 'loading_scroll_list/all.dart';
 export 'no_data_widget.dart';
 export 'page_blocks/all.dart';
+export 'quantity_stepper.dart';
 export 'round_icon.dart';
 export 'search/all.dart';
 export 'setting_item.dart';
