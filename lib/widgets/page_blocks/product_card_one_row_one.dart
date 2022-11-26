@@ -94,6 +94,10 @@ class ProductCardOneRowOneWidget extends StatelessWidget {
     final productImage = Image.network(
       product.image,
       fit: BoxFit.cover,
+      errorBuilder: (context, error, stackTrace) {
+        debugPrint('error: $error');
+        return Image.asset('images/100x100.png');
+      },
     )
         .constrained(height: imageHeight, width: imageHeight)
         .padding(right: listHorizontalPadding);

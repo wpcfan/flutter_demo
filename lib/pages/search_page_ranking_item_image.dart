@@ -15,6 +15,10 @@ class RankItemWithImage extends StatelessWidget {
       item.image,
       width: 100,
       height: 100,
+      errorBuilder: (context, error, stackTrace) {
+        debugPrint('error: $error');
+        return Image.asset('images/100x100.png');
+      },
     );
     final badge = BadgeWidget(title: item.sort.toString());
 

@@ -24,6 +24,10 @@ class PinnedHeaderDelegate extends SliverPersistentHeaderDelegate {
         Image.network(
           pageBlock.data.first.image,
           fit: BoxFit.cover,
+          errorBuilder: (context, error, stackTrace) {
+            debugPrint('error: $error');
+            return Image.asset('images/100x100.png');
+          },
         ),
         Container(
           decoration: const BoxDecoration(

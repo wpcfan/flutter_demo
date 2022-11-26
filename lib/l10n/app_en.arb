@@ -42,5 +42,9 @@
   "search_history": "Search History",
   "@search_history": {
     "description": "used as a title for the search history"
+  },
+  "flash_prefix": "Flash sale left ",
+  "@flash_prefix": {
+    "description": "The text displayed before flash sale tag"
   }
 }

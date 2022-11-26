@@ -110,6 +110,10 @@ class WaterfallLayout extends StatelessWidget {
                       background: Image.network(
                         'https://picsum.photos/seed/1/600/300',
                         fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) {
+                          debugPrint('error: $error');
+                          return Image.asset('images/100x100.png');
+                        },
                       ),
                     ),
                   ),

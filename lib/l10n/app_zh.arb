@@ -42,5 +42,9 @@
   "search_history": "搜索历史",
   "@search_history": {
     "description": "搜索历史标题"
+  },
+  "flash_prefix": "秒杀 距离结束还剩 ",
+  "@flash_prefix": {
+    "description": "在秒杀标签前显示的文本"
   }
 }

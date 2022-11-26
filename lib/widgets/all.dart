@@ -2,6 +2,7 @@ export 'action_item.dart';
 export 'animation/all.dart';
 export 'badge.dart';
 export 'cart_stepper/all.dart';
+export 'flash_sale_count_down.dart';
 export 'flex_tags.dart';
 export 'loading_overlay/all.dart';
 export 'loading_scroll_list/all.dart';

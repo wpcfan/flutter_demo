@@ -74,8 +74,14 @@ class RankingHeader extends StatelessWidget {
     }
 
     return [
-      Image.network(item.headerImage!, fit: BoxFit.cover)
-          .constrained(height: titleFontSize + 2 * padding, width: width),
+      Image.network(
+        item.headerImage!,
+        fit: BoxFit.cover,
+        errorBuilder: (context, error, stackTrace) {
+          debugPrint('error: $error');
+          return Image.asset('images/100x100.png');
+        },
+      ).constrained(height: titleFontSize + 2 * padding, width: width),
       titleRow,
     ].toStack();
   }

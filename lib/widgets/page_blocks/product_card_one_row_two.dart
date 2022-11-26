@@ -63,6 +63,10 @@ class ProductCardOneRowTwoWidget extends StatelessWidget {
     final productImage = Image.network(
       product.image,
       fit: BoxFit.fill,
+      errorBuilder: (context, error, stackTrace) {
+        debugPrint('error: $error');
+        return Image.asset('images/100x100.png');
+      },
     )
         .padding(
           bottom: spaceVertical,

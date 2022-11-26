@@ -1,7 +1,7 @@
+import 'package:demo/widgets/all.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_countdown_timer/current_remaining_time.dart';
-import 'package:flutter_countdown_timer/flutter_countdown_timer.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:styled_widget/styled_widget.dart';
 
 class CartPage extends StatelessWidget {
@@ -9,6 +9,10 @@ class CartPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    /// AppBar 的 action 数组中如果有 TextButton，其文本颜色会被设置为主题色
+    /// 因此需要显式设置其文本颜色
+    final ButtonStyle style = TextButton.styleFrom(
+        foregroundColor: Theme.of(context).colorScheme.onPrimary);
     return Scaffold(
       appBar: AppBar(
         leading: const Text(
@@ -20,9 +24,10 @@ class CartPage extends StatelessWidget {
           const Text('Location'),
         ].toRow(),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.edit),
+          TextButton(
             onPressed: () {},
+            style: style,
+            child: const Text('Edit'),
           ),
           PopupMenuButton(
             itemBuilder: (context) {
@@ -100,6 +105,10 @@ class CartItemCard extends StatelessWidget {
       width: 100,
       height: 100,
       fit: BoxFit.cover,
+      errorBuilder: (context, error, stackTrace) {
+        debugPrint('error: $error');
+        return Image.asset('images/100x100.png');
+      },
     ).padding(vertical: 8, right: 12);
 
     final productTitle = const Text(
@@ -121,9 +130,14 @@ class CartItemCard extends StatelessWidget {
 
     const tagRow = CartTagRow();
     final endTime = DateTime.now().add(const Duration(days: 1));
-    final flashSaleCountDwon = [FlashSaleCountDown(endTime: endTime).expanded()]
-        .toRow(mainAxisSize: MainAxisSize.max)
-        .padding(top: 8);
+    final flashSaleCountDwon = [
+      FlashSaleCountDown(
+        endTime: endTime,
+        gridentStartColor: Colors.red[100],
+        gridentEndColor: Colors.white,
+        prefix: AppLocalizations.of(context)!.flash_prefix,
+      ).expanded()
+    ].toRow(mainAxisSize: MainAxisSize.max).padding(top: 8);
     const productPrice = Text(
       'Item 9',
       style: TextStyle(
@@ -297,43 +311,5 @@ class CartQuantityStepper extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
     );
     return stepper;
-  }
-}
-
-class FlashSaleCountDown extends StatelessWidget {
-  const FlashSaleCountDown({super.key, required this.endTime});
-  final DateTime endTime;
-  @override
-  Widget build(BuildContext context) {
-    final countDown = CountdownTimer(
-      endTime: endTime.millisecondsSinceEpoch,
-      widgetBuilder: (_, CurrentRemainingTime? time) {
-        if (time == null) {
-          return const Text('00:00:00');
-        }
-        return Text(
-          '秒杀 距离结束还剩'
-          '${time.days != null ? '${time.days}天' : ''}'
-          '${time.hours != null ? '${time.hours}时' : ''}'
-          '${time.min != null ? '${time.min}分' : ''}'
-          '${time.sec}秒',
-          style: const TextStyle(
-            fontSize: 10,
-            color: Colors.red,
-          ),
-        );
-      },
-    );
-    return countDown.padding(horizontal: 8, vertical: 4).decorated(
-        border: Border.all(color: Colors.transparent, width: 1),
-        borderRadius: BorderRadius.circular(12),
-        gradient: LinearGradient(
-          begin: Alignment.topRight,
-          end: Alignment.bottomLeft,
-          colors: [
-            Colors.white,
-            Colors.red[100]!,
-          ],
-        ));
   }
 }

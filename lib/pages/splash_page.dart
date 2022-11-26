@@ -25,7 +25,13 @@ class SplashPage extends StatelessWidget implements AutoRouteWrapper {
             children: [
               Container(
                 alignment: FractionalOffset.center,
-                child: Image.network('$placeholderUri/150'),
+                child: Image.network(
+                  '$placeholderUri/150',
+                  errorBuilder: (context, error, stackTrace) {
+                    debugPrint('error: $error');
+                    return Image.asset('images/100x100.png');
+                  },
+                ),
               ),
               Container(
                 alignment: FractionalOffset.topRight,
