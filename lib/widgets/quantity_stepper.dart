@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:styled_widget/styled_widget.dart';
 
 class QuantityStepper extends StatefulWidget {
@@ -52,12 +50,13 @@ class QuantityStepper extends StatefulWidget {
 }
 
 class QuantityStepperState extends State<QuantityStepper> {
-  final _formKey = GlobalKey<FormBuilderState>();
   int _quantity = 1;
+  final _controller = TextEditingController();
 
   @override
   void initState() {
     _quantity = widget.minValue;
+    _controller.text = _quantity.toString();
     super.initState();
   }
 
@@ -67,7 +66,7 @@ class QuantityStepperState extends State<QuantityStepper> {
       onPressed: _quantity > widget.minValue
           ? () => setState(() {
                 _quantity -= widget.step;
-                _formKey.currentState?.patchValue({'quantity': '$_quantity'});
+                _controller.text = _quantity.toString();
                 widget.onChanged?.call(_quantity, _quantity >= widget.minValue);
               })
           : null,
@@ -95,61 +94,52 @@ class QuantityStepperState extends State<QuantityStepper> {
                 widget.iconPadding * 2 +
                 widget.iconBorderWidth * 2);
 
-    final textField = FormBuilder(
-      key: _formKey,
-      child: FormBuilderTextField(
-        name: 'quantity',
-        initialValue: '$_quantity',
-        textAlign: TextAlign.center,
-        keyboardType: TextInputType.number,
-        inputFormatters: [
-          LengthLimitingTextInputFormatter(widget.maxLength),
-          FilteringTextInputFormatter.digitsOnly
-        ],
-        style: TextStyle(fontSize: widget.textFontSize, color: Colors.black),
-        decoration: InputDecoration(
-            isDense: true,
-            contentPadding: EdgeInsets.all(widget.textPadding),
-            border: InputBorder.none,
-            errorStyle: const TextStyle(
-              height: 0,
-              color: Colors.transparent,
-            )),
-        onChanged: (value) {
-          if (value != null && value.isNotEmpty) {
-            final quantity = int.parse(value);
-            if (quantity == _quantity) return;
-            if (_formKey.currentState?.saveAndValidate() ?? false) {
-              setState(() {
-                _quantity = quantity;
-                _formKey.currentState?.patchValue({'quantity': '$_quantity'});
-              });
-              debugPrint('form valid: ${_formKey.currentState?.value}');
-              widget.onChanged?.call(quantity, true);
-            } else {
-              widget.onChanged?.call(quantity, false);
-            }
-          } else {
+    final textField = TextFormField(
+      controller: _controller,
+      textAlign: TextAlign.center,
+      keyboardType: TextInputType.number,
+      inputFormatters: [
+        LengthLimitingTextInputFormatter(widget.maxLength),
+        FilteringTextInputFormatter.digitsOnly
+      ],
+      style: TextStyle(fontSize: widget.textFontSize, color: Colors.black),
+      decoration: InputDecoration(
+          isDense: true,
+          contentPadding: EdgeInsets.all(widget.textPadding),
+          border: InputBorder.none,
+          errorStyle: const TextStyle(
+            height: 0,
+            color: Colors.transparent,
+          )),
+      onChanged: (value) {
+        if (value.isNotEmpty) {
+          final quantity = int.parse(value);
+          if (quantity == _quantity) return;
+          if (quantity >= widget.minValue && quantity <= widget.maxValue) {
             setState(() {
-              _quantity = widget.minValue;
-              _formKey.currentState?.patchValue({'quantity': '$_quantity'});
-              widget.onChanged?.call(_quantity, _quantity >= widget.minValue);
+              _quantity = quantity;
+              _controller.text = _quantity.toString();
             });
+
+            widget.onChanged?.call(quantity, true);
+          } else {
+            widget.onChanged?.call(quantity, false);
           }
-        },
-        validator: FormBuilderValidators.compose([
-          FormBuilderValidators.required(),
-          FormBuilderValidators.min(widget.minValue),
-          FormBuilderValidators.max(widget.maxValue),
-        ]),
-      ).constrained(width: widget.textFieldWidth),
-    );
+        } else {
+          setState(() {
+            _quantity = widget.minValue;
+            _controller.text = _quantity.toString();
+            widget.onChanged?.call(_quantity, _quantity >= widget.minValue);
+          });
+        }
+      },
+    ).constrained(width: widget.textFieldWidth);
 
     final plus = IconButton(
       onPressed: _quantity < widget.maxValue
           ? () => setState(() {
                 _quantity += widget.step;
-                _formKey.currentState?.patchValue({'quantity': '$_quantity'});
+                _controller.text = _quantity.toString();
                 widget.onChanged?.call(_quantity, _quantity <= widget.maxValue);
               })
           : null,
