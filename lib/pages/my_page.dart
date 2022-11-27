@@ -35,9 +35,9 @@ class MyPage extends StatelessWidget {
             alignment: FractionalOffset.center,
             child: ElevatedButton(
               onPressed: () {
-                final perfs = RepositoryProvider.of<SharedPreferences>(context);
-                if (perfs.containsKey('sessionToken')) {
-                  perfs.remove('sessionToken');
+                final prefs = RepositoryProvider.of<SharedPreferences>(context);
+                if (prefs.containsKey('sessionToken')) {
+                  prefs.remove('sessionToken');
                 }
                 context.router.popUntilRoot();
               },

@@ -49,7 +49,14 @@ class CartToggleSelectAll extends CartEvent {}
 
 class CartClear extends CartEvent {}
 
-class CartLoad extends CartEvent {}
+class CartLoad extends CartEvent {
+  final String id;
+
+  const CartLoad(this.id);
+
+  @override
+  List<Object> get props => [id];
+}
 
 class CartLoaded extends CartEvent {
   const CartLoaded(this.cart);

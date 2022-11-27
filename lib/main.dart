@@ -1,6 +1,5 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:demo/bloc/all.dart';
-import 'package:demo/bloc/cart_bloc.dart';
 import 'package:demo/config.dart';
 import 'package:demo/interceptors/all.dart';
 import 'package:demo/repositories/all.dart';
@@ -16,6 +15,7 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:graphql/client.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:uuid/uuid.dart';
 
 import 'observers/all.dart';
 
@@ -32,6 +32,14 @@ void main() async {
 
   /// 加载本地存储
   final SharedPreferences prefs = await SharedPreferences.getInstance();
+  // 如果没有购物车 id，就生成一个
+  if (prefs.getString('cartId') == null) {
+    if (prefs.getString('sessionToken') != null) {
+      await prefs.setString('cartId', prefs.getString('sessionToken')!);
+    } else {
+      await prefs.setString('cartId', const Uuid().v4());
+    }
+  }
 
   /// 注意：不要把路由初始化放到 `builder` 函数中
   /// 否则你会在热重载后看到空白屏

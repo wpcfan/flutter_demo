@@ -26,7 +26,7 @@ class LoginPage extends StatelessWidget implements AutoRouteWrapper {
     return BlocProvider<LoginCubit>(
       create: (context) => LoginCubit(
         repository: context.read<AuthRepository>(),
-        perfs: context.read<SharedPreferences>(),
+        prefs: context.read<SharedPreferences>(),
       ),
       child: this,
     );

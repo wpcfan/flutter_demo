@@ -34,8 +34,8 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
     if (state is LoginSuccess) {
       context.read<LoadingProvider>().setLoad(false);
       if (restoreLastRouteBeforeLogin) {
-        final perfs = context.read<SharedPreferences>();
-        final String route = perfs.getString(perfKeyRouteBeforeLogin) ?? '/';
+        final prefs = context.read<SharedPreferences>();
+        final String route = prefs.getString(perfKeyRouteBeforeLogin) ?? '/';
         if (route != '/') {
           context.router.popUntilRouteWithName(route);
           return;

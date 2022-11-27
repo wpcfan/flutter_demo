@@ -16,7 +16,11 @@ class Currency {
   });
 
   Currency.fromJson(Map<String, dynamic> json) {
-    code = json['code'] != null ? CurrencyCode.values[json['code']] : null;
+    code = json['code'] != null
+        ? CurrencyCode.values.firstWhere(
+            (element) => element.code == json['code'],
+            orElse: () => CurrencyCode.cny)
+        : null;
     symbol = json['symbol'];
     thousandsSeparator = json['thousandsSeparator'];
     decimalSeparator = json['decimalSeparator'];

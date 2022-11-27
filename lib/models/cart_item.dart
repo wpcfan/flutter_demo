@@ -42,9 +42,8 @@ class CartItem extends Equatable {
   final String description;
   final CartItemType type;
   final List<String> images;
-  final double? unitOriginalTotal;
-  final double unitTotal;
-  final double lineTotal;
+  final Money unitTotal;
+  final Money lineTotal;
   final int quantity;
   final Map<String, dynamic>? metadata;
   final List<CartItemAttribute> attributes;
@@ -58,7 +57,6 @@ class CartItem extends Equatable {
     required this.description,
     required this.type,
     required this.images,
-    this.unitOriginalTotal,
     required this.unitTotal,
     required this.lineTotal,
     required this.quantity,
@@ -73,11 +71,12 @@ class CartItem extends Equatable {
         productId = json['productId'],
         name = json['name'],
         description = json['description'],
-        type = CartItemType.values[json['type']],
+        type = CartItemType.values.firstWhere(
+            (element) => element.value == json['type'],
+            orElse: () => CartItemType.sku),
         images = List<String>.from(json['images']),
-        unitOriginalTotal = json['unitOriginalTotal'],
-        unitTotal = json['unitTotal'],
-        lineTotal = json['lineTotal'],
+        unitTotal = Money.fromJson(json['unitTotal']),
+        lineTotal = Money.fromJson(json['lineTotal']),
         quantity = json['quantity'],
         metadata = json['metadata'],
         attributes = List<CartItemAttribute>.from(
@@ -92,9 +91,8 @@ class CartItem extends Equatable {
         'description': description,
         'type': type.index,
         'images': images,
-        'unitOriginalTotal': unitOriginalTotal,
-        'unitTotal': unitTotal,
-        'lineTotal': lineTotal,
+        'unitTotal': unitTotal.toJson(),
+        'lineTotal': lineTotal.toJson(),
         'quantity': quantity,
         'metadata': metadata,
         'attributes': attributes.map((x) => x.toJson()).toList(),
@@ -111,7 +109,6 @@ class CartItem extends Equatable {
       description,
       type,
       images,
-      unitOriginalTotal,
       unitTotal,
       lineTotal,
       quantity,
@@ -124,7 +121,7 @@ class CartItem extends Equatable {
 
   @override
   String toString() {
-    return 'CartItem{id: $id, productId: $productId, name: $name, description: $description, type: $type, images: $images, unitOriginalTotal: $unitOriginalTotal, unitTotal: $unitTotal, lineTotal: $lineTotal, quantity: $quantity, metadata: $metadata, attributes: $attributes, createdAt: $createdAt, updatedAt: $updatedAt}';
+    return 'CartItem{id: $id, productId: $productId, name: $name, description: $description, type: $type, images: $images, unitTotal: $unitTotal, lineTotal: $lineTotal, quantity: $quantity, metadata: $metadata, attributes: $attributes, createdAt: $createdAt, updatedAt: $updatedAt}';
   }
 
   CartItem copyWith({
@@ -134,9 +131,8 @@ class CartItem extends Equatable {
     String? description,
     CartItemType? type,
     List<String>? images,
-    double? unitOriginalTotal,
-    double? unitTotal,
-    double? lineTotal,
+    Money? unitTotal,
+    Money? lineTotal,
     int? quantity,
     Map<String, dynamic>? metadata,
     List<CartItemAttribute>? attributes,
@@ -150,7 +146,6 @@ class CartItem extends Equatable {
       description: description ?? this.description,
       type: type ?? this.type,
       images: images ?? this.images,
-      unitOriginalTotal: unitOriginalTotal ?? this.unitOriginalTotal,
       unitTotal: unitTotal ?? this.unitTotal,
       lineTotal: lineTotal ?? this.lineTotal,
       quantity: quantity ?? this.quantity,

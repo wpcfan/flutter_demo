@@ -3,19 +3,19 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LocaleCubit extends Cubit<Locale> {
-  final SharedPreferences perfs;
+  final SharedPreferences prefs;
 
-  LocaleCubit({required this.perfs}) : super(const Locale('en')) {
-    final languageCode = perfs.getString('locale');
+  LocaleCubit({required this.prefs}) : super(const Locale('en')) {
+    final languageCode = prefs.getString('locale');
     if (languageCode != null) {
       emit(Locale(languageCode));
     } else {
-      perfs.setString('locale', 'en');
+      prefs.setString('locale', 'en');
     }
   }
 
   void changeLocale(Locale locale) {
-    perfs.setString('locale', locale.languageCode);
+    prefs.setString('locale', locale.languageCode);
     emit(locale);
   }
 }

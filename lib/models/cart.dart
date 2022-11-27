@@ -3,16 +3,16 @@ import 'package:demo/models/currency.dart';
 import 'package:equatable/equatable.dart';
 
 class Cart extends Equatable {
-  final int id;
+  final String id;
   final Currency currency;
   final String? email;
   final String? mobile;
   final int totalItems;
   final List<CartItem> items;
-  final double subTotal;
-  final double shippingTotal;
-  final double taxTotal;
-  final double grandTotal;
+  final Money subTotal;
+  final Money shippingTotal;
+  final Money taxTotal;
+  final Money grandTotal;
   final bool isEmpty;
   final bool abandoned;
   final List<CartItemAttribute> attributes;
@@ -49,10 +49,10 @@ class Cart extends Equatable {
         totalItems = json['totalItems'],
         items =
             (json['items'] as List).map((e) => CartItem.fromJson(e)).toList(),
-        subTotal = json['subTotal'],
-        shippingTotal = json['shippingTotal'],
-        taxTotal = json['taxTotal'],
-        grandTotal = json['grandTotal'],
+        subTotal = Money.fromJson(json['subTotal']),
+        shippingTotal = Money.fromJson(json['shippingTotal']),
+        taxTotal = Money.fromJson(json['taxTotal']),
+        grandTotal = Money.fromJson(json['grandTotal']),
         isEmpty = json['isEmpty'],
         abandoned = json['abandoned'],
         attributes = (json['attributes'] as List)
@@ -70,10 +70,10 @@ class Cart extends Equatable {
         'mobile': mobile,
         'totalItems': totalItems,
         'items': items.map((e) => e.toJson()).toList(),
-        'subTotal': subTotal,
-        'shippingTotal': shippingTotal,
-        'taxTotal': taxTotal,
-        'grandTotal': grandTotal,
+        'subTotal': subTotal.toJson(),
+        'shippingTotal': shippingTotal.toJson(),
+        'taxTotal': taxTotal.toJson(),
+        'grandTotal': grandTotal.toJson(),
         'isEmpty': isEmpty,
         'abandoned': abandoned,
         'attributes': attributes.map((e) => e.toJson()).toList(),
@@ -84,16 +84,16 @@ class Cart extends Equatable {
       };
 
   Cart copyWith({
-    int? id,
+    String? id,
     Currency? currency,
     String? email,
     String? mobile,
     int? totalItems,
     List<CartItem>? items,
-    double? subTotal,
-    double? shippingTotal,
-    double? taxTotal,
-    double? grandTotal,
+    Money? subTotal,
+    Money? shippingTotal,
+    Money? taxTotal,
+    Money? grandTotal,
     bool? isEmpty,
     bool? abandoned,
     List<CartItemAttribute>? attributes,

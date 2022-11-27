@@ -5,17 +5,17 @@ import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthGuard extends AutoRouteGuard {
-  final SharedPreferences perfs;
-  AuthGuard(this.perfs);
+  final SharedPreferences prefs;
+  AuthGuard(this.prefs);
 
   @override
   void onNavigation(NavigationResolver resolver, StackRouter router) {
-    if (perfs.getString('sessionToken') != null) {
+    if (prefs.getString('sessionToken') != null) {
       resolver.next(true);
     } else {
       if (restoreLastRouteBeforeLogin) {
         debugPrint('AuthGuard: current route -- ${router.currentPath}');
-        perfs.setString(perfKeyRouteBeforeLogin, router.currentPath);
+        prefs.setString(perfKeyRouteBeforeLogin, router.currentPath);
       }
       router.push(const Login()).then((value) {
         resolver.next(false);

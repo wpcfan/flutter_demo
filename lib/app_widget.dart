@@ -64,7 +64,7 @@ class App extends StatelessWidget {
         providers: [
           BlocProvider(create: (context) => ThemeCubit()),
           BlocProvider(
-              create: (context) => LocaleCubit(perfs: sharedPreferences)),
+              create: (context) => LocaleCubit(prefs: sharedPreferences)),
           BlocProvider(create: (context) => MessageCubit()),
           BlocProvider<HomeBloc>(
             create: (context) =>

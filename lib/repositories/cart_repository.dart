@@ -8,7 +8,7 @@ class CartRepository {
   Future<QueryResult> getCart() async {
     const query = r'''
       query {
-        cart(id: "ck5r8d5b500003f5o2aif0v2b", currency: { code: CNY }) {
+        cart(id: "abcs23132", currency: { code: CNY }) {
           ...CartWithItems
         }
       }

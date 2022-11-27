@@ -126,7 +126,7 @@ class RegisterPage extends StatelessWidget implements AutoRouteWrapper {
     return BlocProvider<RegisterCubit>(
       create: (context) => RegisterCubit(
           repository: context.read<AuthRepository>(),
-          perfs: context.read<SharedPreferences>()),
+          prefs: context.read<SharedPreferences>()),
       child: this,
     );
   }

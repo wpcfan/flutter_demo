@@ -6,6 +6,7 @@ export 'enum_cart_item_type.dart';
 export 'enum_currency.dart';
 export 'enum_status.dart';
 export 'language.dart';
+export 'money.dart';
 export 'page.dart';
 export 'product.dart';
 export 'promotion.dart';
