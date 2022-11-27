@@ -1,3 +1,4 @@
+export 'add_cart_item.dart';
 export 'auth.dart';
 export 'cart.dart';
 export 'cart_item.dart';

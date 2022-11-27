@@ -1,16 +1,16 @@
 import 'package:demo/models/all.dart';
 import 'package:equatable/equatable.dart';
 
-class CartItemAttribute {
+class NameValueAttribute {
   final String name;
   final String value;
 
-  const CartItemAttribute({
+  const NameValueAttribute({
     required this.name,
     required this.value,
   });
 
-  CartItemAttribute.fromJson(Map<String, dynamic> json)
+  NameValueAttribute.fromJson(Map<String, dynamic> json)
       : name = json['name'],
         value = json['value'];
 
@@ -24,11 +24,11 @@ class CartItemAttribute {
     return 'CartItemAttribute{name: $name, value: $value}';
   }
 
-  CartItemAttribute copyWith({
+  NameValueAttribute copyWith({
     String? name,
     String? value,
   }) {
-    return CartItemAttribute(
+    return NameValueAttribute(
       name: name ?? this.name,
       value: value ?? this.value,
     );
@@ -46,7 +46,7 @@ class CartItem extends Equatable {
   final Money lineTotal;
   final int quantity;
   final Map<String, dynamic>? metadata;
-  final List<CartItemAttribute> attributes;
+  final List<NameValueAttribute> attributes;
   final DateTime createdAt;
   final DateTime updatedAt;
 
@@ -79,8 +79,8 @@ class CartItem extends Equatable {
         lineTotal = Money.fromJson(json['lineTotal']),
         quantity = json['quantity'],
         metadata = json['metadata'],
-        attributes = List<CartItemAttribute>.from(
-            json['attributes'].map((x) => CartItemAttribute.fromJson(x))),
+        attributes = List<NameValueAttribute>.from(
+            json['attributes'].map((x) => NameValueAttribute.fromJson(x))),
         createdAt = DateTime.parse(json['createdAt']),
         updatedAt = DateTime.parse(json['updatedAt']);
 
@@ -135,7 +135,7 @@ class CartItem extends Equatable {
     Money? lineTotal,
     int? quantity,
     Map<String, dynamic>? metadata,
-    List<CartItemAttribute>? attributes,
+    List<NameValueAttribute>? attributes,
     DateTime? createdAt,
     DateTime? updatedAt,
   }) {

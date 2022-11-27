@@ -1,3 +1,4 @@
+import 'package:demo/models/product.dart';
 import 'package:graphql/client.dart';
 
 class CartRepository {
@@ -5,10 +6,10 @@ class CartRepository {
 
   CartRepository(this.client);
 
-  Future<QueryResult> getCart() async {
-    const query = r'''
+  Future<QueryResult> getCart(String cartId) async {
+    final query = '''
       query {
-        cart(id: "abcs23132", currency: { code: CNY }) {
+        cart(id: "$cartId", currency: { code: CNY }) {
           ...CartWithItems
         }
       }
@@ -80,5 +81,14 @@ class CartRepository {
     ''';
 
     return await client.query(QueryOptions(document: gql(query)));
+  }
+
+  Future<QueryResult> addItemToCart(
+      {required String cartId,
+      required Product product,
+      int quantity = 1}) async {
+    final query = product.toAddCartItem(cartId: cartId, quantity: quantity);
+
+    return await client.mutate(MutationOptions(document: gql(query)));
   }
 }
