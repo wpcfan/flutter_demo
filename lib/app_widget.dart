@@ -16,6 +16,20 @@ class App extends StatelessWidget {
         RepositoryProvider<SharedPreferences>(
           create: (context) => sharedPreferences,
         ),
+        RepositoryProvider<GraphQLClient>(
+          create: (context) {
+            final Link httpLink = HttpLink(
+              cartQlApiBase,
+            );
+
+            final GraphQLClient client = GraphQLClient(
+              /// **NOTE** The default store is the InMemoryStore, which does NOT persist to disk
+              cache: GraphQLCache(),
+              link: httpLink,
+            );
+            return client;
+          },
+        ),
         RepositoryProvider<Dio>(
           create: (context) => Dio()
             ..interceptors.add(
@@ -41,6 +55,8 @@ class App extends StatelessWidget {
             create: (context) => AuthRepository(context.read<Dio>())),
         RepositoryProvider<PageBlockRepository>(
             create: (context) => PageBlockRepository(context.read<Dio>())),
+        RepositoryProvider<CartRepository>(
+            create: (context) => CartRepository(context.read<GraphQLClient>())),
         RepositoryProvider<HistoryRepository>(
             create: (context) => HistoryRepository(sharedPreferences)),
       ],
@@ -53,6 +69,10 @@ class App extends StatelessWidget {
           BlocProvider<HomeBloc>(
             create: (context) =>
                 HomeBloc(repository: context.read<PageBlockRepository>()),
+          ),
+          BlocProvider<CartBloc>(
+            create: (context) =>
+                CartBloc(repository: context.read<CartRepository>()),
           ),
           BlocProvider<SearchBloc>(
             create: (context) => SearchBloc(

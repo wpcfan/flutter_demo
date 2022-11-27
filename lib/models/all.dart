@@ -2,6 +2,8 @@ export 'auth.dart';
 export 'cart.dart';
 export 'cart_item.dart';
 export 'category.dart';
+export 'enum_cart_item_type.dart';
+export 'enum_currency.dart';
 export 'enum_status.dart';
 export 'language.dart';
 export 'page.dart';

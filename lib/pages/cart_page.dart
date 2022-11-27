@@ -1,6 +1,8 @@
+import 'package:demo/bloc/all.dart';
 import 'package:demo/models/all.dart';
 import 'package:demo/widgets/all.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:styled_widget/styled_widget.dart';
 
@@ -18,6 +20,8 @@ class CartPage extends StatelessWidget {
     /// 因此需要显式设置其文本颜色
     final ButtonStyle style = TextButton.styleFrom(
         foregroundColor: Theme.of(context).colorScheme.onPrimary);
+    final bloc = context.read<CartBloc>();
+    bloc.add(CartLoad());
     return Scaffold(
       appBar: AppBar(
         leading: const Text(
@@ -49,25 +53,29 @@ class CartPage extends StatelessWidget {
           ),
         ],
       ),
-      body: Stack(
-        children: [
-          ListView.builder(itemBuilder: (context, index) {
-            return ListTile(
-              leading: Radio(
-                value: index,
-                groupValue: 0,
-                onChanged: (value) {},
+      body: BlocBuilder<CartBloc, CartState>(
+        builder: (context, state) {
+          return Stack(
+            children: [
+              ListView.builder(itemBuilder: (context, index) {
+                return ListTile(
+                  leading: Radio(
+                    value: index,
+                    groupValue: 0,
+                    onChanged: (value) {},
+                  ),
+                  title: const CartItemCard(),
+                );
+              }),
+              const Positioned(
+                bottom: 0,
+                left: 0,
+                right: 0,
+                child: CartBottomBar(),
               ),
-              title: const CartItemCard(),
-            );
-          }),
-          const Positioned(
-            bottom: 0,
-            left: 0,
-            right: 0,
-            child: CartBottomBar(),
-          ),
-        ],
+            ],
+          );
+        },
       ),
     );
   }

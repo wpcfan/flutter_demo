@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:demo/bloc/all.dart';
+import 'package:demo/bloc/cart_bloc.dart';
 import 'package:demo/config.dart';
 import 'package:demo/interceptors/all.dart';
 import 'package:demo/repositories/all.dart';
@@ -13,6 +14,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
+import 'package:graphql/client.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'observers/all.dart';

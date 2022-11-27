@@ -1,59 +1,130 @@
 import 'package:demo/models/all.dart';
 import 'package:equatable/equatable.dart';
 
+class CartItemAttribute {
+  final String name;
+  final String value;
+
+  const CartItemAttribute({
+    required this.name,
+    required this.value,
+  });
+
+  CartItemAttribute.fromJson(Map<String, dynamic> json)
+      : name = json['name'],
+        value = json['value'];
+
+  Map<String, dynamic> toJson() => {
+        'name': name,
+        'value': value,
+      };
+
+  @override
+  String toString() {
+    return 'CartItemAttribute{name: $name, value: $value}';
+  }
+
+  CartItemAttribute copyWith({
+    String? name,
+    String? value,
+  }) {
+    return CartItemAttribute(
+      name: name ?? this.name,
+      value: value ?? this.value,
+    );
+  }
+}
+
 class CartItem extends Equatable {
   final String id;
   final String productId;
   final String name;
   final String description;
-  final String image;
-  final String price;
-  final String? originalPrice;
+  final CartItemType type;
+  final List<String> images;
+  final double? unitOriginalTotal;
+  final double unitTotal;
+  final double lineTotal;
   final int quantity;
-  final List<Discount>? promoions;
-  final bool isSelected;
+  final Map<String, dynamic>? metadata;
+  final List<CartItemAttribute> attributes;
+  final DateTime createdAt;
+  final DateTime updatedAt;
 
   const CartItem({
     required this.id,
     required this.productId,
     required this.name,
     required this.description,
-    required this.image,
-    required this.price,
-    this.originalPrice,
+    required this.type,
+    required this.images,
+    this.unitOriginalTotal,
+    required this.unitTotal,
+    required this.lineTotal,
     required this.quantity,
-    this.promoions,
-    required this.isSelected,
+    this.metadata,
+    required this.attributes,
+    required this.createdAt,
+    required this.updatedAt,
   });
 
+  CartItem.fromJson(Map<String, dynamic> json)
+      : id = json['id'],
+        productId = json['productId'],
+        name = json['name'],
+        description = json['description'],
+        type = CartItemType.values[json['type']],
+        images = List<String>.from(json['images']),
+        unitOriginalTotal = json['unitOriginalTotal'],
+        unitTotal = json['unitTotal'],
+        lineTotal = json['lineTotal'],
+        quantity = json['quantity'],
+        metadata = json['metadata'],
+        attributes = List<CartItemAttribute>.from(
+            json['attributes'].map((x) => CartItemAttribute.fromJson(x))),
+        createdAt = DateTime.parse(json['createdAt']),
+        updatedAt = DateTime.parse(json['updatedAt']);
+
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'productId': productId,
+        'name': name,
+        'description': description,
+        'type': type.index,
+        'images': images,
+        'unitOriginalTotal': unitOriginalTotal,
+        'unitTotal': unitTotal,
+        'lineTotal': lineTotal,
+        'quantity': quantity,
+        'metadata': metadata,
+        'attributes': attributes.map((x) => x.toJson()).toList(),
+        'createdAt': createdAt.toIso8601String(),
+        'updatedAt': updatedAt.toIso8601String(),
+      };
+
   @override
-  List<Object?> get props => [
-        id,
-        productId,
-        name,
-        description,
-        image,
-        price,
-        originalPrice,
-        quantity,
-        promoions,
-        isSelected,
-      ];
+  List<Object?> get props {
+    return [
+      id,
+      productId,
+      name,
+      description,
+      type,
+      images,
+      unitOriginalTotal,
+      unitTotal,
+      lineTotal,
+      quantity,
+      metadata,
+      attributes,
+      createdAt,
+      updatedAt,
+    ];
+  }
 
   @override
   String toString() {
-    return '''CartItem {
-        id: $id,
-        productId: $productId,
-        name: $name,
-        description: $description,
-        image: $image,
-        price: $price,
-        originalPrice: $originalPrice,
-        quantity: $quantity,
-        promoions: $promoions,
-        isSelected: $isSelected,
-      }''';
+    return 'CartItem{id: $id, productId: $productId, name: $name, description: $description, type: $type, images: $images, unitOriginalTotal: $unitOriginalTotal, unitTotal: $unitTotal, lineTotal: $lineTotal, quantity: $quantity, metadata: $metadata, attributes: $attributes, createdAt: $createdAt, updatedAt: $updatedAt}';
   }
 
   CartItem copyWith({
@@ -61,57 +132,32 @@ class CartItem extends Equatable {
     String? productId,
     String? name,
     String? description,
-    String? image,
-    String? price,
-    String? originalPrice,
+    CartItemType? type,
+    List<String>? images,
+    double? unitOriginalTotal,
+    double? unitTotal,
+    double? lineTotal,
     int? quantity,
-    List<Discount>? promoions,
-    List<CartItem>? freeItems,
-    bool? isSelected,
+    Map<String, dynamic>? metadata,
+    List<CartItemAttribute>? attributes,
+    DateTime? createdAt,
+    DateTime? updatedAt,
   }) {
     return CartItem(
       id: id ?? this.id,
       productId: productId ?? this.productId,
       name: name ?? this.name,
       description: description ?? this.description,
-      image: image ?? this.image,
-      price: price ?? this.price,
-      originalPrice: originalPrice ?? this.originalPrice,
+      type: type ?? this.type,
+      images: images ?? this.images,
+      unitOriginalTotal: unitOriginalTotal ?? this.unitOriginalTotal,
+      unitTotal: unitTotal ?? this.unitTotal,
+      lineTotal: lineTotal ?? this.lineTotal,
       quantity: quantity ?? this.quantity,
-      promoions: promoions ?? this.promoions,
-      isSelected: isSelected ?? this.isSelected,
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'name': name,
-      'description': description,
-      'image': image,
-      'price': price,
-      'originalPrice': originalPrice,
-      'quantity': quantity,
-      'promoions': promoions,
-      'isSelected': isSelected,
-    };
-  }
-
-  factory CartItem.fromJson(Map<String, dynamic> map) {
-    return CartItem(
-      id: map['id'],
-      productId: map['productId'],
-      name: map['name'],
-      description: map['description'],
-      image: map['image'],
-      price: map['price'],
-      originalPrice: map['originalPrice'],
-      quantity: map['quantity'],
-      promoions: map['promoions'] != null
-          ? List<Discount>.from(
-              map['promoions'].map((x) => Discount.fromJson(x)))
-          : null,
-      isSelected: map['isSelected'],
+      metadata: metadata ?? this.metadata,
+      attributes: attributes ?? this.attributes,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
     );
   }
 }
