@@ -29,22 +29,23 @@ class ProductRowWidget extends StatelessWidget {
                 vertical: spaceBetweenListItems,
               ),
               child: ProductCardOneRowOneWidget(
-                product: pageBlock.data.first,
+                data: pageBlock.data.first,
                 width: width,
                 height: height,
                 addToCart: () => debugPrint(
                     'add to cart ${pageBlock.data.first.toString()}'),
-                onTap: () => debugPrint('on tap ${pageBlock.data.first.id}'),
+                onTap: () =>
+                    debugPrint('on tap ${pageBlock.data.first.product.id}'),
               )));
     }
     return IntrinsicHeight(
       child: pageBlock.data
           .take(2)
           .map((el) => ProductCardOneRowTwoWidget(
-                product: el,
+                data: el,
                 width: (width - spaceBetweenListItems) / 2,
                 addToCart: () => debugPrint('add to cart ${el.toString()}'),
-                onTap: () => debugPrint('on tap ${el.id}'),
+                onTap: () => debugPrint('on tap ${el.product.id}'),
               ))
           .toList()
           .toRow(

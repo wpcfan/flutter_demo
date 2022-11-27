@@ -194,13 +194,15 @@
       "target": "home",
       "data": [
         {
-          "id": "PD_123456",
           "sort": 1,
-          "name": "iPhone 5",
-          "description": "iPhone 5 is a smartphone that was designed and marketed by Apple Inc.",
-          "image": "https://picsum.photos/600/300/?image=12",
-          "originalPrice": "$123.43",
-          "price": "$100.23"
+          "product": {
+            "id": "PD_123456",
+            "name": "iPhone 5",
+            "description": "iPhone 5 is a smartphone that was designed and marketed by Apple Inc.",
+            "image": "https://picsum.photos/600/300/?image=12",
+            "originalPrice": 123.43,
+            "price": 100.23
+          }
         }
       ]
     },
@@ -215,21 +217,25 @@
       "target": "home",
       "data": [
         {
-          "id": "PD_1234567",
           "sort": 1,
-          "name": "Macbook Pro bla bla bla bla bla bla bla ",
-          "description": "MacBook Pro is a line of Macintosh portable computers introduced in January 2006 by Apple Inc.",
-          "image": "https://picsum.photos/600/300/?image=13",
-          "originalPrice": "$1050.23",
-          "price": "$1020.23"
+          "product": {
+            "id": "PD_1234567",
+            "name": "Macbook Pro bla bla bla bla bla bla bla ",
+            "description": "MacBook Pro is a line of Macintosh portable computers introduced in January 2006 by Apple Inc.",
+            "image": "https://picsum.photos/600/300/?image=13",
+            "originalPrice": 1050.23,
+            "price": 1020.23
+          }
         },
         {
-          "id": "PD_1234568",
           "sort": 2,
-          "name": "HP EliteBook",
-          "description": "The HP EliteBook is a brand of premium business-class notebooks and mobile workstations made by Hewlett-Packard.",
-          "image": "https://picsum.photos/600/300/?image=14",
-          "price": "$2000.23"
+          "product": {
+            "id": "PD_1234568",
+            "name": "HP EliteBook",
+            "description": "The HP EliteBook is a brand of premium business-class notebooks and mobile workstations made by Hewlett-Packard.",
+            "image": "https://picsum.photos/600/300/?image=14",
+            "price": 2000.23
+          }
         }
       ]
     },
@@ -244,39 +250,47 @@
           "title": "Tab 1",
           "data": [
             {
-              "id": "PD_1234567",
               "sort": 1,
-              "name": "Macbook Pro bla bla bla bla bla bla bla ",
-              "description": "MacBook Pro is a line of Macintosh portable computers introduced in January 2006 by Apple Inc.",
-              "image": "https://picsum.photos/600/300/?image=13",
-              "originalPrice": "$1050.23",
-              "price": "$1020.23"
+              "product": {
+                "id": "PD_1234567",
+                "name": "Macbook Pro bla bla bla bla bla bla bla ",
+                "description": "MacBook Pro is a line of Macintosh portable computers introduced in January 2006 by Apple Inc.",
+                "image": "https://picsum.photos/600/300/?image=13",
+                "originalPrice": 1050.23,
+                "price": 1020.23
+              }
             },
             {
-              "id": "PD_1234568",
               "sort": 2,
-              "name": "HP EliteBook",
-              "description": "The HP EliteBook is a brand of premium business-class notebooks and mobile workstations made by Hewlett-Packard.",
-              "image": "https://picsum.photos/600/300/?image=14",
-              "price": "$2000.23"
+              "product": {
+                "id": "PD_1234568",
+                "name": "HP EliteBook",
+                "description": "The HP EliteBook is a brand of premium business-class notebooks and mobile workstations made by Hewlett-Packard.",
+                "image": "https://picsum.photos/600/300/?image=14",
+                "price": 2000.23
+              }
             },
             {
-              "id": "PD_1234569",
               "sort": 3,
-              "name": "iPhone 5",
-              "description": "iPhone 5 is a smartphone that was designed and marketed by Apple Inc.",
-              "image": "https://picsum.photos/600/300/?image=12",
-              "originalPrice": "$123.43",
-              "price": "$100.23"
+              "product": {
+                "id": "PD_1234569",
+                "name": "iPhone 5",
+                "description": "iPhone 5 is a smartphone that was designed and marketed by Apple Inc.",
+                "image": "https://picsum.photos/600/300/?image=12",
+                "originalPrice": 123.43,
+                "price": 100.23
+              }
             },
             {
-              "id": "PD_1234569",
-              "sort": 3,
-              "name": "iPhone 5",
-              "description": "iPhone 5 is a smartphone that was designed and marketed by Apple Inc.",
-              "image": "https://picsum.photos/600/300/?image=16",
-              "originalPrice": "$123.43",
-              "price": "$100.23"
+              "sort": 4,
+              "product": {
+                "id": "PD_1234569",
+                "name": "iPhone 5",
+                "description": "iPhone 5 is a smartphone that was designed and marketed by Apple Inc.",
+                "image": "https://picsum.photos/600/300/?image=16",
+                "originalPrice": 123.43,
+                "price": 100.23
+              }
             }
           ]
         },
@@ -284,21 +298,25 @@
           "title": "Tab 2",
           "data": [
             {
-              "id": "PD_1234567",
               "sort": 1,
-              "name": "Macbook Pro bla bla bla bla bla bla bla ",
-              "description": "MacBook Pro is a line of Macintosh portable computers introduced in January 2006 by Apple Inc.",
-              "image": "https://picsum.photos/600/300/?image=13",
-              "originalPrice": "$1050.23",
-              "price": "$1020.23"
+              "product": {
+                "id": "PD_1234567",
+                "name": "Macbook Pro bla bla bla bla bla bla bla ",
+                "description": "MacBook Pro is a line of Macintosh portable computers introduced in January 2006 by Apple Inc.",
+                "image": "https://picsum.photos/600/300/?image=13",
+                "originalPrice": 1050.23,
+                "price": 1020.23
+              }
             },
             {
-              "id": "PD_1234568",
               "sort": 2,
-              "name": "HP EliteBook",
-              "description": "The HP EliteBook is a brand of premium business-class notebooks and mobile workstations made by Hewlett-Packard.",
-              "image": "https://picsum.photos/600/300/?image=14",
-              "price": "$2000.23"
+              "product": {
+                "id": "PD_1234568",
+                "name": "HP EliteBook",
+                "description": "The HP EliteBook is a brand of premium business-class notebooks and mobile workstations made by Hewlett-Packard.",
+                "image": "https://picsum.photos/600/300/?image=14",
+                "price": 2000.23
+              }
             }
           ]
         }

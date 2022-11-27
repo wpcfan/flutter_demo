@@ -3,12 +3,12 @@ part of 'product_row.dart';
 class ProductCardOneRowTwoWidget extends StatelessWidget {
   const ProductCardOneRowTwoWidget({
     super.key,
-    required this.product,
+    required this.data,
     required this.width,
     this.addToCart,
     this.onTap,
   });
-  final ProductData product;
+  final ProductData data;
   final double width;
   final void Function()? addToCart;
   final void Function()? onTap;
@@ -26,7 +26,7 @@ class ProductCardOneRowTwoWidget extends StatelessWidget {
         .border(all: 1, color: Colors.grey);
     // 商品名称
     final productName = Text(
-      product.name,
+      data.product.name ?? '',
       style: const TextStyle(
         fontWeight: FontWeight.bold,
         fontSize: 14,
@@ -38,7 +38,7 @@ class ProductCardOneRowTwoWidget extends StatelessWidget {
     ).padding(bottom: spaceVertical);
     // 商品描述
     final productDescription = Text(
-      product.description,
+      data.product.description ?? '',
       style: const TextStyle(
         fontSize: 12,
         color: Colors.black54,
@@ -48,11 +48,15 @@ class ProductCardOneRowTwoWidget extends StatelessWidget {
       overflow: TextOverflow.ellipsis,
     ).padding(bottom: spaceVertical);
     // 商品原价：划线价
-    final productOriginalPrice = product.originalPrice != null
-        ? product.originalPrice!.lineThru().padding(bottom: spaceVertical)
+    final productOriginalPrice = data.product.originalPrice != null
+        ? data.product.originalPrice!
+            .toString()
+            .lineThru()
+            .padding(bottom: spaceVertical)
         : const SizedBox();
     // 商品价格
-    final productPrice = product.price
+    final productPrice = data.product.price!
+        .toString()
         .toPriceWithDecimalSize(defaultFontSize: 14, decimalFontSize: 10);
     // 购物车图标
     const double buttonSize = 30.0;
@@ -61,7 +65,7 @@ class ProductCardOneRowTwoWidget extends StatelessWidget {
         .gestures(onTap: addToCart);
     // 商品图片
     final productImage = Image.network(
-      product.image,
+      data.product.images.first,
       fit: BoxFit.fill,
       errorBuilder: (context, error, stackTrace) {
         debugPrint('error: $error');

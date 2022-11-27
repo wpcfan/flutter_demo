@@ -17,7 +17,7 @@ class Product extends Equatable {
     this.metadata,
   });
 
-  final int? id;
+  final String? id;
   final String? name;
   final String? description;
   final double? originalPrice;
@@ -42,7 +42,7 @@ class Product extends Equatable {
       ];
 
   Product copyWith({
-    int? id,
+    String? id,
     String? name,
     String? description,
     double? originalPrice,
@@ -70,7 +70,7 @@ class Product extends Equatable {
       'Product { id: $id, name: $name, description: $description, originalPrice: $originalPrice, price: $price, images: $images, categories: $categories, discounts: $discounts, metadata: $metadata }';
 
   factory Product.fromJson(Map<String, dynamic> json) => Product(
-        id: json['id'] as int?,
+        id: json['id'] as String?,
         name: json['name'] as String?,
         description: json['description'] as String?,
         originalPrice: (json['original_price'] as num?)?.toDouble(),

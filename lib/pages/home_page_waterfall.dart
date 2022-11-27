@@ -21,7 +21,7 @@ class WaterfallGridWidget extends StatelessWidget {
         (context, index) {
           final product = data.data[index];
           return ProductCardOneRowTwoWidget(
-            product: product,
+            data: product,
             width: itemWidth,
             onTap: () => debugPrint('onTap'),
             addToCart: () => debugPrint('addToCart'),
@@ -50,7 +50,7 @@ class WaterfallMasonryWidget extends StatelessWidget {
       childCount: data.data.length,
       itemBuilder: (context, index) {
         return ProductCardOneRowTwoWidget(
-          product: data.data[index],
+          data: data.data[index],
           width: itemWidth,
         );
       },

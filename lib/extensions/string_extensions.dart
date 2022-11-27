@@ -35,7 +35,7 @@ extension StringExtension on String {
       defaultStyle: defaultStyle,
       patternList: [
         EasyRichTextPattern(
-          targetString: '\\$first',
+          targetString: first,
           matchWordBoundaries: false,
           style: TextStyle(
             fontSize: defaultFontSize,

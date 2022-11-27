@@ -1,3 +1,4 @@
+import 'package:demo/models/product.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 
