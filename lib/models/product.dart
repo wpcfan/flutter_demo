@@ -1,7 +1,50 @@
 import 'dart:convert';
 
+import 'package:demo/config.dart';
 import 'package:demo/models/all.dart';
 import 'package:equatable/equatable.dart';
+
+class OrderQuantity {
+  final int min;
+  final int max;
+  final int step;
+  OrderQuantity({
+    this.min = minOrderQuantity,
+    this.max = maxOrderQuantity,
+    this.step = orderQuantityStep,
+  });
+
+  OrderQuantity copyWith({
+    int? min,
+    int? max,
+    int? step,
+  }) {
+    return OrderQuantity(
+      min: min ?? this.min,
+      max: max ?? this.max,
+      step: step ?? this.step,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'min': min,
+      'max': max,
+      'step': step,
+    };
+  }
+
+  factory OrderQuantity.fromJson(Map<String, dynamic> map) {
+    return OrderQuantity(
+      min: map['min'],
+      max: map['max'],
+      step: map['step'],
+    );
+  }
+
+  @override
+  String toString() => 'ProductQuantity(min: $min, max: $max, step: $step)';
+}
 
 class Product extends Equatable {
   const Product({
@@ -20,8 +63,8 @@ class Product extends Equatable {
   final String? id;
   final String? name;
   final String? description;
-  final double? originalPrice;
-  final double? price;
+  final int? originalPrice;
+  final int? price;
   final List<String> images;
   final List<Category>? categories;
   final List<Discount>? discounts;
@@ -45,8 +88,8 @@ class Product extends Equatable {
     String? id,
     String? name,
     String? description,
-    double? originalPrice,
-    double? price,
+    int? originalPrice,
+    int? price,
     List<String>? images,
     List<Category>? categories,
     List<Discount>? discounts,
@@ -73,8 +116,8 @@ class Product extends Equatable {
         id: json['id'] as String?,
         name: json['name'] as String?,
         description: json['description'] as String?,
-        originalPrice: (json['original_price'] as num?)?.toDouble(),
-        price: (json['price'] as num?)?.toDouble(),
+        originalPrice: (json['original_price'] as num?)?.toInt(),
+        price: (json['price'] as num?)?.toInt(),
         images: (json['images'] as List<dynamic>?)
                 ?.map((e) => e as String)
                 .toList() ??
@@ -100,9 +143,9 @@ class Product extends Equatable {
         'metadata': metadata,
       };
 
-  String toAddCartItem({required String cartId, int quantity = 1}) => '''
+  String toAddItemCartQL({required String cartId, int quantity = 1}) => '''
     mutation {
-      addItemToCart(
+      addItem(
         input: {
           cartId: "$cartId",
           id: "$id",
@@ -111,11 +154,17 @@ class Product extends Equatable {
           images: ${jsonEncode(images)},
           price: $price,
           quantity: $quantity,
-          attributes: ${jsonEncode(attributes)},
+          attributes: [
+            ${attributes.map((e) => e.toCartQL()).join(',')}
+          ]
           metadata: {
-            "original_price": $originalPrice,
-            "discounts": $discounts,
-            "categories": $categories
+            original_price: $originalPrice,
+            discounts: [
+              ${(discounts ?? []).map((e) => e.toCartQL()).join(',')}
+            ],
+            categories: [
+              ${(categories ?? []).map((e) => e.toCartQL()).join(',')}
+            ],
           }
         }
       ) {
@@ -128,5 +177,6 @@ class Product extends Equatable {
           formatted
         }
       }
+    }
   ''';
 }

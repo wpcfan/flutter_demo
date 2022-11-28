@@ -1,7 +1,7 @@
 import 'money.dart';
 
 class AddCartItemOutput {
-  final String cartId;
+  final String id;
   final bool isEmpty;
   final bool abandoned;
   final int totalItems;
@@ -9,7 +9,7 @@ class AddCartItemOutput {
   final Money subTotal;
 
   AddCartItemOutput({
-    required this.cartId,
+    required this.id,
     required this.isEmpty,
     required this.abandoned,
     required this.totalItems,
@@ -19,7 +19,7 @@ class AddCartItemOutput {
 
   factory AddCartItemOutput.fromJson(Map<String, dynamic> json) {
     return AddCartItemOutput(
-      cartId: json['cartId'] as String,
+      id: json['id'] as String,
       isEmpty: json['isEmpty'] as bool,
       abandoned: json['abandoned'] as bool,
       totalItems: json['totalItems'] as int,
@@ -30,6 +30,6 @@ class AddCartItemOutput {
 
   @override
   String toString() {
-    return 'AddCartItemOutput(cartId: $cartId, isEmpty: $isEmpty, abandoned: $abandoned, totalItems: $totalItems, totalUniqueItems: $totalUniqueItems, subTotal: $subTotal)';
+    return 'AddCartItemOutput(cartId: $id, isEmpty: $isEmpty, abandoned: $abandoned, totalItems: $totalItems, totalUniqueItems: $totalUniqueItems, subTotal: $subTotal)';
   }
 }

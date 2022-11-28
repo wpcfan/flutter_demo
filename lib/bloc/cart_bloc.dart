@@ -1,3 +1,4 @@
+import 'package:demo/config.dart';
 import 'package:demo/helpers/all.dart';
 import 'package:demo/models/all.dart';
 import 'package:demo/repositories/all.dart';
@@ -10,15 +11,16 @@ part 'cart_state.dart';
 class CartBloc extends Bloc<CartEvent, CartState> {
   final CartRepository repository;
   CartBloc({required this.repository}) : super(const CartInitial()) {
-    on<CartLoad>(_onCartLoad, transformer: throttleDroppable(throttleDuration));
-    on<CartAddItem>(_onCartAddItem,
+    on<CartLoadEvent>(_onCartLoad,
+        transformer: throttleDroppable(throttleDuration));
+    on<CartAddItemEvent>(_onCartAddItem,
         transformer: throttleDroppable(throttleDuration));
   }
 
-  Future<void> _onCartLoad(CartLoad event, Emitter<CartState> emit) async {
+  Future<void> _onCartLoad(CartLoadEvent event, Emitter<CartState> emit) async {
     emit(state.copyWith(isFetching: true));
     try {
-      final result = await repository.getCart(event.cartId);
+      final result = await repository.getCart();
       if (result.hasException) {
         emit(state.copyWith(
           status: BlocStatus.failure,
@@ -43,11 +45,10 @@ class CartBloc extends Bloc<CartEvent, CartState> {
   }
 
   Future<void> _onCartAddItem(
-      CartAddItem event, Emitter<CartState> emit) async {
+      CartAddItemEvent event, Emitter<CartState> emit) async {
     emit(state.copyWith(isFetching: true));
     try {
       final result = await repository.addItemToCart(
-        cartId: event.cartId,
         product: event.product,
         quantity: event.quantity,
       );

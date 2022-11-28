@@ -19,3 +19,9 @@ const double listHorizontalPadding = 12;
 const double listVerticalPadding = 12;
 // 相邻列表条目之间的垂直距离
 const double spaceBetweenListItems = 12;
+// 默认最大购买数量
+const int maxOrderQuantity = 999;
+// 默认最小购买数量
+const int minOrderQuantity = 1;
+// 默认购买数量步长，即每次增加或减少的数量
+const int orderQuantityStep = 1;

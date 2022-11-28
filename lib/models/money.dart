@@ -2,18 +2,18 @@ import 'package:demo/models/currency.dart';
 import 'package:equatable/equatable.dart';
 
 class Money extends Equatable {
-  final int amount;
+  final int? amount;
   final Currency? currency;
-  final String formatted;
+  final String? formatted;
 
   const Money(this.amount, this.currency, this.formatted);
 
   Money.fromJson(Map<String, dynamic> json)
-      : amount = json['amount'],
+      : amount = json['amount'] as int?,
         currency = json['currency'] != null
-            ? Currency.fromJson(json['currency'])
+            ? Currency.fromJson(json['currency'] as Map<String, dynamic>)
             : null,
-        formatted = json['formatted'];
+        formatted = json['formatted'] as String?;
 
   Map<String, dynamic> toJson() => {
         'amount': amount,

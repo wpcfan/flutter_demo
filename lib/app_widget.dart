@@ -56,7 +56,10 @@ class App extends StatelessWidget {
         RepositoryProvider<PageBlockRepository>(
             create: (context) => PageBlockRepository(context.read<Dio>())),
         RepositoryProvider<CartRepository>(
-            create: (context) => CartRepository(context.read<GraphQLClient>())),
+            create: (context) => CartRepository(
+                  context.read<GraphQLClient>(),
+                  context.read<SharedPreferences>(),
+                )),
         RepositoryProvider<HistoryRepository>(
             create: (context) => HistoryRepository(sharedPreferences)),
       ],
@@ -72,7 +75,8 @@ class App extends StatelessWidget {
           ),
           BlocProvider<CartBloc>(
             create: (context) =>
-                CartBloc(repository: context.read<CartRepository>()),
+                CartBloc(repository: context.read<CartRepository>())
+                  ..add(CartLoadEvent()),
           ),
           BlocProvider<SearchBloc>(
             create: (context) => SearchBloc(

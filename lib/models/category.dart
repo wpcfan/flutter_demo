@@ -54,4 +54,15 @@ class Category extends Equatable {
         'image': image,
         'categories': categories?.map((e) => e.toJson()).toList(),
       };
+
+  String toCartQL() => '''
+    {
+      id: $id,
+      name: "$name",
+      image: "$image",
+      categories: [
+        ${(categories ?? []).map((e) => e.toCartQL()).join(',')}
+      ]
+    }
+  ''';
 }

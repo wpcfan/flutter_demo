@@ -4,7 +4,6 @@ import 'package:demo/widgets/all.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:styled_widget/styled_widget.dart';
 
 part 'cart_page_bottom_bar.dart';
@@ -22,9 +21,8 @@ class CartPage extends StatelessWidget {
     final ButtonStyle style = TextButton.styleFrom(
         foregroundColor: Theme.of(context).colorScheme.onPrimary);
     final bloc = context.read<CartBloc>();
-    final prefs = context.read<SharedPreferences>();
 
-    bloc.add(CartLoad(prefs.getString('cartId')!));
+    bloc.add(CartLoadEvent());
     return Scaffold(
       appBar: AppBar(
         leading: const Text(

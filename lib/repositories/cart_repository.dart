@@ -1,12 +1,14 @@
 import 'package:demo/models/product.dart';
 import 'package:graphql/client.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CartRepository {
   final GraphQLClient client;
+  final SharedPreferences prefs;
+  CartRepository(this.client, this.prefs);
 
-  CartRepository(this.client);
-
-  Future<QueryResult> getCart(String cartId) async {
+  Future<QueryResult> getCart() async {
+    final cartId = prefs.getString('cartId') ?? '';
     final query = '''
       query {
         cart(id: "$cartId", currency: { code: CNY }) {
@@ -83,11 +85,12 @@ class CartRepository {
     return await client.query(QueryOptions(document: gql(query)));
   }
 
-  Future<QueryResult> addItemToCart(
-      {required String cartId,
-      required Product product,
-      int quantity = 1}) async {
-    final query = product.toAddCartItem(cartId: cartId, quantity: quantity);
+  Future<QueryResult> addItemToCart({
+    required Product product,
+    int quantity = 1,
+  }) async {
+    final cartId = prefs.getString('cartId') ?? '';
+    final query = product.toAddItemCartQL(cartId: cartId, quantity: quantity);
 
     return await client.mutate(MutationOptions(document: gql(query)));
   }

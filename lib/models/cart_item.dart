@@ -19,6 +19,13 @@ class NameValueAttribute {
         'value': value,
       };
 
+  String toCartQL() => '''
+    {
+      name: "$name",
+      value: "$value"
+    }
+  ''';
+
   @override
   String toString() {
     return 'CartItemAttribute{name: $name, value: $value}';
@@ -37,7 +44,7 @@ class NameValueAttribute {
 
 class CartItem extends Equatable {
   final String id;
-  final String productId;
+  final String? productId;
   final String name;
   final String description;
   final CartItemType type;
@@ -68,7 +75,7 @@ class CartItem extends Equatable {
 
   CartItem.fromJson(Map<String, dynamic> json)
       : id = json['id'],
-        productId = json['productId'],
+        productId = json['id'],
         name = json['name'],
         description = json['description'],
         type = CartItemType.values.firstWhere(

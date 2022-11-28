@@ -1,7 +1,9 @@
+import 'package:demo/bloc/all.dart';
 import 'package:demo/config.dart';
 import 'package:demo/extensions/all.dart';
 import 'package:demo/models/all.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:styled_widget/styled_widget.dart';
 
 part 'product_card_one_row_one.dart';
@@ -20,8 +22,23 @@ class ProductRowWidget extends StatelessWidget {
     final width =
         MediaQuery.of(context).size.width - screenHorizontalPadding * 2;
     final height = (width / aspectRatio).ceilToDouble();
+    final cartBloc = context.read<CartBloc>();
+    final messageBloc = context.read<MessageCubit>();
+    wrapper(child) => BlocListener<CartBloc, CartState>(
+        listener: (context, state) {
+          if (state.status == BlocStatus.success) {
+            messageBloc.showMessage('Added to cart');
+          } else if (state.status == BlocStatus.failure) {
+            messageBloc.showMessage('Failed to add to cart');
+          }
+        },
+        child: child);
     if (pageBlock.data.length == 1) {
-      return SizedBox(
+      final product = pageBlock.data.first.product;
+      final orderQuantity = product.metadata != null
+          ? OrderQuantity.fromJson(product.metadata!['order_quantity'])
+          : OrderQuantity();
+      final oneRowOne = SizedBox(
           height: height + 2 * spaceBetweenListItems,
           child: Padding(
               padding: const EdgeInsets.symmetric(
@@ -32,21 +49,35 @@ class ProductRowWidget extends StatelessWidget {
                 data: pageBlock.data.first,
                 width: width,
                 height: height,
-                addToCart: () => debugPrint(
-                    'add to cart ${pageBlock.data.first.toString()}'),
+                addToCart: () {
+                  cartBloc.add(CartAddItemEvent(
+                    product: product,
+                    quantity: orderQuantity.min,
+                  ));
+                },
                 onTap: () =>
                     debugPrint('on tap ${pageBlock.data.first.product.id}'),
               )));
+      return wrapper(oneRowOne);
     }
-    return IntrinsicHeight(
+    final oneRowTwo = IntrinsicHeight(
       child: pageBlock.data
           .take(2)
-          .map((el) => ProductCardOneRowTwoWidget(
-                data: el,
-                width: (width - spaceBetweenListItems) / 2,
-                addToCart: () => debugPrint('add to cart ${el.toString()}'),
-                onTap: () => debugPrint('on tap ${el.product.id}'),
-              ))
+          .map((el) {
+            final product = el.product;
+            final orderQuantity = product.metadata != null
+                ? OrderQuantity.fromJson(product.metadata!['order_quantity'])
+                : OrderQuantity();
+            return ProductCardOneRowTwoWidget(
+              data: el,
+              width: (width - spaceBetweenListItems) / 2,
+              addToCart: () => cartBloc.add(CartAddItemEvent(
+                product: product,
+                quantity: orderQuantity.min,
+              )),
+              onTap: () => debugPrint('on tap ${el.product.id}'),
+            );
+          })
           .toList()
           .toRow(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -55,5 +86,6 @@ class ProductRowWidget extends StatelessWidget {
               horizontal: screenHorizontalPadding,
               vertical: spaceBetweenListItems / 2),
     );
+    return wrapper(oneRowTwo);
   }
 }

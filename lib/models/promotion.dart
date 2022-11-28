@@ -65,18 +65,20 @@ abstract class Discount extends Equatable {
   }
 
   Map<String, dynamic> toJson();
+
+  String toCartQL();
 }
 
 /// Discount
 class DiscountPromotion extends Discount {
-  final String discount;
+  final String? discount;
 
   const DiscountPromotion({
     required int id,
     required String title,
     required String tag,
     required String titleWhenApplied,
-    required this.discount,
+    this.discount,
   }) : super(
           id: id,
           title: title,
@@ -133,6 +135,18 @@ class DiscountPromotion extends Discount {
         "titleWhenApplied": titleWhenApplied,
         "discount": discount,
       };
+
+  @override
+  String toCartQL() {
+    return '''{
+      id: $id,
+      title: "$title",
+      type: "$type",
+      tag: "$tag",
+      titleWhenApplied: "$titleWhenApplied",
+      discount: "$discount",
+    }''';
+  }
 }
 
 /// Free Product on purchase
@@ -232,6 +246,21 @@ class FreeProductPromotion extends Discount {
         "productImage": productImage,
         "productPrice": productPrice,
       };
+
+  @override
+  String toCartQL() {
+    return '''{
+      id: $id,
+      title: "$title",
+      type: "$type",
+      tag: "$tag",
+      titleWhenApplied: "$titleWhenApplied",
+      productId: "$productId",
+      productName: "$productName",
+      productImage: "$productImage",
+      productPrice: "$productPrice",
+    }''';
+  }
 }
 
 /// Buy X Get Y
@@ -348,6 +377,23 @@ class BuyXGetYPromotion extends Discount {
         "buy": buy,
         "get": get,
       };
+
+  @override
+  String toCartQL() {
+    return '''{
+      id: $id,
+      title: "$title",
+      type: "$type",
+      tag: "$tag",
+      titleWhenApplied: "$titleWhenApplied",
+      productId: "$productId",
+      productName: "$productName",
+      productImage: "$productImage",
+      productPrice: "$productPrice",
+      buy: $buy,
+      get: $get,
+    }''';
+  }
 }
 
 /// Discount based on the quantity of the product
@@ -427,6 +473,19 @@ class DiscountOnUnitPromotion extends Discount {
         "discount": discount,
         "minQuantity": minQuantity,
       };
+
+  @override
+  String toCartQL() {
+    return '''{
+      id: $id,
+      title: "$title",
+      type: "$type",
+      tag: "$tag",
+      titleWhenApplied: "$titleWhenApplied",
+      discount: "$discount",
+      minQuantity: $minQuantity,
+    }''';
+  }
 }
 
 /// Discount based on the total price of the product
@@ -505,6 +564,19 @@ class DiscountOnTotalPromotion extends Discount {
         "discount": discount,
         "minTotal": minTotal,
       };
+
+  @override
+  String toCartQL() {
+    return '''{
+      id: $id,
+      title: "$title",
+      type: "$type",
+      tag: "$tag",
+      titleWhenApplied: "$titleWhenApplied",
+      discount: "$discount",
+      minTotal: $minTotal,
+    }''';
+  }
 }
 
 /// Discount based on the quantity of the product
@@ -584,6 +656,19 @@ class DiscountEveryXUnitPromotion extends Discount {
         "discount": discount,
         "everyXUnit": everyXUnit,
       };
+
+  @override
+  String toCartQL() {
+    return '''{
+      id: $id,
+      title: "$title",
+      type: "$type",
+      tag: "$tag",
+      titleWhenApplied: "$titleWhenApplied",
+      discount: "$discount",
+      everyXUnit: $everyXUnit,
+    }''';
+  }
 }
 
 /// Discount based on the total price of the product
@@ -663,6 +748,19 @@ class DiscountEveryXTotalPromotion extends Discount {
         "discount": discount,
         "everyXTotal": everyXTotal,
       };
+
+  @override
+  String toCartQL() {
+    return '''{
+      id: $id,
+      title: "$title",
+      type: "$type",
+      tag: "$tag",
+      titleWhenApplied: "$titleWhenApplied",
+      discount: "$discount",
+      everyXTotal: $everyXTotal,
+    }''';
+  }
 }
 
 class FreeProductOnUnitPromotion extends Discount {
@@ -769,6 +867,22 @@ class FreeProductOnUnitPromotion extends Discount {
         "freeProductPrice": freeProductPrice,
         "minQuantity": minQuantity,
       };
+
+  @override
+  String toCartQL() {
+    return '''{
+      id: $id,
+      title: "$title",
+      type: "$type",
+      tag: "$tag",
+      titleWhenApplied: "$titleWhenApplied",
+      freeProductId: "$freeProductId",
+      freeProductName: "$freeProductName",
+      freeProductImage: "$freeProductImage",
+      freeProductPrice: "$freeProductPrice",
+      minQuantity: $minQuantity,
+    }''';
+  }
 }
 
 class FreeProductOnTotalPromotion extends Discount {
@@ -875,6 +989,22 @@ class FreeProductOnTotalPromotion extends Discount {
         "freeProductPrice": freeProductPrice,
         "minTotal": minTotal,
       };
+
+  @override
+  String toCartQL() {
+    return '''{
+      id: $id,
+      title: "$title",
+      type: "$type",
+      tag: "$tag",
+      titleWhenApplied: "$titleWhenApplied",
+      freeProductId: "$freeProductId",
+      freeProductName: "$freeProductName",
+      freeProductImage: "$freeProductImage",
+      freeProductPrice: "$freeProductPrice",
+      minTotal: $minTotal,
+    }''';
+  }
 }
 
 class FreeProductEveryXUnitPromotion extends Discount {
@@ -981,6 +1111,22 @@ class FreeProductEveryXUnitPromotion extends Discount {
         "freeProductPrice": freeProductPrice,
         "everyXUnit": everyXUnit,
       };
+
+  @override
+  String toCartQL() {
+    return '''{
+      id: $id,
+      title: "$title",
+      type: "$type",
+      tag: "$tag",
+      titleWhenApplied: "$titleWhenApplied",
+      freeProductId: "$freeProductId",
+      freeProductName: "$freeProductName",
+      freeProductImage: "$freeProductImage",
+      freeProductPrice: "$freeProductPrice",
+      everyXUnit: $everyXUnit,
+    }''';
+  }
 }
 
 class FreeProductEveryXTotalPromotion extends Discount {
@@ -1087,6 +1233,22 @@ class FreeProductEveryXTotalPromotion extends Discount {
         "freeProductPrice": freeProductPrice,
         "everyXTotal": everyXTotal,
       };
+
+  @override
+  String toCartQL() {
+    return '''{
+      id: $id,
+      title: "$title",
+      type: "$type",
+      tag: "$tag",
+      titleWhenApplied: "$titleWhenApplied",
+      freeProductId: "$freeProductId",
+      freeProductName: "$freeProductName",
+      freeProductImage: "$freeProductImage",
+      freeProductPrice: "$freeProductPrice",
+      everyXTotal: $everyXTotal,
+    }''';
+  }
 }
 
 class FlashSalePromotion extends Discount {
@@ -1169,4 +1331,17 @@ class FlashSalePromotion extends Discount {
         "salePrice": salePrice,
         "endTime": endTime.toIso8601String(),
       };
+
+  @override
+  String toCartQL() {
+    return '''{
+      id: $id,
+      title: "$title",
+      type: "$type",
+      tag: "$tag",
+      titleWhenApplied: "$titleWhenApplied",
+      salePrice: "$salePrice",
+      endTime: "$endTime",
+    }''';
+  }
 }
