@@ -23,7 +23,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       final result = await repository.getCart();
       if (result.hasException) {
         emit(state.copyWith(
-          status: BlocStatus.failure,
+          loadStatus: BlocStatus.failure,
           error: result.exception.toString(),
           isFetching: false,
         ));
@@ -31,13 +31,13 @@ class CartBloc extends Bloc<CartEvent, CartState> {
         final cart = Cart.fromJson(result.data!['cart']);
         emit(state.copyWith(
           cart: cart,
-          status: BlocStatus.success,
+          loadStatus: BlocStatus.success,
           isFetching: false,
         ));
       }
     } catch (e) {
       emit(state.copyWith(
-        status: BlocStatus.failure,
+        loadStatus: BlocStatus.failure,
         error: e.toString(),
         isFetching: false,
       ));
@@ -54,7 +54,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       );
       if (result.hasException) {
         emit(state.copyWith(
-          status: BlocStatus.failure,
+          addStatus: BlocStatus.failure,
           error: result.exception.toString(),
           isFetching: false,
         ));
@@ -69,13 +69,13 @@ class CartBloc extends Bloc<CartEvent, CartState> {
             isEmpty: output.isEmpty,
             abandoned: output.abandoned,
           ),
-          status: BlocStatus.success,
+          addStatus: BlocStatus.success,
           isFetching: false,
         ));
       }
     } catch (e) {
       emit(state.copyWith(
-        status: BlocStatus.failure,
+        addStatus: BlocStatus.failure,
         error: e.toString(),
         isFetching: false,
       ));

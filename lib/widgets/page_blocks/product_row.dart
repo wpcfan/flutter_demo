@@ -23,13 +23,13 @@ class ProductRowWidget extends StatelessWidget {
         MediaQuery.of(context).size.width - screenHorizontalPadding * 2;
     final height = (width / aspectRatio).ceilToDouble();
     final cartBloc = context.read<CartBloc>();
-    final messageBloc = context.read<MessageCubit>();
+    final messageCubit = context.read<MessageCubit>();
     wrapper(child) => BlocListener<CartBloc, CartState>(
         listener: (context, state) {
-          if (state.status == BlocStatus.success) {
-            messageBloc.showMessage('Added to cart');
-          } else if (state.status == BlocStatus.failure) {
-            messageBloc.showMessage('Failed to add to cart');
+          if (state.addStatus == BlocStatus.success) {
+            messageCubit.showMessage('Added to cart');
+          } else if (state.loadStatus == BlocStatus.failure) {
+            messageCubit.showMessage('Failed to add to cart');
           }
         },
         child: child);
