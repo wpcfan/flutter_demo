@@ -1,50 +1,7 @@
 import 'dart:convert';
 
-import 'package:demo/config.dart';
 import 'package:demo/models/all.dart';
 import 'package:equatable/equatable.dart';
-
-class OrderQuantity {
-  final int min;
-  final int max;
-  final int step;
-  OrderQuantity({
-    this.min = minOrderQuantity,
-    this.max = maxOrderQuantity,
-    this.step = orderQuantityStep,
-  });
-
-  OrderQuantity copyWith({
-    int? min,
-    int? max,
-    int? step,
-  }) {
-    return OrderQuantity(
-      min: min ?? this.min,
-      max: max ?? this.max,
-      step: step ?? this.step,
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'min': min,
-      'max': max,
-      'step': step,
-    };
-  }
-
-  factory OrderQuantity.fromJson(Map<String, dynamic> map) {
-    return OrderQuantity(
-      min: map['min'],
-      max: map['max'],
-      step: map['step'],
-    );
-  }
-
-  @override
-  String toString() => 'ProductQuantity(min: $min, max: $max, step: $step)';
-}
 
 class Product extends Equatable {
   const Product({
@@ -58,6 +15,8 @@ class Product extends Equatable {
     this.discounts,
     this.attributes = const [],
     this.metadata,
+    this.attributeOptions = const [],
+    this.tags = const [],
   });
 
   final String? id;
@@ -68,8 +27,10 @@ class Product extends Equatable {
   final List<String> images;
   final List<Category>? categories;
   final List<Discount>? discounts;
-  final List<NameValueAttribute> attributes;
+  final List<KeyValueAttribute> attributes;
   final Map<String, dynamic>? metadata;
+  final List<KeyValueAttribute> attributeOptions;
+  final List<ProductTag> tags;
 
   @override
   List<Object?> get props => [
@@ -81,7 +42,10 @@ class Product extends Equatable {
         images,
         categories,
         discounts,
+        attributes,
         metadata,
+        attributeOptions,
+        tags,
       ];
 
   Product copyWith({
@@ -93,7 +57,10 @@ class Product extends Equatable {
     List<String>? images,
     List<Category>? categories,
     List<Discount>? discounts,
+    List<KeyValueAttribute>? attributes,
     Map<String, dynamic>? metadata,
+    List<KeyValueAttribute>? attributeOptions,
+    List<ProductTag>? tags,
   }) {
     return Product(
       id: id ?? this.id,
@@ -104,13 +71,17 @@ class Product extends Equatable {
       images: images ?? this.images,
       categories: categories ?? this.categories,
       discounts: discounts ?? this.discounts,
+      attributes: attributes ?? this.attributes,
       metadata: metadata ?? this.metadata,
+      attributeOptions: attributeOptions ?? this.attributeOptions,
+      tags: tags ?? this.tags,
     );
   }
 
   @override
-  String toString() =>
-      'Product { id: $id, name: $name, description: $description, originalPrice: $originalPrice, price: $price, images: $images, categories: $categories, discounts: $discounts, metadata: $metadata }';
+  String toString() {
+    return 'Product(id: $id, name: $name, description: $description, originalPrice: $originalPrice, price: $price, images: $images, categories: $categories, discounts: $discounts, attributes: $attributes, metadata: $metadata, attributeOptions: $attributeOptions, tags: $tags)';
+  }
 
   factory Product.fromJson(Map<String, dynamic> json) => Product(
         id: json['id'] as String?,
@@ -128,7 +99,21 @@ class Product extends Equatable {
         discounts: (json['discounts'] as List<dynamic>?)
             ?.map((e) => Discount.fromJson(e as Map<String, dynamic>))
             .toList(),
+        attributes: (json['attributes'] as List<dynamic>?)
+                ?.map((e) =>
+                    KeyValueAttribute.fromJson(e as Map<String, dynamic>))
+                .toList() ??
+            [],
         metadata: json['metadata'] as Map<String, dynamic>?,
+        attributeOptions: (json['attribute_options'] as List<dynamic>?)
+                ?.map((e) =>
+                    KeyValueAttribute.fromJson(e as Map<String, dynamic>))
+                .toList() ??
+            [],
+        tags: (json['tags'] as List<dynamic>?)
+                ?.map((e) => ProductTag.fromJson(e as Map<String, dynamic>))
+                .toList() ??
+            [],
       );
 
   Map<String, dynamic> toJson() => {
@@ -140,31 +125,41 @@ class Product extends Equatable {
         'images': images,
         'categories': categories?.map((e) => e.toJson()).toList(),
         'discounts': discounts?.map((e) => e.toJson()).toList(),
+        'attributes': attributes.map((e) => e.toJson()).toList(),
         'metadata': metadata,
+        'attribute_options': attributeOptions.map((e) => e.toJson()).toList(),
+        'tags': tags.map((e) => e.toJson()).toList(),
       };
 
   String toAddItemCartQL({required String cartId, int quantity = 1}) => '''
     mutation {
       addItem(
         input: {
-          cartId: "$cartId",
-          id: "$id",
-          name: "$name",
-          description: "$description",
-          images: ${jsonEncode(images)},
-          price: $price,
-          quantity: $quantity,
+          cartId: "$cartId"
+          id: "$id"
+          name: "$name"
+          type: SKU
+          description: "$description"
+          images: ${jsonEncode(images)}
+          price: $price
+          quantity: $quantity
           attributes: [
             ${attributes.map((e) => e.toCartQL()).join(',')}
           ]
           metadata: {
-            original_price: $originalPrice,
+            ${originalPrice != null ? 'original_price: $originalPrice' : ''}
             discounts: [
-              ${(discounts ?? []).map((e) => e.toCartQL()).join(',')}
-            ],
+              ${discounts != null && discounts!.isNotEmpty ? (discounts ?? []).map((e) => e.toCartQL()).join(',') : ''}
+            ]
             categories: [
-              ${(categories ?? []).map((e) => e.toCartQL()).join(',')}
-            ],
+              ${categories != null && categories!.isNotEmpty ? (categories ?? []).map((e) => e.toCartQL()).join(',') : ''}
+            ]
+            attribute_options: [
+              ${attributeOptions.isNotEmpty ? attributeOptions.map((e) => e.toCartQL()).join(',') : ''}
+            ]
+            tags: [
+              ${tags.isNotEmpty ? tags.map((e) => e.toCartQL()).join(',') : ''}
+            ]
           }
         }
       ) {

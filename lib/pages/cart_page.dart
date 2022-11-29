@@ -20,9 +20,7 @@ class CartPage extends StatelessWidget {
     /// 因此需要显式设置其文本颜色
     final ButtonStyle style = TextButton.styleFrom(
         foregroundColor: Theme.of(context).colorScheme.onPrimary);
-    final bloc = context.read<CartBloc>();
-
-    bloc.add(CartLoadEvent());
+    context.read<CartBloc>().add(CartLoadEvent());
     return Scaffold(
       appBar: AppBar(
         leading: const Text(
@@ -56,26 +54,29 @@ class CartPage extends StatelessWidget {
       ),
       body: BlocBuilder<CartBloc, CartState>(
         builder: (context, state) {
-          return Stack(
-            children: [
-              ListView.builder(itemBuilder: (context, index) {
-                return ListTile(
-                  leading: Radio(
-                    value: index,
-                    groupValue: 0,
-                    onChanged: (value) {},
+          if (state.loadStatus == BlocStatus.success) {
+            return Stack(
+              children: [
+                ListView.builder(
+                    itemCount: state.cart?.items.length ?? 0,
+                    itemBuilder: (context, index) {
+                      return ListTile(
+                        title: CartItemCard(cartItem: state.cart!.items[index]),
+                      );
+                    }),
+                Positioned(
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  child: CartBottomBar(
+                    subTotal: state.cart!.subTotal,
                   ),
-                  title: const CartItemCard(),
-                );
-              }),
-              const Positioned(
-                bottom: 0,
-                left: 0,
-                right: 0,
-                child: CartBottomBar(),
-              ),
-            ],
-          );
+                ),
+              ],
+            );
+          } else {
+            return const Center(child: CircularProgressIndicator());
+          }
         },
       ),
     );

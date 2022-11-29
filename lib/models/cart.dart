@@ -16,7 +16,7 @@ class Cart extends Equatable {
   final Money grandTotal;
   final bool isEmpty;
   final bool abandoned;
-  final List<NameValueAttribute> attributes;
+  final List<KeyValueAttribute> attributes;
   final Map<String, dynamic>? metadata;
   final String? notes;
   final DateTime createdAt;
@@ -59,7 +59,7 @@ class Cart extends Equatable {
         isEmpty = json['isEmpty'],
         abandoned = json['abandoned'],
         attributes = (json['attributes'] as List)
-            .map((e) => NameValueAttribute.fromJson(e))
+            .map((e) => KeyValueAttribute.fromJson(e))
             .toList(),
         metadata = json['metadata'],
         notes = json['notes'],
@@ -101,7 +101,7 @@ class Cart extends Equatable {
     Money? grandTotal,
     bool? isEmpty,
     bool? abandoned,
-    List<NameValueAttribute>? attributes,
+    List<KeyValueAttribute>? attributes,
     Map<String, dynamic>? metadata,
     String? notes,
     DateTime? createdAt,

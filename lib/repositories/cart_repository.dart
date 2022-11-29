@@ -1,5 +1,7 @@
 import 'package:demo/models/product.dart';
+import 'package:flutter/material.dart';
 import 'package:graphql/client.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CartRepository {
@@ -9,9 +11,19 @@ class CartRepository {
 
   Future<QueryResult> getCart() async {
     final cartId = prefs.getString('cartId') ?? '';
+    final locale = Locale(prefs.getString('locale') ?? 'en');
+    final format = NumberFormat.simpleCurrency(locale: locale.toString());
     final query = '''
       query {
-        cart(id: "$cartId", currency: { code: CNY }) {
+        cart(
+          id: "$cartId", 
+          currency: { 
+            code: ${format.currencyName}, 
+            symbol: "${format.currencySymbol}" 
+            thousandsSeparator: "${format.symbols.GROUP_SEP}",
+            decimalSeparator: "${format.symbols.DECIMAL_SEP}",
+            decimalDigits: ${format.maximumFractionDigits}
+          }) {  
           ...CartWithItems
         }
       }
@@ -77,6 +89,7 @@ class CartRepository {
           amount
           formatted
         }
+        metadata
         createdAt
         updatedAt
       }

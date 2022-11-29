@@ -19,6 +19,7 @@ class LoginCubit extends Cubit<LoginState> {
       final user = await repository.login(username, password);
       if (user.sessionToken != null) {
         prefs.setString('sessionToken', user.sessionToken!);
+        prefs.setString('cartId', user.sessionToken!);
         emit(LoginSuccess(user: user));
       } else {
         emit(LoginError('Something went wrong'));

@@ -1,42 +1,44 @@
+import 'dart:convert';
+
 import 'package:demo/models/all.dart';
 import 'package:equatable/equatable.dart';
 
-class NameValueAttribute {
-  final String name;
+class KeyValueAttribute {
+  final String key;
   final String value;
 
-  const NameValueAttribute({
-    required this.name,
+  const KeyValueAttribute({
+    required this.key,
     required this.value,
   });
 
-  NameValueAttribute.fromJson(Map<String, dynamic> json)
-      : name = json['name'],
+  KeyValueAttribute.fromJson(Map<String, dynamic> json)
+      : key = json['key'],
         value = json['value'];
 
   Map<String, dynamic> toJson() => {
-        'name': name,
+        'key': key,
         'value': value,
       };
 
   String toCartQL() => '''
     {
-      name: "$name",
+      key: "$key",
       value: "$value"
     }
   ''';
 
   @override
   String toString() {
-    return 'CartItemAttribute{name: $name, value: $value}';
+    return 'CartItemAttribute{key: $key, value: $value}';
   }
 
-  NameValueAttribute copyWith({
-    String? name,
+  KeyValueAttribute copyWith({
+    String? key,
     String? value,
   }) {
-    return NameValueAttribute(
-      name: name ?? this.name,
+    return KeyValueAttribute(
+      key: key ?? this.key,
       value: value ?? this.value,
     );
   }
@@ -53,9 +55,10 @@ class CartItem extends Equatable {
   final Money lineTotal;
   final int quantity;
   final Map<String, dynamic>? metadata;
-  final List<NameValueAttribute> attributes;
+  final List<KeyValueAttribute> attributes;
   final DateTime createdAt;
   final DateTime updatedAt;
+  final bool isSelected;
 
   const CartItem({
     required this.id,
@@ -71,25 +74,29 @@ class CartItem extends Equatable {
     required this.attributes,
     required this.createdAt,
     required this.updatedAt,
+    this.isSelected = false,
   });
 
-  CartItem.fromJson(Map<String, dynamic> json)
-      : id = json['id'],
-        productId = json['id'],
-        name = json['name'],
-        description = json['description'],
-        type = CartItemType.values.firstWhere(
-            (element) => element.value == json['type'],
-            orElse: () => CartItemType.sku),
-        images = List<String>.from(json['images']),
-        unitTotal = Money.fromJson(json['unitTotal']),
-        lineTotal = Money.fromJson(json['lineTotal']),
-        quantity = json['quantity'],
-        metadata = json['metadata'],
-        attributes = List<NameValueAttribute>.from(
-            json['attributes'].map((x) => NameValueAttribute.fromJson(x))),
-        createdAt = DateTime.parse(json['createdAt']),
-        updatedAt = DateTime.parse(json['updatedAt']);
+  factory CartItem.fromJson(Map<String, dynamic> json) {
+    return CartItem(
+      id: json['id'],
+      productId: json['productId'],
+      name: json['name'],
+      description: json['description'],
+      type: CartItemType.values.firstWhere((e) => e.value == json['type'],
+          orElse: () => CartItemType.sku),
+      images: List<String>.from(json['images']),
+      unitTotal: Money.fromJson(json['unitTotal']),
+      lineTotal: Money.fromJson(json['lineTotal']),
+      quantity: json['quantity'],
+      metadata: json['metadata'],
+      attributes: List<KeyValueAttribute>.from(
+          json['attributes'].map((x) => KeyValueAttribute.fromJson(x))),
+      createdAt: DateTime.parse(json['createdAt']),
+      updatedAt: DateTime.parse(json['updatedAt']),
+      isSelected: json['metadata']?['isSelected'] ?? false,
+    );
+  }
 
   Map<String, dynamic> toJson() => {
         'id': id,
@@ -101,10 +108,11 @@ class CartItem extends Equatable {
         'unitTotal': unitTotal.toJson(),
         'lineTotal': lineTotal.toJson(),
         'quantity': quantity,
-        'metadata': metadata,
+        'metadata': jsonEncode(metadata),
         'attributes': attributes.map((x) => x.toJson()).toList(),
         'createdAt': createdAt.toIso8601String(),
         'updatedAt': updatedAt.toIso8601String(),
+        'isSelected': isSelected,
       };
 
   @override
@@ -142,9 +150,10 @@ class CartItem extends Equatable {
     Money? lineTotal,
     int? quantity,
     Map<String, dynamic>? metadata,
-    List<NameValueAttribute>? attributes,
+    List<KeyValueAttribute>? attributes,
     DateTime? createdAt,
     DateTime? updatedAt,
+    bool? isSelected,
   }) {
     return CartItem(
       id: id ?? this.id,
@@ -160,6 +169,7 @@ class CartItem extends Equatable {
       attributes: attributes ?? this.attributes,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
+      isSelected: isSelected ?? this.isSelected,
     );
   }
 }

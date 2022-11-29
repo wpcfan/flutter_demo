@@ -61,7 +61,7 @@ class Category extends Equatable {
       name: "$name",
       image: "$image",
       categories: [
-        ${(categories ?? []).map((e) => e.toCartQL()).join(',')}
+        ${categories != null && categories!.isNotEmpty ? (categories ?? []).map((e) => e.toCartQL()).join(',') : ''}
       ]
     }
   ''';

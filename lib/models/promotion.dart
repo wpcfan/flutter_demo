@@ -25,6 +25,7 @@ abstract class Discount extends Equatable {
   final DiscountType type;
   final String tag;
   final String titleWhenApplied;
+  final bool isApplied;
 
   const Discount({
     required this.id,
@@ -32,10 +33,16 @@ abstract class Discount extends Equatable {
     required this.type,
     required this.tag,
     required this.titleWhenApplied,
+    this.isApplied = false,
   });
 
   factory Discount.fromJson(Map<String, dynamic> json) {
-    final type = DiscountType.values.firstWhere((e) => e.value == json['type']);
+    final index =
+        DiscountType.values.indexWhere((it) => it.value == json['type']);
+    if (index == -1) {
+      throw Exception('Unknown discount type: ${json['type']}');
+    }
+    final type = DiscountType.values[index];
     switch (type) {
       case DiscountType.discount:
         return DiscountPromotion.fromJson(json);
@@ -79,12 +86,14 @@ class DiscountPromotion extends Discount {
     required String tag,
     required String titleWhenApplied,
     this.discount,
+    bool isApplied = false,
   }) : super(
           id: id,
           title: title,
           type: DiscountType.discount,
           tag: tag,
           titleWhenApplied: titleWhenApplied,
+          isApplied: isApplied,
         );
 
   @override
@@ -99,6 +108,7 @@ class DiscountPromotion extends Discount {
         tag: $tag,
         titleWhenApplied: $titleWhenApplied,
         discount: $discount,
+        isApplied: $isApplied,
       }''';
   }
 
@@ -108,6 +118,7 @@ class DiscountPromotion extends Discount {
     String? tag,
     String? titleWhenApplied,
     String? discount,
+    bool? isApplied,
   }) {
     return DiscountPromotion(
       id: id ?? this.id,
@@ -115,6 +126,7 @@ class DiscountPromotion extends Discount {
       tag: tag ?? this.tag,
       titleWhenApplied: titleWhenApplied ?? this.titleWhenApplied,
       discount: discount ?? this.discount,
+      isApplied: isApplied ?? this.isApplied,
     );
   }
 
@@ -125,6 +137,7 @@ class DiscountPromotion extends Discount {
         tag: json["tag"],
         titleWhenApplied: json["titleWhenApplied"],
         discount: json["discount"],
+        isApplied: json["isApplied"] ?? false,
       );
 
   @override
@@ -134,6 +147,7 @@ class DiscountPromotion extends Discount {
         "tag": tag,
         "titleWhenApplied": titleWhenApplied,
         "discount": discount,
+        "isApplied": isApplied,
       };
 
   @override
@@ -141,10 +155,11 @@ class DiscountPromotion extends Discount {
     return '''{
       id: $id,
       title: "$title",
-      type: "$type",
+      type: "${type.value}",
       tag: "$tag",
       titleWhenApplied: "$titleWhenApplied",
       discount: "$discount",
+      isApplied: $isApplied,
     }''';
   }
 }
@@ -165,12 +180,14 @@ class FreeProductPromotion extends Discount {
     required this.productName,
     required this.productImage,
     required this.productPrice,
+    bool isApplied = false,
   }) : super(
           id: id,
           title: title,
           type: DiscountType.freeProduct,
           tag: tag,
           titleWhenApplied: titleWhenApplied,
+          isApplied: isApplied,
         );
 
   @override
@@ -198,6 +215,7 @@ class FreeProductPromotion extends Discount {
         productName: $productName,
         productImage: $productImage,
         productPrice: $productPrice,
+        isApplied: $isApplied,
       }''';
   }
 
@@ -210,6 +228,7 @@ class FreeProductPromotion extends Discount {
     String? productName,
     String? productImage,
     String? productPrice,
+    bool? isApplied,
   }) {
     return FreeProductPromotion(
       id: id ?? this.id,
@@ -220,6 +239,7 @@ class FreeProductPromotion extends Discount {
       productName: productName ?? this.productName,
       productImage: productImage ?? this.productImage,
       productPrice: productPrice ?? this.productPrice,
+      isApplied: isApplied ?? this.isApplied,
     );
   }
 
@@ -233,6 +253,7 @@ class FreeProductPromotion extends Discount {
         productName: json["productName"],
         productImage: json["productImage"],
         productPrice: json["productPrice"],
+        isApplied: json["isApplied"] ?? false,
       );
 
   @override
@@ -245,6 +266,7 @@ class FreeProductPromotion extends Discount {
         "productName": productName,
         "productImage": productImage,
         "productPrice": productPrice,
+        "isApplied": isApplied,
       };
 
   @override
@@ -259,6 +281,7 @@ class FreeProductPromotion extends Discount {
       productName: "$productName",
       productImage: "$productImage",
       productPrice: "$productPrice",
+      isApplied: $isApplied,
     }''';
   }
 }
@@ -284,12 +307,14 @@ class BuyXGetYPromotion extends Discount {
     required this.productPrice,
     required this.buy,
     required this.get,
+    bool isApplied = false,
   }) : super(
           id: id,
           title: title,
           type: DiscountType.buyXGetY,
           tag: tag,
           titleWhenApplied: titleWhenApplied,
+          isApplied: isApplied,
         );
 
   @override
@@ -321,6 +346,7 @@ class BuyXGetYPromotion extends Discount {
         productPrice: $productPrice,
         buy: $buy,
         get: $get,
+        isApplied: $isApplied,
       }''';
   }
 
@@ -335,6 +361,7 @@ class BuyXGetYPromotion extends Discount {
     String? productPrice,
     int? buy,
     int? get,
+    bool? isApplied,
   }) {
     return BuyXGetYPromotion(
       id: id ?? this.id,
@@ -347,6 +374,7 @@ class BuyXGetYPromotion extends Discount {
       productPrice: productPrice ?? this.productPrice,
       buy: buy ?? this.buy,
       get: get ?? this.get,
+      isApplied: isApplied ?? this.isApplied,
     );
   }
 
@@ -362,6 +390,7 @@ class BuyXGetYPromotion extends Discount {
         productPrice: json["productPrice"],
         buy: json["buy"],
         get: json["get"],
+        isApplied: json["isApplied"] ?? false,
       );
 
   @override
@@ -376,6 +405,7 @@ class BuyXGetYPromotion extends Discount {
         "productPrice": productPrice,
         "buy": buy,
         "get": get,
+        "isApplied": isApplied,
       };
 
   @override
@@ -392,6 +422,7 @@ class BuyXGetYPromotion extends Discount {
       productPrice: "$productPrice",
       buy: $buy,
       get: $get,
+      isApplied: $isApplied,
     }''';
   }
 }
@@ -411,12 +442,14 @@ class DiscountOnUnitPromotion extends Discount {
     required String titleWhenApplied,
     required this.discount,
     required this.minQuantity,
+    bool isApplied = false,
   }) : super(
           id: id,
           title: title,
           type: DiscountType.discountOnUnit,
           tag: tag,
           titleWhenApplied: titleWhenApplied,
+          isApplied: isApplied,
         );
 
   @override
@@ -433,6 +466,7 @@ class DiscountOnUnitPromotion extends Discount {
         titleWhenApplied: $titleWhenApplied,
         discount: $discount,
         minQuantity: $minQuantity,
+        isApplied: $isApplied,
       }''';
   }
 
@@ -443,6 +477,7 @@ class DiscountOnUnitPromotion extends Discount {
     String? titleWhenApplied,
     String? discount,
     int? minQuantity,
+    bool? isApplied,
   }) {
     return DiscountOnUnitPromotion(
       id: id ?? this.id,
@@ -451,6 +486,7 @@ class DiscountOnUnitPromotion extends Discount {
       titleWhenApplied: titleWhenApplied ?? this.titleWhenApplied,
       discount: discount ?? this.discount,
       minQuantity: minQuantity ?? this.minQuantity,
+      isApplied: isApplied ?? this.isApplied,
     );
   }
 
@@ -462,6 +498,7 @@ class DiscountOnUnitPromotion extends Discount {
         titleWhenApplied: json["titleWhenApplied"],
         discount: json["discount"],
         minQuantity: json["minQuantity"],
+        isApplied: json["isApplied"] ?? false,
       );
 
   @override
@@ -472,6 +509,7 @@ class DiscountOnUnitPromotion extends Discount {
         "titleWhenApplied": titleWhenApplied,
         "discount": discount,
         "minQuantity": minQuantity,
+        "isApplied": isApplied,
       };
 
   @override
@@ -484,6 +522,7 @@ class DiscountOnUnitPromotion extends Discount {
       titleWhenApplied: "$titleWhenApplied",
       discount: "$discount",
       minQuantity: $minQuantity,
+      isApplied: $isApplied,
     }''';
   }
 }
@@ -503,12 +542,14 @@ class DiscountOnTotalPromotion extends Discount {
     required String titleWhenApplied,
     required this.discount,
     required this.minTotal,
+    bool isApplied = false,
   }) : super(
           id: id,
           title: title,
           type: DiscountType.discountOnTotal,
           tag: tag,
           titleWhenApplied: titleWhenApplied,
+          isApplied: isApplied,
         );
 
   @override
@@ -524,6 +565,7 @@ class DiscountOnTotalPromotion extends Discount {
         titleWhenApplied: $titleWhenApplied,
         discount: $discount,
         minTotal: $minTotal,
+        isApplied: $isApplied,
       }''';
   }
 
@@ -534,6 +576,7 @@ class DiscountOnTotalPromotion extends Discount {
     String? titleWhenApplied,
     String? discount,
     int? minTotal,
+    bool? isApplied,
   }) {
     return DiscountOnTotalPromotion(
       id: id ?? this.id,
@@ -542,6 +585,7 @@ class DiscountOnTotalPromotion extends Discount {
       titleWhenApplied: titleWhenApplied ?? this.titleWhenApplied,
       discount: discount ?? this.discount,
       minTotal: minTotal ?? this.minTotal,
+      isApplied: isApplied ?? this.isApplied,
     );
   }
 
@@ -553,6 +597,7 @@ class DiscountOnTotalPromotion extends Discount {
         titleWhenApplied: json["titleWhenApplied"],
         discount: json["discount"],
         minTotal: json["minTotal"],
+        isApplied: json["isApplied"] ?? false,
       );
 
   @override
@@ -563,6 +608,7 @@ class DiscountOnTotalPromotion extends Discount {
         "titleWhenApplied": titleWhenApplied,
         "discount": discount,
         "minTotal": minTotal,
+        "isApplied": isApplied,
       };
 
   @override
@@ -575,6 +621,7 @@ class DiscountOnTotalPromotion extends Discount {
       titleWhenApplied: "$titleWhenApplied",
       discount: "$discount",
       minTotal: $minTotal,
+      isApplied: $isApplied,
     }''';
   }
 }
@@ -594,12 +641,14 @@ class DiscountEveryXUnitPromotion extends Discount {
     required String titleWhenApplied,
     required this.discount,
     required this.everyXUnit,
+    bool isApplied = false,
   }) : super(
           id: id,
           title: title,
           type: DiscountType.discountEveryXUnit,
           tag: tag,
           titleWhenApplied: titleWhenApplied,
+          isApplied: isApplied,
         );
 
   @override
@@ -616,6 +665,7 @@ class DiscountEveryXUnitPromotion extends Discount {
         titleWhenApplied: $titleWhenApplied,
         discount: $discount,
         everyXUnit: $everyXUnit,
+        isApplied: $isApplied,
       }''';
   }
 
@@ -626,6 +676,7 @@ class DiscountEveryXUnitPromotion extends Discount {
     String? titleWhenApplied,
     String? discount,
     int? everyXUnit,
+    bool? isApplied,
   }) {
     return DiscountEveryXUnitPromotion(
       id: id ?? this.id,
@@ -634,6 +685,7 @@ class DiscountEveryXUnitPromotion extends Discount {
       titleWhenApplied: titleWhenApplied ?? this.titleWhenApplied,
       discount: discount ?? this.discount,
       everyXUnit: everyXUnit ?? this.everyXUnit,
+      isApplied: isApplied ?? this.isApplied,
     );
   }
 
@@ -645,6 +697,7 @@ class DiscountEveryXUnitPromotion extends Discount {
         titleWhenApplied: json["titleWhenApplied"],
         discount: json["discount"],
         everyXUnit: json["everyXUnit"],
+        isApplied: json["isApplied"] ?? false,
       );
 
   @override
@@ -655,6 +708,7 @@ class DiscountEveryXUnitPromotion extends Discount {
         "titleWhenApplied": titleWhenApplied,
         "discount": discount,
         "everyXUnit": everyXUnit,
+        "isApplied": isApplied,
       };
 
   @override
@@ -667,6 +721,7 @@ class DiscountEveryXUnitPromotion extends Discount {
       titleWhenApplied: "$titleWhenApplied",
       discount: "$discount",
       everyXUnit: $everyXUnit,
+      isApplied: $isApplied,
     }''';
   }
 }
@@ -686,12 +741,14 @@ class DiscountEveryXTotalPromotion extends Discount {
     required String titleWhenApplied,
     required this.discount,
     required this.everyXTotal,
+    bool isApplied = false,
   }) : super(
           id: id,
           title: title,
           type: DiscountType.discountEveryXTotal,
           tag: tag,
           titleWhenApplied: titleWhenApplied,
+          isApplied: isApplied,
         );
 
   @override
@@ -708,6 +765,7 @@ class DiscountEveryXTotalPromotion extends Discount {
         titleWhenApplied: $titleWhenApplied,
         discount: $discount,
         everyXTotal: $everyXTotal,
+        isApplied: $isApplied,
       }''';
   }
 
@@ -718,6 +776,7 @@ class DiscountEveryXTotalPromotion extends Discount {
     String? titleWhenApplied,
     String? discount,
     int? everyXTotal,
+    bool? isApplied,
   }) {
     return DiscountEveryXTotalPromotion(
       id: id ?? this.id,
@@ -726,6 +785,7 @@ class DiscountEveryXTotalPromotion extends Discount {
       titleWhenApplied: titleWhenApplied ?? this.titleWhenApplied,
       discount: discount ?? this.discount,
       everyXTotal: everyXTotal ?? this.everyXTotal,
+      isApplied: isApplied ?? this.isApplied,
     );
   }
 
@@ -737,6 +797,7 @@ class DiscountEveryXTotalPromotion extends Discount {
         titleWhenApplied: json["titleWhenApplied"],
         discount: json["discount"],
         everyXTotal: json["everyXTotal"],
+        isApplied: json["isApplied"] ?? false,
       );
 
   @override
@@ -747,6 +808,7 @@ class DiscountEveryXTotalPromotion extends Discount {
         "titleWhenApplied": titleWhenApplied,
         "discount": discount,
         "everyXTotal": everyXTotal,
+        "isApplied": isApplied,
       };
 
   @override
@@ -759,6 +821,7 @@ class DiscountEveryXTotalPromotion extends Discount {
       titleWhenApplied: "$titleWhenApplied",
       discount: "$discount",
       everyXTotal: $everyXTotal,
+      isApplied: $isApplied,
     }''';
   }
 }
@@ -780,12 +843,14 @@ class FreeProductOnUnitPromotion extends Discount {
     required this.freeProductImage,
     required this.freeProductPrice,
     required this.minQuantity,
+    bool isApplied = false,
   }) : super(
           id: id,
           title: title,
           type: DiscountType.freeProductOnUnit,
           tag: tag,
           titleWhenApplied: titleWhenApplied,
+          isApplied: isApplied,
         );
 
   @override
@@ -815,6 +880,7 @@ class FreeProductOnUnitPromotion extends Discount {
         freeProductImage: $freeProductImage,
         freeProductPrice: $freeProductPrice,
         minQuantity: $minQuantity,
+        isApplied: $isApplied,
       }''';
   }
 
@@ -828,6 +894,7 @@ class FreeProductOnUnitPromotion extends Discount {
     String? freeProductImage,
     String? freeProductPrice,
     int? minQuantity,
+    bool? isApplied,
   }) {
     return FreeProductOnUnitPromotion(
       id: id ?? this.id,
@@ -839,6 +906,7 @@ class FreeProductOnUnitPromotion extends Discount {
       freeProductImage: freeProductImage ?? this.freeProductImage,
       freeProductPrice: freeProductPrice ?? this.freeProductPrice,
       minQuantity: minQuantity ?? this.minQuantity,
+      isApplied: isApplied ?? this.isApplied,
     );
   }
 
@@ -853,6 +921,7 @@ class FreeProductOnUnitPromotion extends Discount {
         freeProductImage: json["freeProductImage"],
         freeProductPrice: json["freeProductPrice"],
         minQuantity: json["minQuantity"],
+        isApplied: json["isApplied"] ?? false,
       );
 
   @override
@@ -866,6 +935,7 @@ class FreeProductOnUnitPromotion extends Discount {
         "freeProductImage": freeProductImage,
         "freeProductPrice": freeProductPrice,
         "minQuantity": minQuantity,
+        "isApplied": isApplied,
       };
 
   @override
@@ -881,6 +951,7 @@ class FreeProductOnUnitPromotion extends Discount {
       freeProductImage: "$freeProductImage",
       freeProductPrice: "$freeProductPrice",
       minQuantity: $minQuantity,
+      isApplied: $isApplied,
     }''';
   }
 }
@@ -902,12 +973,14 @@ class FreeProductOnTotalPromotion extends Discount {
     required this.freeProductImage,
     required this.freeProductPrice,
     required this.minTotal,
+    bool isApplied = false,
   }) : super(
           id: id,
           title: title,
           type: DiscountType.freeProductOnTotal,
           tag: tag,
           titleWhenApplied: titleWhenApplied,
+          isApplied: isApplied,
         );
 
   @override
@@ -937,6 +1010,7 @@ class FreeProductOnTotalPromotion extends Discount {
         freeProductImage: $freeProductImage,
         freeProductPrice: $freeProductPrice,
         minTotal: $minTotal,
+        isApplied: $isApplied,
       }''';
   }
 
@@ -950,6 +1024,7 @@ class FreeProductOnTotalPromotion extends Discount {
     String? freeProductImage,
     String? freeProductPrice,
     int? minTotal,
+    bool? isApplied,
   }) {
     return FreeProductOnTotalPromotion(
       id: id ?? this.id,
@@ -961,6 +1036,7 @@ class FreeProductOnTotalPromotion extends Discount {
       freeProductImage: freeProductImage ?? this.freeProductImage,
       freeProductPrice: freeProductPrice ?? this.freeProductPrice,
       minTotal: minTotal ?? this.minTotal,
+      isApplied: isApplied ?? this.isApplied,
     );
   }
 
@@ -975,6 +1051,7 @@ class FreeProductOnTotalPromotion extends Discount {
         freeProductImage: json["freeProductImage"],
         freeProductPrice: json["freeProductPrice"],
         minTotal: json["minTotal"],
+        isApplied: json["isApplied"] ?? false,
       );
 
   @override
@@ -988,6 +1065,7 @@ class FreeProductOnTotalPromotion extends Discount {
         "freeProductImage": freeProductImage,
         "freeProductPrice": freeProductPrice,
         "minTotal": minTotal,
+        "isApplied": isApplied,
       };
 
   @override
@@ -1003,6 +1081,7 @@ class FreeProductOnTotalPromotion extends Discount {
       freeProductImage: "$freeProductImage",
       freeProductPrice: "$freeProductPrice",
       minTotal: $minTotal,
+      isApplied: $isApplied,
     }''';
   }
 }
@@ -1024,12 +1103,14 @@ class FreeProductEveryXUnitPromotion extends Discount {
     required this.freeProductImage,
     required this.freeProductPrice,
     required this.everyXUnit,
+    bool isApplied = false,
   }) : super(
           id: id,
           title: title,
           type: DiscountType.freeProductEveryXUnit,
           tag: tag,
           titleWhenApplied: titleWhenApplied,
+          isApplied: isApplied,
         );
 
   @override
@@ -1059,6 +1140,7 @@ class FreeProductEveryXUnitPromotion extends Discount {
         freeProductImage: $freeProductImage,
         freeProductPrice: $freeProductPrice,
         everyXUnit: $everyXUnit,
+        isApplied: $isApplied,
       }''';
   }
 
@@ -1072,6 +1154,7 @@ class FreeProductEveryXUnitPromotion extends Discount {
     String? freeProductImage,
     String? freeProductPrice,
     int? everyXUnit,
+    bool? isApplied,
   }) {
     return FreeProductEveryXUnitPromotion(
       id: id ?? this.id,
@@ -1083,6 +1166,7 @@ class FreeProductEveryXUnitPromotion extends Discount {
       freeProductImage: freeProductImage ?? this.freeProductImage,
       freeProductPrice: freeProductPrice ?? this.freeProductPrice,
       everyXUnit: everyXUnit ?? this.everyXUnit,
+      isApplied: isApplied ?? this.isApplied,
     );
   }
 
@@ -1097,6 +1181,7 @@ class FreeProductEveryXUnitPromotion extends Discount {
         freeProductImage: json["freeProductImage"],
         freeProductPrice: json["freeProductPrice"],
         everyXUnit: json["everyXUnit"],
+        isApplied: json["isApplied"] ?? false,
       );
 
   @override
@@ -1110,6 +1195,7 @@ class FreeProductEveryXUnitPromotion extends Discount {
         "freeProductImage": freeProductImage,
         "freeProductPrice": freeProductPrice,
         "everyXUnit": everyXUnit,
+        "isApplied": isApplied,
       };
 
   @override
@@ -1125,6 +1211,7 @@ class FreeProductEveryXUnitPromotion extends Discount {
       freeProductImage: "$freeProductImage",
       freeProductPrice: "$freeProductPrice",
       everyXUnit: $everyXUnit,
+      isApplied: $isApplied,
     }''';
   }
 }
@@ -1146,12 +1233,14 @@ class FreeProductEveryXTotalPromotion extends Discount {
     required this.freeProductImage,
     required this.freeProductPrice,
     required this.everyXTotal,
+    bool isApplied = false,
   }) : super(
           id: id,
           title: title,
           type: DiscountType.freeProductEveryXTotal,
           tag: tag,
           titleWhenApplied: titleWhenApplied,
+          isApplied: isApplied,
         );
 
   @override
@@ -1181,6 +1270,7 @@ class FreeProductEveryXTotalPromotion extends Discount {
         freeProductImage: $freeProductImage,
         freeProductPrice: $freeProductPrice,
         everyXTotal: $everyXTotal,
+        isApplied: $isApplied,
       }''';
   }
 
@@ -1194,6 +1284,7 @@ class FreeProductEveryXTotalPromotion extends Discount {
     String? freeProductImage,
     String? freeProductPrice,
     int? everyXTotal,
+    bool? isApplied,
   }) {
     return FreeProductEveryXTotalPromotion(
       id: id ?? this.id,
@@ -1205,6 +1296,7 @@ class FreeProductEveryXTotalPromotion extends Discount {
       freeProductImage: freeProductImage ?? this.freeProductImage,
       freeProductPrice: freeProductPrice ?? this.freeProductPrice,
       everyXTotal: everyXTotal ?? this.everyXTotal,
+      isApplied: isApplied ?? this.isApplied,
     );
   }
 
@@ -1219,6 +1311,7 @@ class FreeProductEveryXTotalPromotion extends Discount {
         freeProductImage: json["freeProductImage"],
         freeProductPrice: json["freeProductPrice"],
         everyXTotal: json["everyXTotal"],
+        isApplied: json["isApplied"] ?? false,
       );
 
   @override
@@ -1232,6 +1325,7 @@ class FreeProductEveryXTotalPromotion extends Discount {
         "freeProductImage": freeProductImage,
         "freeProductPrice": freeProductPrice,
         "everyXTotal": everyXTotal,
+        "isApplied": isApplied,
       };
 
   @override
@@ -1247,6 +1341,7 @@ class FreeProductEveryXTotalPromotion extends Discount {
       freeProductImage: "$freeProductImage",
       freeProductPrice: "$freeProductPrice",
       everyXTotal: $everyXTotal,
+      isApplied: $isApplied,
     }''';
   }
 }
@@ -1262,12 +1357,14 @@ class FlashSalePromotion extends Discount {
     required String titleWhenApplied,
     required this.salePrice,
     required this.endTime,
+    bool isApplied = false,
   }) : super(
           id: id,
           title: title,
           type: DiscountType.flashSale,
           tag: tag,
           titleWhenApplied: titleWhenApplied,
+          isApplied: isApplied,
         );
 
   @override
@@ -1291,6 +1388,7 @@ class FlashSalePromotion extends Discount {
         titleWhenApplied: $titleWhenApplied,
         salePrice: $salePrice,
         endTime: $endTime,
+        isApplied: $isApplied,
       }''';
   }
 
@@ -1301,6 +1399,7 @@ class FlashSalePromotion extends Discount {
     String? titleWhenApplied,
     String? salePrice,
     DateTime? endTime,
+    bool? isApplied,
   }) {
     return FlashSalePromotion(
       id: id ?? this.id,
@@ -1309,6 +1408,7 @@ class FlashSalePromotion extends Discount {
       titleWhenApplied: titleWhenApplied ?? this.titleWhenApplied,
       salePrice: salePrice ?? this.salePrice,
       endTime: endTime ?? this.endTime,
+      isApplied: isApplied ?? this.isApplied,
     );
   }
 
@@ -1320,6 +1420,7 @@ class FlashSalePromotion extends Discount {
         titleWhenApplied: json["titleWhenApplied"],
         salePrice: json["salePrice"],
         endTime: DateTime.parse(json["endTime"]),
+        isApplied: json["isApplied"] ?? false,
       );
 
   @override
@@ -1330,6 +1431,7 @@ class FlashSalePromotion extends Discount {
         "titleWhenApplied": titleWhenApplied,
         "salePrice": salePrice,
         "endTime": endTime.toIso8601String(),
+        "isApplied": isApplied,
       };
 
   @override
@@ -1342,6 +1444,7 @@ class FlashSalePromotion extends Discount {
       titleWhenApplied: "$titleWhenApplied",
       salePrice: "$salePrice",
       endTime: "$endTime",
+      isApplied: $isApplied,
     }''';
   }
 }

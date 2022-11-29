@@ -1,88 +1,113 @@
 part of 'cart_page.dart';
 
 class CartItemCard extends StatelessWidget {
-  const CartItemCard({super.key});
+  const CartItemCard({super.key, required this.cartItem});
+  final CartItem cartItem;
 
   @override
   Widget build(BuildContext context) {
-    const discountRow = CartDiscountRow(
-      discount: DiscountPromotion(
-          id: 1,
-          title: '买就减30',
-          tag: '直减',
-          titleWhenApplied: '已减30',
-          discount: '30'),
-    );
+    final discounts = ((cartItem.metadata?['discounts'] ?? []) as List<dynamic>)
+        .map((it) => Discount.fromJson(it as Map<String, dynamic>))
+        .toList();
+    final discount = discounts.isNotEmpty
+        ? discounts.firstWhere(
+            (el) => el.isApplied,
+            orElse: () => discounts.first,
+          )
+        : null;
+    final discountRow =
+        discount != null ? CartDiscountRow(discount: discount) : null;
 
-    final image = Image.network(
-      'https://picsum.photos/200/200',
-      width: 100,
-      height: 100,
-      fit: BoxFit.cover,
-      errorBuilder: (context, error, stackTrace) {
-        debugPrint('error: $error');
-        return Image.asset('images/100x100.png');
-      },
-    ).padding(vertical: 8, right: 12);
+    final image = cartItem.images.isNotEmpty
+        ? Image.network(
+            cartItem.images.first,
+            width: 100,
+            height: 100,
+            fit: BoxFit.cover,
+            errorBuilder: (context, error, stackTrace) {
+              debugPrint('error: $error');
+              return Image.asset('images/100x100.png');
+            },
+          ).padding(vertical: 8, right: 12)
+        : null;
 
-    final productTitle = const Text(
-      'Item 3',
-      style: TextStyle(fontSize: 14, color: Colors.black87),
+    final productTitle = Text(
+      cartItem.name,
+      style: const TextStyle(fontSize: 14, color: Colors.black87),
       overflow: TextOverflow.ellipsis,
       maxLines: 2,
     ).padding(bottom: 8);
 
-    final productDesc = const Text(
-      'Item 4',
-      style: TextStyle(fontSize: 10, color: Colors.grey),
-      overflow: TextOverflow.ellipsis,
-      maxLines: 1,
-    )
-        .padding(horizontal: 8, vertical: 4)
-        .backgroundColor(Colors.grey[200]!)
-        .padding(bottom: 8);
+    final attributes = cartItem.attributes
+        .map((it) => Text(
+              '${it.key}: ${it.value}',
+              style: const TextStyle(fontSize: 12, color: Colors.black54),
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
+            )
+                .padding(horizontal: 4, vertical: 2)
+                .backgroundColor(Colors.grey[200]!)
+                .decorated(
+                    borderRadius: BorderRadius.circular(4),
+                    border: Border.all(color: Colors.grey[300]!, width: 1)))
+        .toList()
+        .toRow(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center);
 
-    const tagRow = CartTagRow(
-      tags: [
-        ProductTag(
-          title: 'Tag 1',
-        ),
-        ProductTag(
-          title: 'Tag 2',
-        ),
-        ProductTag(
-          title: 'Tag 3',
-        ),
-        ProductTag(
-          title: 'Tag 4',
-        ),
-      ],
-    );
-    final endTime = DateTime.now().add(const Duration(days: 1));
-    final flashSaleCountDwon = [
-      FlashSaleCountDown(
-        endTime: endTime,
-        gridentStartColor: Colors.red[100],
-        gridentEndColor: Colors.white,
-        prefix: AppLocalizations.of(context)!.flash_prefix,
-      ).expanded()
-    ].toRow(mainAxisSize: MainAxisSize.max).padding(top: 8);
-    const productPrice = Text(
-      'Item 9',
-      style: TextStyle(
+    final productDesc = cartItem.attributes.isNotEmpty
+        ? attributes
+        : Text(
+            cartItem.description,
+            style: const TextStyle(fontSize: 10, color: Colors.grey),
+            overflow: TextOverflow.ellipsis,
+            maxLines: 1,
+          )
+            .padding(horizontal: 8, vertical: 4)
+            .backgroundColor(Colors.grey[200]!)
+            .padding(bottom: 8);
+
+    final tags = ((cartItem.metadata?['tags'] ?? []) as List<dynamic>)
+        .map((it) => ProductTag.fromJson(it as Map<String, dynamic>))
+        .toList();
+    final tagRow = tags.isNotEmpty ? CartTagRow(tags: tags) : null;
+
+    final flashSaleIndex =
+        discounts.indexWhere((el) => el.type == DiscountType.flashSale);
+    final flashSaleCountDwon = flashSaleIndex >= 0
+        ? [
+            FlashSaleCountDown(
+              endTime:
+                  (discounts[flashSaleIndex] as FlashSalePromotion).endTime,
+              gridentStartColor: Colors.red[100],
+              gridentEndColor: Colors.white,
+              prefix: AppLocalizations.of(context)!.flash_prefix,
+            ).expanded()
+          ].toRow(mainAxisSize: MainAxisSize.max).padding(top: 8)
+        : null;
+
+    final productPrice = Text(
+      cartItem.unitTotal.formatted ?? '',
+      style: const TextStyle(
           fontSize: 14, color: Colors.red, fontWeight: FontWeight.bold),
     );
 
-    const discountPrice = Text(
-      'Item 10',
-      style: TextStyle(
-          fontSize: 14, color: Colors.red, fontWeight: FontWeight.bold),
-    );
+    final flashSalePrice = flashSaleIndex >= 0
+        ? Text(
+            (discount as FlashSalePromotion).salePrice,
+            style: const TextStyle(
+                fontSize: 14, color: Colors.red, fontWeight: FontWeight.bold),
+          )
+        : null;
 
     final priceCol = [
       productPrice,
-      discountPrice,
-    ].toColumn(crossAxisAlignment: CrossAxisAlignment.start);
+      flashSalePrice,
+    ]
+        .whereType<Widget>()
+        .toList()
+        .toColumn(crossAxisAlignment: CrossAxisAlignment.start);
 
     final stepperKey = GlobalKey<QuantityStepperState>();
     final stepper = QuantityStepper(
@@ -96,6 +121,8 @@ class CartItemCard extends StatelessWidget {
       priceCol,
       stepper,
     ]
+        .whereType<Widget>()
+        .toList()
         .toRow(
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -103,32 +130,63 @@ class CartItemCard extends StatelessWidget {
         )
         .padding(top: 12, bottom: 8);
 
-    final rightCol = [
+    final rowAbovePrice = [
       productTitle,
       productDesc,
       tagRow,
       flashSaleCountDwon,
-      priceRow,
-    ]
-        .toColumn(
+    ].whereType<Widget>().toList().toColumn(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
+        );
+
+    final rightCol = [rowAbovePrice, priceRow]
+        .whereType<Widget>()
+        .toList()
+        .toColumn(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
         )
         .expanded();
 
-    final secondRow = [
-      image,
-      rightCol,
-    ].toRow(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.max);
+    // 要撑起来，需要使用 IntrinsicHeight 包裹，里面的内容同时包裹 expanded
+    final secondRow = IntrinsicHeight(
+      child: [
+        image,
+        rightCol,
+      ].whereType<Widget>().toList().toRow(),
+    );
 
-    return [
+    final right = [
       discountRow,
       secondRow,
-    ].toColumn(
-        mainAxisSize: MainAxisSize.min,
+    ].whereType<Widget>().toList().toColumn(
+        mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.stretch);
+        crossAxisAlignment: CrossAxisAlignment.start);
+
+    final selectedIcon = Icon(
+      cartItem.isSelected ? Icons.check_circle_rounded : Icons.circle_outlined,
+      color: cartItem.isSelected ? Colors.red : Colors.grey,
+    ).padding(right: 8);
+
+    final control = [selectedIcon, right.expanded()]
+        .whereType<Widget>()
+        .toList()
+        .toRow(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+        )
+        .padding(horizontal: 16, vertical: 8)
+        .backgroundColor(Colors.white)
+        .decorated(
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(color: Colors.grey[300]!, width: 1),
+        )
+        .padding(bottom: 8);
+
+    return control;
   }
 }
