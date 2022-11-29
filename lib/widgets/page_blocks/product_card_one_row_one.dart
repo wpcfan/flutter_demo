@@ -93,16 +93,11 @@ class ProductCardOneRowOneWidget extends StatelessWidget {
         .padding(right: screenHorizontalPadding)
         .expanded();
     // 商品图片
-    final productImage = Image.network(
-      data.product.images.first,
-      fit: BoxFit.cover,
-      errorBuilder: (context, error, stackTrace) {
-        debugPrint('error: $error');
-        return Image.asset('images/100x100.png');
-      },
-    )
-        .constrained(height: imageHeight, width: imageHeight)
-        .padding(right: listHorizontalPadding);
+    final productImage = ImageWidget(
+      image: data.product.images.first,
+      width: imageHeight,
+      height: imageHeight,
+    ).padding(right: listHorizontalPadding);
     // 商品图片和右边的名称和描述和价格形成一行
     return [productImage, right]
         .toRow(

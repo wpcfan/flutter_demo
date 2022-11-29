@@ -64,20 +64,13 @@ class ProductCardOneRowTwoWidget extends StatelessWidget {
         .rounded(size: buttonSize, color: Colors.red)
         .gestures(onTap: addToCart);
     // 商品图片
-    final productImage = Image.network(
-      data.product.images.first,
-      fit: BoxFit.fill,
-      errorBuilder: (context, error, stackTrace) {
-        debugPrint('error: $error');
-        return Image.asset('images/100x100.png');
-      },
-    )
-        .padding(
-          bottom: spaceVertical,
-        )
-        .constrained(
-            height: width - listVerticalPadding * 2,
-            width: width - listHorizontalPadding * 2);
+    final productImage = ImageWidget(
+      image: data.product.images.first,
+      width: width - listHorizontalPadding * 2,
+      height: width - listVerticalPadding * 2,
+    ).padding(
+      bottom: spaceVertical,
+    );
     // 商品图片、名称和描述形成一列
     final imageNameAndDesc = <Widget>[
       productImage,

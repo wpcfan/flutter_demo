@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:styled_widget/styled_widget.dart';
 
-class QuantityStepper extends StatefulWidget {
+class QuantityStepper extends StatelessWidget {
   const QuantityStepper({
     super.key,
     this.minusIcon = Icons.remove,
@@ -24,6 +24,7 @@ class QuantityStepper extends StatefulWidget {
     this.onChanged,
     this.textFieldWidth = 32,
     this.maxLength = 3,
+    required this.value,
   });
   final IconData minusIcon;
   final IconData plusIcon;
@@ -41,129 +42,80 @@ class QuantityStepper extends StatefulWidget {
   final int minValue;
   final int maxValue;
   final int step;
-  final void Function(int, bool)? onChanged;
+  final void Function(String?)? onChanged;
   final double textFieldWidth;
   final int maxLength;
-
-  @override
-  State<QuantityStepper> createState() => QuantityStepperState();
-}
-
-class QuantityStepperState extends State<QuantityStepper> {
-  int _quantity = 1;
-  final _controller = TextEditingController();
-
-  @override
-  void initState() {
-    _quantity = widget.minValue;
-    _controller.text = _quantity.toString();
-    super.initState();
-  }
+  final int value;
 
   @override
   Widget build(BuildContext context) {
     final minus = IconButton(
-      onPressed: _quantity > widget.minValue
-          ? () => setState(() {
-                _quantity -= widget.step;
-                _controller.text = _quantity.toString();
-                widget.onChanged?.call(_quantity, _quantity >= widget.minValue);
-              })
+      onPressed: value > minValue
+          ? () => onChanged?.call((value - step).toString())
           : null,
       icon: Icon(
-        widget.minusIcon,
+        minusIcon,
       ),
-      iconSize: widget.iconSize,
-      color: widget.iconColor,
-      disabledColor: widget.iconDisabledColor,
-      padding: EdgeInsets.all(widget.iconPadding),
+      iconSize: iconSize,
+      color: iconColor,
+      disabledColor: iconDisabledColor,
+      padding: EdgeInsets.all(iconPadding),
     )
         .decorated(
-          color: widget.iconBackgroundColor,
-          borderRadius: BorderRadius.circular(widget.iconBorderRadius),
+          color: iconBackgroundColor,
+          borderRadius: BorderRadius.circular(iconBorderRadius),
           border: Border.all(
-            color: widget.iconBorderColor,
-            width: widget.iconBorderWidth,
+            color: iconBorderColor,
+            width: iconBorderWidth,
           ),
         )
         .constrained(
-            width: widget.iconSize +
-                widget.iconPadding * 2 +
-                widget.iconBorderWidth * 2,
-            height: widget.iconSize +
-                widget.iconPadding * 2 +
-                widget.iconBorderWidth * 2);
+            width: iconSize + iconPadding * 2 + iconBorderWidth * 2,
+            height: iconSize + iconPadding * 2 + iconBorderWidth * 2);
 
     final textField = TextFormField(
-      controller: _controller,
+      initialValue: value.toString(),
       textAlign: TextAlign.center,
       keyboardType: TextInputType.number,
       inputFormatters: [
-        LengthLimitingTextInputFormatter(widget.maxLength),
+        LengthLimitingTextInputFormatter(maxLength),
         FilteringTextInputFormatter.digitsOnly
       ],
-      style: TextStyle(fontSize: widget.textFontSize, color: Colors.black),
+      style: TextStyle(fontSize: textFontSize, color: Colors.black),
       decoration: InputDecoration(
           isDense: true,
-          contentPadding: EdgeInsets.all(widget.textPadding),
+          contentPadding: EdgeInsets.all(textPadding),
           border: InputBorder.none,
           errorStyle: const TextStyle(
             height: 0,
             color: Colors.transparent,
           )),
       onChanged: (value) {
-        if (value.isNotEmpty) {
-          final quantity = int.parse(value);
-          if (quantity == _quantity) return;
-          if (quantity >= widget.minValue && quantity <= widget.maxValue) {
-            setState(() {
-              _quantity = quantity;
-              _controller.text = _quantity.toString();
-            });
-
-            widget.onChanged?.call(quantity, true);
-          } else {
-            widget.onChanged?.call(quantity, false);
-          }
-        } else {
-          setState(() {
-            _quantity = widget.minValue;
-            _controller.text = _quantity.toString();
-            widget.onChanged?.call(_quantity, _quantity >= widget.minValue);
-          });
-        }
+        onChanged?.call(value);
       },
-    ).constrained(width: widget.textFieldWidth);
+    ).constrained(width: textFieldWidth);
 
     final plus = IconButton(
-      onPressed: _quantity < widget.maxValue
-          ? () => setState(() {
-                _quantity += widget.step;
-                _controller.text = _quantity.toString();
-                widget.onChanged?.call(_quantity, _quantity <= widget.maxValue);
-              })
+      onPressed: value < maxValue
+          ? () => onChanged?.call((value + step).toString())
           : null,
-      icon: Icon(widget.plusIcon),
-      iconSize: widget.iconSize,
-      color: widget.iconColor,
-      disabledColor: widget.iconDisabledColor,
-      padding: EdgeInsets.all(widget.iconPadding),
+      icon: Icon(plusIcon),
+      iconSize: iconSize,
+      color: iconColor,
+      disabledColor: iconDisabledColor,
+      padding: EdgeInsets.all(iconPadding),
     )
         .decorated(
-          color: widget.iconBackgroundColor,
-          borderRadius: BorderRadius.circular(widget.iconBorderRadius),
+          color: iconBackgroundColor,
+          borderRadius: BorderRadius.circular(iconBorderRadius),
           border: Border.all(
-            color: widget.iconBorderColor,
-            width: widget.iconBorderWidth,
+            color: iconBorderColor,
+            width: iconBorderWidth,
           ),
         )
         .constrained(
-            width: widget.iconSize +
-                widget.iconPadding * 2 +
-                widget.iconBorderWidth * 2,
-            height: widget.iconSize +
-                widget.iconPadding * 2 +
-                widget.iconBorderWidth * 2);
+            width: iconSize + iconPadding * 2 + iconBorderWidth * 2,
+            height: iconSize + iconPadding * 2 + iconBorderWidth * 2);
 
     final stepper = [
       minus,

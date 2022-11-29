@@ -31,6 +31,7 @@ class CartItemCard extends StatelessWidget {
     this.descriptionBackgroundColor = Colors.black12,
     this.onToggleSelection,
     this.imageBorderRadius = 8.0,
+    this.onQuantityChanged,
   });
   final CartItem cartItem;
   final double horizontalSpacing;
@@ -60,6 +61,7 @@ class CartItemCard extends StatelessWidget {
   final Color descriptionBackgroundColor;
   final VoidCallback? onToggleSelection;
   final double imageBorderRadius;
+  final void Function(String?)? onQuantityChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -154,12 +156,9 @@ class CartItemCard extends StatelessWidget {
         .toList()
         .toColumn(crossAxisAlignment: CrossAxisAlignment.start);
 
-    final stepperKey = GlobalKey<QuantityStepperState>();
     final stepper = QuantityStepper(
-      key: stepperKey,
-      onChanged: (quantity, isValid) {
-        debugPrint('quantity: $quantity, isValid: $isValid');
-      },
+      value: cartItem.quantity,
+      onChanged: onQuantityChanged,
     );
 
     final priceRow = [

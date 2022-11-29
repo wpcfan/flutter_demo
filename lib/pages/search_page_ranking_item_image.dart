@@ -4,22 +4,18 @@ class RankItemWithImage extends StatelessWidget {
   const RankItemWithImage({
     super.key,
     required this.item,
+    this.width = 100,
+    this.height = 100,
     this.onTap,
   });
   final RankingData item;
+  final double width;
+  final double height;
   final void Function(Link)? onTap;
 
   @override
   Widget build(BuildContext context) {
-    final image = Image.network(
-      item.image,
-      width: 100,
-      height: 100,
-      errorBuilder: (context, error, stackTrace) {
-        debugPrint('error: $error');
-        return Image.asset('images/100x100.png');
-      },
-    );
+    final image = ImageWidget(image: item.image, width: width, height: height);
     final badge = BadgeWidget(title: item.sort.toString());
 
     final imageWithBadge = [
