@@ -1,8 +1,65 @@
 part of 'cart_page.dart';
 
 class CartItemCard extends StatelessWidget {
-  const CartItemCard({super.key, required this.cartItem});
+  const CartItemCard({
+    super.key,
+    required this.cartItem,
+    this.horizontalSpacing = 8.0,
+    this.verticalSpacing = 8.0,
+    this.horizontalPadding = 12.0,
+    this.verticalPadding = 8.0,
+    this.borderRadius = 8.0,
+    this.borderColor = Colors.grey,
+    this.borderWidth = 1.0,
+    this.imageSize = 100.0,
+    this.maxTitleLines = 2,
+    this.titleFontSize = 14.0,
+    this.titleFontColor = Colors.black87,
+    this.priceFontSize = 14.0,
+    this.priceFontColor = Colors.red,
+    this.priceFontWeight = FontWeight.bold,
+    this.flashSaleFontSize = 12.0,
+    this.flashSaleFontWeight = FontWeight.bold,
+    this.flashSaleFontColor = Colors.red,
+    this.checkedIcon = Icons.check_circle_rounded,
+    this.uncheckedIcon = Icons.circle_outlined,
+    this.checkedIconColor = Colors.red,
+    this.uncheckedIconColor = Colors.grey,
+    this.backgroundColor = Colors.white,
+    this.descriptionFontSize = 10.0,
+    this.descriptionFontColor = Colors.black54,
+    this.descriptionBackgroundColor = Colors.black12,
+    this.onToggleSelection,
+    this.imageBorderRadius = 8.0,
+  });
   final CartItem cartItem;
+  final double horizontalSpacing;
+  final double verticalSpacing;
+  final double horizontalPadding;
+  final double verticalPadding;
+  final double borderRadius;
+  final Color borderColor;
+  final double borderWidth;
+  final double imageSize;
+  final int maxTitleLines;
+  final double titleFontSize;
+  final Color titleFontColor;
+  final double priceFontSize;
+  final Color priceFontColor;
+  final FontWeight priceFontWeight;
+  final double flashSaleFontSize;
+  final Color flashSaleFontColor;
+  final FontWeight flashSaleFontWeight;
+  final IconData checkedIcon;
+  final IconData uncheckedIcon;
+  final Color checkedIconColor;
+  final Color uncheckedIconColor;
+  final Color backgroundColor;
+  final double descriptionFontSize;
+  final Color descriptionFontColor;
+  final Color descriptionBackgroundColor;
+  final VoidCallback? onToggleSelection;
+  final double imageBorderRadius;
 
   @override
   Widget build(BuildContext context) {
@@ -19,54 +76,34 @@ class CartItemCard extends StatelessWidget {
         discount != null ? CartDiscountRow(discount: discount) : null;
 
     final image = cartItem.images.isNotEmpty
-        ? Image.network(
-            cartItem.images.first,
-            width: 100,
-            height: 100,
-            fit: BoxFit.cover,
-            errorBuilder: (context, error, stackTrace) {
-              debugPrint('error: $error');
-              return Image.asset('images/100x100.png');
-            },
-          ).padding(vertical: 8, right: 12)
+        ? ImageWidget(
+                image: cartItem.images.first,
+                width: imageSize,
+                height: imageSize,
+                radius: imageBorderRadius)
+            .padding(vertical: verticalSpacing, right: horizontalSpacing)
         : null;
 
     final productTitle = Text(
       cartItem.name,
-      style: const TextStyle(fontSize: 14, color: Colors.black87),
+      style: TextStyle(fontSize: titleFontSize, color: titleFontColor),
       overflow: TextOverflow.ellipsis,
-      maxLines: 2,
-    ).padding(bottom: 8);
-
-    final attributes = cartItem.attributes
-        .map((it) => Text(
-              '${it.key}: ${it.value}',
-              style: const TextStyle(fontSize: 12, color: Colors.black54),
-              overflow: TextOverflow.ellipsis,
-              maxLines: 1,
-            )
-                .padding(horizontal: 4, vertical: 2)
-                .backgroundColor(Colors.grey[200]!)
-                .decorated(
-                    borderRadius: BorderRadius.circular(4),
-                    border: Border.all(color: Colors.grey[300]!, width: 1)))
-        .toList()
-        .toRow(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.center);
+      maxLines: maxTitleLines,
+    ).padding(vertical: verticalSpacing);
 
     final productDesc = cartItem.attributes.isNotEmpty
-        ? attributes
-        : Text(
-            cartItem.description,
-            style: const TextStyle(fontSize: 10, color: Colors.grey),
-            overflow: TextOverflow.ellipsis,
-            maxLines: 1,
+        ? CartItemAttributeRow(
+            attributes: cartItem.attributes,
+            fontSize: descriptionFontSize,
+            fontColor: descriptionFontColor,
+            backgroundColor: descriptionBackgroundColor,
           )
-            .padding(horizontal: 8, vertical: 4)
-            .backgroundColor(Colors.grey[200]!)
-            .padding(bottom: 8);
+        : CartItemDescription(
+            description: cartItem.description,
+            fontSize: descriptionFontSize,
+            fontColor: descriptionFontColor,
+            backgroundColor: descriptionBackgroundColor,
+          );
 
     final tags = ((cartItem.metadata?['tags'] ?? []) as List<dynamic>)
         .map((it) => ProductTag.fromJson(it as Map<String, dynamic>))
@@ -84,20 +121,28 @@ class CartItemCard extends StatelessWidget {
               gridentEndColor: Colors.white,
               prefix: AppLocalizations.of(context)!.flash_prefix,
             ).expanded()
-          ].toRow(mainAxisSize: MainAxisSize.max).padding(top: 8)
+          ]
+            .toRow(mainAxisSize: MainAxisSize.max)
+            .padding(bottom: verticalSpacing)
         : null;
 
     final productPrice = Text(
       cartItem.unitTotal.formatted ?? '',
-      style: const TextStyle(
-          fontSize: 14, color: Colors.red, fontWeight: FontWeight.bold),
+      style: TextStyle(
+        fontSize: priceFontSize,
+        color: priceFontColor,
+        fontWeight: priceFontWeight,
+      ),
     );
 
     final flashSalePrice = flashSaleIndex >= 0
         ? Text(
             (discount as FlashSalePromotion).salePrice,
-            style: const TextStyle(
-                fontSize: 14, color: Colors.red, fontWeight: FontWeight.bold),
+            style: TextStyle(
+              fontSize: flashSaleFontSize,
+              color: flashSaleFontColor,
+              fontWeight: flashSaleFontWeight,
+            ),
           )
         : null;
 
@@ -128,11 +173,11 @@ class CartItemCard extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.start,
         )
-        .padding(top: 12, bottom: 8);
+        .padding(bottom: verticalSpacing);
 
     final rowAbovePrice = [
       productTitle,
-      productDesc,
+      productDesc.padding(bottom: verticalSpacing),
       tagRow,
       flashSaleCountDwon,
     ].whereType<Widget>().toList().toColumn(
@@ -167,9 +212,14 @@ class CartItemCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start);
 
     final selectedIcon = Icon(
-      cartItem.isSelected ? Icons.check_circle_rounded : Icons.circle_outlined,
-      color: cartItem.isSelected ? Colors.red : Colors.grey,
-    ).padding(right: 8);
+      cartItem.isSelected ? checkedIcon : uncheckedIcon,
+      color: cartItem.isSelected ? checkedIconColor : uncheckedIconColor,
+    )
+        .ripple(
+          customBorder: const CircleBorder(),
+        )
+        .padding(right: horizontalSpacing)
+        .gestures(onTap: onToggleSelection);
 
     final control = [selectedIcon, right.expanded()]
         .whereType<Widget>()
@@ -179,13 +229,16 @@ class CartItemCard extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
         )
-        .padding(horizontal: 16, vertical: 8)
-        .backgroundColor(Colors.white)
-        .decorated(
-          borderRadius: BorderRadius.circular(8),
-          border: Border.all(color: Colors.grey[300]!, width: 1),
+        .padding(
+          horizontal: horizontalPadding,
+          vertical: verticalPadding,
         )
-        .padding(bottom: 8);
+        .backgroundColor(backgroundColor)
+        .decorated(
+          borderRadius: BorderRadius.circular(borderRadius),
+          border: Border.all(color: borderColor, width: borderWidth),
+        )
+        .padding(bottom: verticalPadding);
 
     return control;
   }

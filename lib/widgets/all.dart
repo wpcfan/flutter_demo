@@ -4,6 +4,7 @@ export 'badge.dart';
 export 'cart_stepper/all.dart';
 export 'flash_sale_count_down.dart';
 export 'flex_tags.dart';
+export 'image.dart';
 export 'loading_overlay/all.dart';
 export 'loading_scroll_list/all.dart';
 export 'no_data_widget.dart';

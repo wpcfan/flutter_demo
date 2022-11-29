@@ -9,6 +9,8 @@ import 'package:styled_widget/styled_widget.dart';
 part 'cart_page_bottom_bar.dart';
 part 'cart_page_discount_row.dart';
 part 'cart_page_item.dart';
+part 'cart_page_item_attributes.dart';
+part 'cart_page_item_description.dart';
 part 'cart_page_tag_row.dart';
 
 class CartPage extends StatelessWidget {
@@ -61,7 +63,11 @@ class CartPage extends StatelessWidget {
                     itemCount: state.cart?.items.length ?? 0,
                     itemBuilder: (context, index) {
                       return ListTile(
-                        title: CartItemCard(cartItem: state.cart!.items[index]),
+                        title: CartItemCard(
+                          cartItem: state.cart!.items[index],
+                          onToggleSelection: () =>
+                              debugPrint('toggle selection'),
+                        ),
                       );
                     }),
                 Positioned(
