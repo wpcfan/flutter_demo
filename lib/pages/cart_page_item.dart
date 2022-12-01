@@ -65,9 +65,7 @@ class CartItemCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final discounts = ((cartItem.metadata?['discounts'] ?? []) as List<dynamic>)
-        .map((it) => Discount.fromJson(it as Map<String, dynamic>))
-        .toList();
+    final discounts = cartItem.discounts;
     final discount = discounts.isNotEmpty
         ? discounts.firstWhere(
             (el) => el.isApplied,
@@ -107,14 +105,17 @@ class CartItemCard extends StatelessWidget {
             backgroundColor: descriptionBackgroundColor,
           );
 
-    final tags = ((cartItem.metadata?['tags'] ?? []) as List<dynamic>)
-        .map((it) => ProductTag.fromJson(it as Map<String, dynamic>))
-        .toList();
+    final tags = cartItem.tags;
     final tagRow = tags.isNotEmpty ? CartTagRow(tags: tags) : null;
 
     final flashSaleIndex =
         discounts.indexWhere((el) => el.type == DiscountType.flashSale);
-    final flashSaleCountDwon = flashSaleIndex >= 0
+
+    final flashSalePromotion = discounts[flashSaleIndex] as FlashSalePromotion;
+    final now = DateTime.now();
+    final flashSaleCountDwon = flashSaleIndex >= 0 &&
+            flashSalePromotion.endTime.isAfter(now) &&
+            flashSalePromotion.startTime.isBefore(now)
         ? [
             FlashSaleCountDown(
               endTime:
@@ -128,18 +129,11 @@ class CartItemCard extends StatelessWidget {
             .padding(bottom: verticalSpacing)
         : null;
 
-    final productPrice = Text(
-      cartItem.unitTotal.formatted ?? '',
-      style: TextStyle(
-        fontSize: priceFontSize,
-        color: priceFontColor,
-        fontWeight: priceFontWeight,
-      ),
-    );
-
-    final flashSalePrice = flashSaleIndex >= 0
+    final flashSalePrice = flashSaleIndex >= 0 &&
+            flashSalePromotion.endTime.isAfter(now) &&
+            flashSalePromotion.startTime.isBefore(now)
         ? Text(
-            (discount as FlashSalePromotion).salePrice,
+            flashSalePromotion.salePrice.formatted ?? '',
             style: TextStyle(
               fontSize: flashSaleFontSize,
               color: flashSaleFontColor,
@@ -147,6 +141,15 @@ class CartItemCard extends StatelessWidget {
             ),
           )
         : null;
+
+    final productPrice = Text(
+      cartItem.unitTotal.formatted ?? '',
+      style: TextStyle(
+        fontSize: priceFontSize,
+        color: priceFontColor,
+        fontWeight: priceFontWeight,
+      ),
+    ).padding(bottom: verticalSpacing);
 
     final priceCol = [
       productPrice,

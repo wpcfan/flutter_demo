@@ -36,9 +36,7 @@ class ProductRowWidget extends StatelessWidget {
         child: child);
     if (pageBlock.data.length == 1) {
       final product = pageBlock.data.first.product;
-      final orderQuantity = product.metadata != null
-          ? OrderQuantity.fromJson(product.metadata!['order_quantity'])
-          : OrderQuantity();
+      final orderQuantity = product.orderQuantity;
       final oneRowOne = SizedBox(
           height: height + 2 * spaceBetweenListItems,
           child: Padding(

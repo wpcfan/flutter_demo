@@ -40,4 +40,12 @@ class Money extends Equatable {
 
   @override
   List<Object?> get props => [amount, currency, formatted];
+
+  String toCartQL() {
+    return '''{
+      amount: $amount
+      currency: ${currency?.toCartQL()}
+      formatted: $formatted
+    }''';
+  }
 }

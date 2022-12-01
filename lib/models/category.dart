@@ -57,12 +57,12 @@ class Category extends Equatable {
 
   String toCartQL() => '''
     {
-      id: $id,
-      name: "$name",
-      image: "$image",
+      id: $id
+      name: "$name"
+      image: "$image"
       categories: [
         ${categories != null && categories!.isNotEmpty ? (categories ?? []).map((e) => e.toCartQL()).join(',') : ''}
-      ]
+      ] d
     }
   ''';
 }

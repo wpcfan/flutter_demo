@@ -47,17 +47,33 @@ class ProductCardOneRowTwoWidget extends StatelessWidget {
       maxLines: 1,
       overflow: TextOverflow.ellipsis,
     ).padding(bottom: spaceVertical);
+
+    final discounts = data.product.discounts ?? [];
+    final discount = discounts.isNotEmpty
+        ? discounts.firstWhere(
+            (el) => el.isApplied,
+            orElse: () => discounts.first,
+          )
+        : null;
+
     // 商品原价：划线价
-    final productOriginalPrice = data.product.originalPrice != null
-        ? data.product.originalPrice!
+    final productOriginalPrice = data.product.price != null &&
+            discount != null &&
+            discount.type == DiscountType.discount &&
+            (discount as DiscountPromotion).discount?.amount != null &&
+            discount.discount?.amount != data.product.price
+        ? data.product.price!
             .toString()
             .lineThru()
             .padding(bottom: spaceVertical)
-        : const SizedBox();
+        : null;
     // 商品价格
-    final productPrice = data.product.price!
-        .toString()
-        .toPriceWithDecimalSize(defaultFontSize: 14, decimalFontSize: 10);
+    final productPrice = discount != null &&
+            discount.type == DiscountType.discount &&
+            (discount as DiscountPromotion).discount?.formatted != null
+        ? discount.discount?.formatted!
+            .toPriceWithDecimalSize(defaultFontSize: 14, decimalFontSize: 10)
+        : null;
     // 购物车图标
     const double buttonSize = 30.0;
     final cartBtn = const Icon(Icons.add_shopping_cart, color: Colors.white)
@@ -80,10 +96,13 @@ class ProductCardOneRowTwoWidget extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start);
     // 商品价格和划线价格形成一列
-    final priceColumn = [productOriginalPrice, productPrice].toColumn(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
-    );
+    final priceColumn = [productOriginalPrice, productPrice]
+        .whereType<Widget>()
+        .toList()
+        .toColumn(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+        );
     // 商品价格和划线价格和购物车图标形成一行
     final priceRow = [
       priceColumn,

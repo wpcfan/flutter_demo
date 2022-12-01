@@ -49,18 +49,12 @@ class QuantityStepper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final minus = IconButton(
-      onPressed: value > minValue
-          ? () => onChanged?.call((value - step).toString())
-          : null,
-      icon: Icon(
-        minusIcon,
-      ),
-      iconSize: iconSize,
-      color: iconColor,
-      disabledColor: iconDisabledColor,
-      padding: EdgeInsets.all(iconPadding),
+    final minus = Icon(
+      minusIcon,
+      size: iconSize,
+      color: value > minValue ? iconColor : iconDisabledColor,
     )
+        .padding(all: iconPadding)
         .decorated(
           color: iconBackgroundColor,
           borderRadius: BorderRadius.circular(iconBorderRadius),
@@ -69,9 +63,11 @@ class QuantityStepper extends StatelessWidget {
             width: iconBorderWidth,
           ),
         )
-        .constrained(
-            width: iconSize + iconPadding * 2 + iconBorderWidth * 2,
-            height: iconSize + iconPadding * 2 + iconBorderWidth * 2);
+        .ripple(customBorder: const CircleBorder())
+        .gestures(
+            onTap: value > minValue
+                ? () => onChanged?.call((value - step).toString())
+                : null);
 
     final textField = TextFormField(
       initialValue: value.toString(),
@@ -95,16 +91,12 @@ class QuantityStepper extends StatelessWidget {
       },
     ).constrained(width: textFieldWidth);
 
-    final plus = IconButton(
-      onPressed: value < maxValue
-          ? () => onChanged?.call((value + step).toString())
-          : null,
-      icon: Icon(plusIcon),
-      iconSize: iconSize,
-      color: iconColor,
-      disabledColor: iconDisabledColor,
-      padding: EdgeInsets.all(iconPadding),
+    final plus = Icon(
+      plusIcon,
+      size: iconSize,
+      color: value < maxValue ? iconColor : iconDisabledColor,
     )
+        .padding(all: iconPadding)
         .decorated(
           color: iconBackgroundColor,
           borderRadius: BorderRadius.circular(iconBorderRadius),
@@ -113,9 +105,11 @@ class QuantityStepper extends StatelessWidget {
             width: iconBorderWidth,
           ),
         )
-        .constrained(
-            width: iconSize + iconPadding * 2 + iconBorderWidth * 2,
-            height: iconSize + iconPadding * 2 + iconBorderWidth * 2);
+        .ripple(customBorder: const CircleBorder())
+        .gestures(
+            onTap: value < maxValue
+                ? () => onChanged?.call((value + step).toString())
+                : null);
 
     final stepper = [
       minus,

@@ -3,47 +3,6 @@ import 'dart:convert';
 import 'package:demo/models/all.dart';
 import 'package:equatable/equatable.dart';
 
-class KeyValueAttribute {
-  final String key;
-  final String value;
-
-  const KeyValueAttribute({
-    required this.key,
-    required this.value,
-  });
-
-  KeyValueAttribute.fromJson(Map<String, dynamic> json)
-      : key = json['key'],
-        value = json['value'];
-
-  Map<String, dynamic> toJson() => {
-        'key': key,
-        'value': value,
-      };
-
-  String toCartQL() => '''
-    {
-      key: "$key",
-      value: "$value"
-    }
-  ''';
-
-  @override
-  String toString() {
-    return 'CartItemAttribute{key: $key, value: $value}';
-  }
-
-  KeyValueAttribute copyWith({
-    String? key,
-    String? value,
-  }) {
-    return KeyValueAttribute(
-      key: key ?? this.key,
-      value: value ?? this.value,
-    );
-  }
-}
-
 class CartItem extends Equatable {
   final String id;
   final String? productId;
@@ -76,6 +35,28 @@ class CartItem extends Equatable {
     required this.updatedAt,
     this.isSelected = false,
   });
+
+  List<Discount> get discounts =>
+      ((metadata?['discounts'] ?? []) as List<dynamic>)
+          .map((it) => Discount.fromJson(it as Map<String, dynamic>))
+          .toList();
+
+  List<Category> get categories =>
+      ((metadata?['categories'] ?? []) as List<dynamic>)
+          .map((it) => Category.fromJson(it as Map<String, dynamic>))
+          .toList();
+
+  OrderQuantity get orderQuantity => metadata?['orderQuantity'] != null
+      ? OrderQuantity.fromJson(metadata?['orderQuantity'])
+      : OrderQuantity();
+
+  List<ProductTag> get tags => ((metadata?['tags'] ?? []) as List<dynamic>)
+      .map((it) => ProductTag.fromJson(it as Map<String, dynamic>))
+      .toList();
+
+  List<SpecAttribute> get specs => ((metadata?['specs'] ?? []) as List<dynamic>)
+      .map((it) => SpecAttribute.fromJson(it as Map<String, dynamic>))
+      .toList();
 
   factory CartItem.fromJson(Map<String, dynamic> json) {
     return CartItem(

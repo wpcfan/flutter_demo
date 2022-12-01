@@ -1,3 +1,4 @@
+import 'package:demo/models/all.dart';
 import 'package:equatable/equatable.dart';
 
 enum DiscountType {
@@ -78,7 +79,7 @@ abstract class Discount extends Equatable {
 
 /// Discount
 class DiscountPromotion extends Discount {
-  final String? discount;
+  final Money? discount;
 
   const DiscountPromotion({
     required int id,
@@ -117,7 +118,7 @@ class DiscountPromotion extends Discount {
     String? title,
     String? tag,
     String? titleWhenApplied,
-    String? discount,
+    Money? discount,
     bool? isApplied,
   }) {
     return DiscountPromotion(
@@ -136,7 +137,9 @@ class DiscountPromotion extends Discount {
         title: json["title"],
         tag: json["tag"],
         titleWhenApplied: json["titleWhenApplied"],
-        discount: json["discount"],
+        discount: json["discount"] == null
+            ? null
+            : Money.fromJson(json["discount"] as Map<String, dynamic>),
         isApplied: json["isApplied"] ?? false,
       );
 
@@ -146,40 +149,34 @@ class DiscountPromotion extends Discount {
         "title": title,
         "tag": tag,
         "titleWhenApplied": titleWhenApplied,
-        "discount": discount,
+        "discount": discount?.toJson(),
         "isApplied": isApplied,
       };
 
   @override
   String toCartQL() {
     return '''{
-      id: $id,
-      title: "$title",
-      type: "${type.value}",
-      tag: "$tag",
-      titleWhenApplied: "$titleWhenApplied",
-      discount: "$discount",
-      isApplied: $isApplied,
+      id: $id
+      title: "$title"
+      type: "${type.value}"
+      tag: "$tag"
+      titleWhenApplied: "$titleWhenApplied"
+      discount: ${discount?.toCartQL()}
+      isApplied: $isApplied
     }''';
   }
 }
 
 /// Free Product on purchase
 class FreeProductPromotion extends Discount {
-  final String productId;
-  final String productName;
-  final String productImage;
-  final String productPrice;
+  final Product product;
 
   const FreeProductPromotion({
     required int id,
     required String title,
     required String tag,
     required String titleWhenApplied,
-    required this.productId,
-    required this.productName,
-    required this.productImage,
-    required this.productPrice,
+    required this.product,
     bool isApplied = false,
   }) : super(
           id: id,
@@ -197,10 +194,7 @@ class FreeProductPromotion extends Discount {
         type,
         tag,
         titleWhenApplied,
-        productId,
-        productName,
-        productImage,
-        productPrice,
+        product,
       ];
 
   @override
@@ -211,10 +205,7 @@ class FreeProductPromotion extends Discount {
         type: $type,
         tag: $tag,
         titleWhenApplied: $titleWhenApplied,
-        productId: $productId,
-        productName: $productName,
-        productImage: $productImage,
-        productPrice: $productPrice,
+        product: $product,
         isApplied: $isApplied,
       }''';
   }
@@ -224,10 +215,7 @@ class FreeProductPromotion extends Discount {
     String? title,
     String? tag,
     String? titleWhenApplied,
-    String? productId,
-    String? productName,
-    String? productImage,
-    String? productPrice,
+    Product? product,
     bool? isApplied,
   }) {
     return FreeProductPromotion(
@@ -235,10 +223,7 @@ class FreeProductPromotion extends Discount {
       title: title ?? this.title,
       tag: tag ?? this.tag,
       titleWhenApplied: titleWhenApplied ?? this.titleWhenApplied,
-      productId: productId ?? this.productId,
-      productName: productName ?? this.productName,
-      productImage: productImage ?? this.productImage,
-      productPrice: productPrice ?? this.productPrice,
+      product: product ?? this.product,
       isApplied: isApplied ?? this.isApplied,
     );
   }
@@ -249,10 +234,7 @@ class FreeProductPromotion extends Discount {
         title: json["title"],
         tag: json["tag"],
         titleWhenApplied: json["titleWhenApplied"],
-        productId: json["productId"],
-        productName: json["productName"],
-        productImage: json["productImage"],
-        productPrice: json["productPrice"],
+        product: Product.fromJson(json["product"] as Map<String, dynamic>),
         isApplied: json["isApplied"] ?? false,
       );
 
@@ -262,26 +244,20 @@ class FreeProductPromotion extends Discount {
         "title": title,
         "tag": tag,
         "titleWhenApplied": titleWhenApplied,
-        "productId": productId,
-        "productName": productName,
-        "productImage": productImage,
-        "productPrice": productPrice,
+        "product": product.toJson(),
         "isApplied": isApplied,
       };
 
   @override
   String toCartQL() {
     return '''{
-      id: $id,
-      title: "$title",
-      type: "$type",
-      tag: "$tag",
-      titleWhenApplied: "$titleWhenApplied",
-      productId: "$productId",
-      productName: "$productName",
-      productImage: "$productImage",
-      productPrice: "$productPrice",
-      isApplied: $isApplied,
+      id: $id
+      title: "$title"
+      type: "$type"
+      tag: "$tag"
+      titleWhenApplied: "$titleWhenApplied"
+      product: ${product.toCartQL()}
+      isApplied: $isApplied
     }''';
   }
 }
@@ -289,10 +265,6 @@ class FreeProductPromotion extends Discount {
 /// Buy X Get Y
 /// note: X and Y are the same product
 class BuyXGetYPromotion extends Discount {
-  final String productId;
-  final String productName;
-  final String productImage;
-  final String productPrice;
   final int buy;
   final int get;
 
@@ -301,10 +273,6 @@ class BuyXGetYPromotion extends Discount {
     required String title,
     required String tag,
     required String titleWhenApplied,
-    required this.productId,
-    required this.productName,
-    required this.productImage,
-    required this.productPrice,
     required this.buy,
     required this.get,
     bool isApplied = false,
@@ -324,10 +292,6 @@ class BuyXGetYPromotion extends Discount {
         type,
         tag,
         titleWhenApplied,
-        productId,
-        productName,
-        productImage,
-        productPrice,
         buy,
         get,
       ];
@@ -340,10 +304,6 @@ class BuyXGetYPromotion extends Discount {
         type: $type,
         tag: $tag,
         titleWhenApplied: $titleWhenApplied,
-        productId: $productId,
-        productName: $productName,
-        productImage: $productImage,
-        productPrice: $productPrice,
         buy: $buy,
         get: $get,
         isApplied: $isApplied,
@@ -368,10 +328,6 @@ class BuyXGetYPromotion extends Discount {
       title: title ?? this.title,
       tag: tag ?? this.tag,
       titleWhenApplied: titleWhenApplied ?? this.titleWhenApplied,
-      productId: productId ?? this.productId,
-      productName: productName ?? this.productName,
-      productImage: productImage ?? this.productImage,
-      productPrice: productPrice ?? this.productPrice,
       buy: buy ?? this.buy,
       get: get ?? this.get,
       isApplied: isApplied ?? this.isApplied,
@@ -384,10 +340,6 @@ class BuyXGetYPromotion extends Discount {
         title: json["title"],
         tag: json["tag"],
         titleWhenApplied: json["titleWhenApplied"],
-        productId: json["productId"],
-        productName: json["productName"],
-        productImage: json["productImage"],
-        productPrice: json["productPrice"],
         buy: json["buy"],
         get: json["get"],
         isApplied: json["isApplied"] ?? false,
@@ -399,10 +351,6 @@ class BuyXGetYPromotion extends Discount {
         "title": title,
         "tag": tag,
         "titleWhenApplied": titleWhenApplied,
-        "productId": productId,
-        "productName": productName,
-        "productImage": productImage,
-        "productPrice": productPrice,
         "buy": buy,
         "get": get,
         "isApplied": isApplied,
@@ -416,10 +364,6 @@ class BuyXGetYPromotion extends Discount {
       type: "$type",
       tag: "$tag",
       titleWhenApplied: "$titleWhenApplied",
-      productId: "$productId",
-      productName: "$productName",
-      productImage: "$productImage",
-      productPrice: "$productPrice",
       buy: $buy,
       get: $get,
       isApplied: $isApplied,
@@ -432,7 +376,7 @@ class BuyXGetYPromotion extends Discount {
 /// i.e. if the quantity of the product in cart is 5 and minQuantity is 3,
 /// then the discount is applied only once
 class DiscountOnUnitPromotion extends Discount {
-  final String discount;
+  final Money discount;
   final int minQuantity;
 
   const DiscountOnUnitPromotion({
@@ -475,7 +419,7 @@ class DiscountOnUnitPromotion extends Discount {
     String? title,
     String? tag,
     String? titleWhenApplied,
-    String? discount,
+    Money? discount,
     int? minQuantity,
     bool? isApplied,
   }) {
@@ -496,7 +440,7 @@ class DiscountOnUnitPromotion extends Discount {
         title: json["title"],
         tag: json["tag"],
         titleWhenApplied: json["titleWhenApplied"],
-        discount: json["discount"],
+        discount: Money.fromJson(json["discount"]),
         minQuantity: json["minQuantity"],
         isApplied: json["isApplied"] ?? false,
       );
@@ -507,7 +451,7 @@ class DiscountOnUnitPromotion extends Discount {
         "title": title,
         "tag": tag,
         "titleWhenApplied": titleWhenApplied,
-        "discount": discount,
+        "discount": discount.toJson(),
         "minQuantity": minQuantity,
         "isApplied": isApplied,
       };
@@ -515,14 +459,14 @@ class DiscountOnUnitPromotion extends Discount {
   @override
   String toCartQL() {
     return '''{
-      id: $id,
-      title: "$title",
-      type: "$type",
-      tag: "$tag",
-      titleWhenApplied: "$titleWhenApplied",
-      discount: "$discount",
-      minQuantity: $minQuantity,
-      isApplied: $isApplied,
+      id: $id
+      title: "$title"
+      type: "$type"
+      tag: "$tag"
+      titleWhenApplied: "$titleWhenApplied"
+      discount: ${discount.toCartQL()}
+      minQuantity: $minQuantity
+      isApplied: $isApplied
     }''';
   }
 }
@@ -532,7 +476,7 @@ class DiscountOnUnitPromotion extends Discount {
 /// i.e. if the total price of the product in cart is 5 and minPrice is 3,
 /// then the discount is applied only once
 class DiscountOnTotalPromotion extends Discount {
-  final String discount;
+  final Money discount;
   final int minTotal;
 
   const DiscountOnTotalPromotion({
@@ -574,7 +518,7 @@ class DiscountOnTotalPromotion extends Discount {
     String? title,
     String? tag,
     String? titleWhenApplied,
-    String? discount,
+    Money? discount,
     int? minTotal,
     bool? isApplied,
   }) {
@@ -595,7 +539,7 @@ class DiscountOnTotalPromotion extends Discount {
         title: json["title"],
         tag: json["tag"],
         titleWhenApplied: json["titleWhenApplied"],
-        discount: json["discount"],
+        discount: Money.fromJson(json["discount"]),
         minTotal: json["minTotal"],
         isApplied: json["isApplied"] ?? false,
       );
@@ -606,7 +550,7 @@ class DiscountOnTotalPromotion extends Discount {
         "title": title,
         "tag": tag,
         "titleWhenApplied": titleWhenApplied,
-        "discount": discount,
+        "discount": discount.toJson(),
         "minTotal": minTotal,
         "isApplied": isApplied,
       };
@@ -614,14 +558,14 @@ class DiscountOnTotalPromotion extends Discount {
   @override
   String toCartQL() {
     return '''{
-      id: $id,
-      title: "$title",
-      type: "$type",
-      tag: "$tag",
-      titleWhenApplied: "$titleWhenApplied",
-      discount: "$discount",
-      minTotal: $minTotal,
-      isApplied: $isApplied,
+      id: $id
+      title: "$title"
+      type: "$type"
+      tag: "$tag"
+      titleWhenApplied: "$titleWhenApplied"
+      discount: ${discount.toCartQL()}
+      minTotal: $minTotal
+      isApplied: $isApplied
     }''';
   }
 }
@@ -631,7 +575,7 @@ class DiscountOnTotalPromotion extends Discount {
 /// i.e. if the quantity of the product in cart is 6 and minQuantity is 3,
 /// then the discount is applied 2 times
 class DiscountEveryXUnitPromotion extends Discount {
-  final String discount;
+  final Money discount;
   final int everyXUnit;
 
   const DiscountEveryXUnitPromotion({
@@ -674,7 +618,7 @@ class DiscountEveryXUnitPromotion extends Discount {
     String? title,
     String? tag,
     String? titleWhenApplied,
-    String? discount,
+    Money? discount,
     int? everyXUnit,
     bool? isApplied,
   }) {
@@ -695,7 +639,7 @@ class DiscountEveryXUnitPromotion extends Discount {
         title: json["title"],
         tag: json["tag"],
         titleWhenApplied: json["titleWhenApplied"],
-        discount: json["discount"],
+        discount: Money.fromJson(json["discount"]),
         everyXUnit: json["everyXUnit"],
         isApplied: json["isApplied"] ?? false,
       );
@@ -706,7 +650,7 @@ class DiscountEveryXUnitPromotion extends Discount {
         "title": title,
         "tag": tag,
         "titleWhenApplied": titleWhenApplied,
-        "discount": discount,
+        "discount": discount.toJson(),
         "everyXUnit": everyXUnit,
         "isApplied": isApplied,
       };
@@ -719,7 +663,7 @@ class DiscountEveryXUnitPromotion extends Discount {
       type: "$type",
       tag: "$tag",
       titleWhenApplied: "$titleWhenApplied",
-      discount: "$discount",
+      discount: ${discount.toCartQL()},
       everyXUnit: $everyXUnit,
       isApplied: $isApplied,
     }''';
@@ -731,7 +675,7 @@ class DiscountEveryXUnitPromotion extends Discount {
 /// i.e. if the total price of the product in cart is 6 and minTotal is 3,
 /// then the discount is applied 2 times
 class DiscountEveryXTotalPromotion extends Discount {
-  final String discount;
+  final Money discount;
   final int everyXTotal;
 
   const DiscountEveryXTotalPromotion({
@@ -774,7 +718,7 @@ class DiscountEveryXTotalPromotion extends Discount {
     String? title,
     String? tag,
     String? titleWhenApplied,
-    String? discount,
+    Money? discount,
     int? everyXTotal,
     bool? isApplied,
   }) {
@@ -795,7 +739,7 @@ class DiscountEveryXTotalPromotion extends Discount {
         title: json["title"],
         tag: json["tag"],
         titleWhenApplied: json["titleWhenApplied"],
-        discount: json["discount"],
+        discount: Money.fromJson(json["discount"]),
         everyXTotal: json["everyXTotal"],
         isApplied: json["isApplied"] ?? false,
       );
@@ -806,7 +750,7 @@ class DiscountEveryXTotalPromotion extends Discount {
         "title": title,
         "tag": tag,
         "titleWhenApplied": titleWhenApplied,
-        "discount": discount,
+        "discount": discount.toJson(),
         "everyXTotal": everyXTotal,
         "isApplied": isApplied,
       };
@@ -814,23 +758,20 @@ class DiscountEveryXTotalPromotion extends Discount {
   @override
   String toCartQL() {
     return '''{
-      id: $id,
-      title: "$title",
-      type: "$type",
-      tag: "$tag",
-      titleWhenApplied: "$titleWhenApplied",
-      discount: "$discount",
-      everyXTotal: $everyXTotal,
-      isApplied: $isApplied,
+      id: $id
+      title: "$title"
+      type: "$type"
+      tag: "$tag"
+      titleWhenApplied: "$titleWhenApplied"
+      discount: ${discount.toCartQL()}
+      everyXTotal: $everyXTotal
+      isApplied: $isApplied
     }''';
   }
 }
 
 class FreeProductOnUnitPromotion extends Discount {
-  final String freeProductId;
-  final String freeProductName;
-  final String freeProductImage;
-  final String freeProductPrice;
+  final Product product;
   final int minQuantity;
 
   const FreeProductOnUnitPromotion({
@@ -838,10 +779,7 @@ class FreeProductOnUnitPromotion extends Discount {
     required String title,
     required String tag,
     required String titleWhenApplied,
-    required this.freeProductId,
-    required this.freeProductName,
-    required this.freeProductImage,
-    required this.freeProductPrice,
+    required this.product,
     required this.minQuantity,
     bool isApplied = false,
   }) : super(
@@ -860,10 +798,7 @@ class FreeProductOnUnitPromotion extends Discount {
         type,
         tag,
         titleWhenApplied,
-        freeProductId,
-        freeProductName,
-        freeProductImage,
-        freeProductPrice,
+        product,
         minQuantity,
       ];
 
@@ -875,10 +810,7 @@ class FreeProductOnUnitPromotion extends Discount {
         type: $type,
         tag: $tag,
         titleWhenApplied: $titleWhenApplied,
-        freeProductId: $freeProductId,
-        freeProductName: $freeProductName,
-        freeProductImage: $freeProductImage,
-        freeProductPrice: $freeProductPrice,
+        product: $product,
         minQuantity: $minQuantity,
         isApplied: $isApplied,
       }''';
@@ -889,10 +821,7 @@ class FreeProductOnUnitPromotion extends Discount {
     String? title,
     String? tag,
     String? titleWhenApplied,
-    String? freeProductId,
-    String? freeProductName,
-    String? freeProductImage,
-    String? freeProductPrice,
+    Product? product,
     int? minQuantity,
     bool? isApplied,
   }) {
@@ -901,10 +830,7 @@ class FreeProductOnUnitPromotion extends Discount {
       title: title ?? this.title,
       tag: tag ?? this.tag,
       titleWhenApplied: titleWhenApplied ?? this.titleWhenApplied,
-      freeProductId: freeProductId ?? this.freeProductId,
-      freeProductName: freeProductName ?? this.freeProductName,
-      freeProductImage: freeProductImage ?? this.freeProductImage,
-      freeProductPrice: freeProductPrice ?? this.freeProductPrice,
+      product: product ?? this.product,
       minQuantity: minQuantity ?? this.minQuantity,
       isApplied: isApplied ?? this.isApplied,
     );
@@ -916,10 +842,7 @@ class FreeProductOnUnitPromotion extends Discount {
         title: json["title"],
         tag: json["tag"],
         titleWhenApplied: json["titleWhenApplied"],
-        freeProductId: json["freeProductId"],
-        freeProductName: json["freeProductName"],
-        freeProductImage: json["freeProductImage"],
-        freeProductPrice: json["freeProductPrice"],
+        product: Product.fromJson(json["product"]),
         minQuantity: json["minQuantity"],
         isApplied: json["isApplied"] ?? false,
       );
@@ -930,10 +853,7 @@ class FreeProductOnUnitPromotion extends Discount {
         "title": title,
         "tag": tag,
         "titleWhenApplied": titleWhenApplied,
-        "freeProductId": freeProductId,
-        "freeProductName": freeProductName,
-        "freeProductImage": freeProductImage,
-        "freeProductPrice": freeProductPrice,
+        "product": product.toJson(),
         "minQuantity": minQuantity,
         "isApplied": isApplied,
       };
@@ -941,26 +861,20 @@ class FreeProductOnUnitPromotion extends Discount {
   @override
   String toCartQL() {
     return '''{
-      id: $id,
-      title: "$title",
-      type: "$type",
-      tag: "$tag",
-      titleWhenApplied: "$titleWhenApplied",
-      freeProductId: "$freeProductId",
-      freeProductName: "$freeProductName",
-      freeProductImage: "$freeProductImage",
-      freeProductPrice: "$freeProductPrice",
-      minQuantity: $minQuantity,
-      isApplied: $isApplied,
+      id: $id
+      title: "$title"
+      type: "$type"
+      tag: "$tag"
+      titleWhenApplied: "$titleWhenApplied"
+      product: ${product.toCartQL()}
+      minQuantity: $minQuantity
+      isApplied: $isApplied
     }''';
   }
 }
 
 class FreeProductOnTotalPromotion extends Discount {
-  final String freeProductId;
-  final String freeProductName;
-  final String freeProductImage;
-  final String freeProductPrice;
+  final Product product;
   final int minTotal;
 
   const FreeProductOnTotalPromotion({
@@ -968,10 +882,7 @@ class FreeProductOnTotalPromotion extends Discount {
     required String title,
     required String tag,
     required String titleWhenApplied,
-    required this.freeProductId,
-    required this.freeProductName,
-    required this.freeProductImage,
-    required this.freeProductPrice,
+    required this.product,
     required this.minTotal,
     bool isApplied = false,
   }) : super(
@@ -990,10 +901,7 @@ class FreeProductOnTotalPromotion extends Discount {
         type,
         tag,
         titleWhenApplied,
-        freeProductId,
-        freeProductName,
-        freeProductImage,
-        freeProductPrice,
+        product,
         minTotal,
       ];
 
@@ -1005,10 +913,7 @@ class FreeProductOnTotalPromotion extends Discount {
         type: $type,
         tag: $tag,
         titleWhenApplied: $titleWhenApplied,
-        freeProductId: $freeProductId,
-        freeProductName: $freeProductName,
-        freeProductImage: $freeProductImage,
-        freeProductPrice: $freeProductPrice,
+        product: $product,
         minTotal: $minTotal,
         isApplied: $isApplied,
       }''';
@@ -1019,10 +924,7 @@ class FreeProductOnTotalPromotion extends Discount {
     String? title,
     String? tag,
     String? titleWhenApplied,
-    String? freeProductId,
-    String? freeProductName,
-    String? freeProductImage,
-    String? freeProductPrice,
+    Product? product,
     int? minTotal,
     bool? isApplied,
   }) {
@@ -1031,10 +933,7 @@ class FreeProductOnTotalPromotion extends Discount {
       title: title ?? this.title,
       tag: tag ?? this.tag,
       titleWhenApplied: titleWhenApplied ?? this.titleWhenApplied,
-      freeProductId: freeProductId ?? this.freeProductId,
-      freeProductName: freeProductName ?? this.freeProductName,
-      freeProductImage: freeProductImage ?? this.freeProductImage,
-      freeProductPrice: freeProductPrice ?? this.freeProductPrice,
+      product: product ?? this.product,
       minTotal: minTotal ?? this.minTotal,
       isApplied: isApplied ?? this.isApplied,
     );
@@ -1046,10 +945,7 @@ class FreeProductOnTotalPromotion extends Discount {
         title: json["title"],
         tag: json["tag"],
         titleWhenApplied: json["titleWhenApplied"],
-        freeProductId: json["freeProductId"],
-        freeProductName: json["freeProductName"],
-        freeProductImage: json["freeProductImage"],
-        freeProductPrice: json["freeProductPrice"],
+        product: Product.fromJson(json["product"]),
         minTotal: json["minTotal"],
         isApplied: json["isApplied"] ?? false,
       );
@@ -1060,10 +956,7 @@ class FreeProductOnTotalPromotion extends Discount {
         "title": title,
         "tag": tag,
         "titleWhenApplied": titleWhenApplied,
-        "freeProductId": freeProductId,
-        "freeProductName": freeProductName,
-        "freeProductImage": freeProductImage,
-        "freeProductPrice": freeProductPrice,
+        "product": product.toJson(),
         "minTotal": minTotal,
         "isApplied": isApplied,
       };
@@ -1071,26 +964,20 @@ class FreeProductOnTotalPromotion extends Discount {
   @override
   String toCartQL() {
     return '''{
-      id: $id,
-      title: "$title",
-      type: "$type",
-      tag: "$tag",
-      titleWhenApplied: "$titleWhenApplied",
-      freeProductId: "$freeProductId",
-      freeProductName: "$freeProductName",
-      freeProductImage: "$freeProductImage",
-      freeProductPrice: "$freeProductPrice",
-      minTotal: $minTotal,
-      isApplied: $isApplied,
+      id: $id
+      title: "$title"
+      type: "$type"
+      tag: "$tag"
+      titleWhenApplied: "$titleWhenApplied"
+      product: ${product.toCartQL()}
+      minTotal: $minTotal
+      isApplied: $isApplied
     }''';
   }
 }
 
 class FreeProductEveryXUnitPromotion extends Discount {
-  final String freeProductId;
-  final String freeProductName;
-  final String freeProductImage;
-  final String freeProductPrice;
+  final Product product;
   final int everyXUnit;
 
   const FreeProductEveryXUnitPromotion({
@@ -1098,10 +985,7 @@ class FreeProductEveryXUnitPromotion extends Discount {
     required String title,
     required String tag,
     required String titleWhenApplied,
-    required this.freeProductId,
-    required this.freeProductName,
-    required this.freeProductImage,
-    required this.freeProductPrice,
+    required this.product,
     required this.everyXUnit,
     bool isApplied = false,
   }) : super(
@@ -1120,27 +1004,21 @@ class FreeProductEveryXUnitPromotion extends Discount {
         type,
         tag,
         titleWhenApplied,
-        freeProductId,
-        freeProductName,
-        freeProductImage,
-        freeProductPrice,
+        product,
         everyXUnit,
       ];
 
   @override
   String toString() {
     return '''FreeProductEveryXUnitPromotion {
-        id: $id,
-        title: $title,
-        type: $type,
-        tag: $tag,
-        titleWhenApplied: $titleWhenApplied,
-        freeProductId: $freeProductId,
-        freeProductName: $freeProductName,
-        freeProductImage: $freeProductImage,
-        freeProductPrice: $freeProductPrice,
-        everyXUnit: $everyXUnit,
-        isApplied: $isApplied,
+        id: $id
+        title: $title
+        type: $type
+        tag: $tag
+        titleWhenApplied: $titleWhenApplied
+        product: $product
+        everyXUnit: $everyXUnit
+        isApplied: $isApplied
       }''';
   }
 
@@ -1149,10 +1027,7 @@ class FreeProductEveryXUnitPromotion extends Discount {
     String? title,
     String? tag,
     String? titleWhenApplied,
-    String? freeProductId,
-    String? freeProductName,
-    String? freeProductImage,
-    String? freeProductPrice,
+    Product? product,
     int? everyXUnit,
     bool? isApplied,
   }) {
@@ -1161,10 +1036,7 @@ class FreeProductEveryXUnitPromotion extends Discount {
       title: title ?? this.title,
       tag: tag ?? this.tag,
       titleWhenApplied: titleWhenApplied ?? this.titleWhenApplied,
-      freeProductId: freeProductId ?? this.freeProductId,
-      freeProductName: freeProductName ?? this.freeProductName,
-      freeProductImage: freeProductImage ?? this.freeProductImage,
-      freeProductPrice: freeProductPrice ?? this.freeProductPrice,
+      product: product ?? this.product,
       everyXUnit: everyXUnit ?? this.everyXUnit,
       isApplied: isApplied ?? this.isApplied,
     );
@@ -1176,10 +1048,7 @@ class FreeProductEveryXUnitPromotion extends Discount {
         title: json["title"],
         tag: json["tag"],
         titleWhenApplied: json["titleWhenApplied"],
-        freeProductId: json["freeProductId"],
-        freeProductName: json["freeProductName"],
-        freeProductImage: json["freeProductImage"],
-        freeProductPrice: json["freeProductPrice"],
+        product: Product.fromJson(json["product"]),
         everyXUnit: json["everyXUnit"],
         isApplied: json["isApplied"] ?? false,
       );
@@ -1190,10 +1059,7 @@ class FreeProductEveryXUnitPromotion extends Discount {
         "title": title,
         "tag": tag,
         "titleWhenApplied": titleWhenApplied,
-        "freeProductId": freeProductId,
-        "freeProductName": freeProductName,
-        "freeProductImage": freeProductImage,
-        "freeProductPrice": freeProductPrice,
+        "product": product.toJson(),
         "everyXUnit": everyXUnit,
         "isApplied": isApplied,
       };
@@ -1201,26 +1067,20 @@ class FreeProductEveryXUnitPromotion extends Discount {
   @override
   String toCartQL() {
     return '''{
-      id: $id,
-      title: "$title",
-      type: "$type",
-      tag: "$tag",
-      titleWhenApplied: "$titleWhenApplied",
-      freeProductId: "$freeProductId",
-      freeProductName: "$freeProductName",
-      freeProductImage: "$freeProductImage",
-      freeProductPrice: "$freeProductPrice",
-      everyXUnit: $everyXUnit,
-      isApplied: $isApplied,
+      id: $id
+      title: "$title"
+      type: "$type"
+      tag: "$tag"
+      titleWhenApplied: "$titleWhenApplied"
+      product: ${product.toCartQL()}
+      everyXUnit: $everyXUnit
+      isApplied: $isApplied
     }''';
   }
 }
 
 class FreeProductEveryXTotalPromotion extends Discount {
-  final String freeProductId;
-  final String freeProductName;
-  final String freeProductImage;
-  final String freeProductPrice;
+  final Product product;
   final int everyXTotal;
 
   const FreeProductEveryXTotalPromotion({
@@ -1228,10 +1088,7 @@ class FreeProductEveryXTotalPromotion extends Discount {
     required String title,
     required String tag,
     required String titleWhenApplied,
-    required this.freeProductId,
-    required this.freeProductName,
-    required this.freeProductImage,
-    required this.freeProductPrice,
+    required this.product,
     required this.everyXTotal,
     bool isApplied = false,
   }) : super(
@@ -1250,10 +1107,7 @@ class FreeProductEveryXTotalPromotion extends Discount {
         type,
         tag,
         titleWhenApplied,
-        freeProductId,
-        freeProductName,
-        freeProductImage,
-        freeProductPrice,
+        product,
         everyXTotal,
       ];
 
@@ -1265,10 +1119,7 @@ class FreeProductEveryXTotalPromotion extends Discount {
         type: $type,
         tag: $tag,
         titleWhenApplied: $titleWhenApplied,
-        freeProductId: $freeProductId,
-        freeProductName: $freeProductName,
-        freeProductImage: $freeProductImage,
-        freeProductPrice: $freeProductPrice,
+        product: $product,
         everyXTotal: $everyXTotal,
         isApplied: $isApplied,
       }''';
@@ -1279,10 +1130,7 @@ class FreeProductEveryXTotalPromotion extends Discount {
     String? title,
     String? tag,
     String? titleWhenApplied,
-    String? freeProductId,
-    String? freeProductName,
-    String? freeProductImage,
-    String? freeProductPrice,
+    Product? product,
     int? everyXTotal,
     bool? isApplied,
   }) {
@@ -1291,10 +1139,7 @@ class FreeProductEveryXTotalPromotion extends Discount {
       title: title ?? this.title,
       tag: tag ?? this.tag,
       titleWhenApplied: titleWhenApplied ?? this.titleWhenApplied,
-      freeProductId: freeProductId ?? this.freeProductId,
-      freeProductName: freeProductName ?? this.freeProductName,
-      freeProductImage: freeProductImage ?? this.freeProductImage,
-      freeProductPrice: freeProductPrice ?? this.freeProductPrice,
+      product: product ?? this.product,
       everyXTotal: everyXTotal ?? this.everyXTotal,
       isApplied: isApplied ?? this.isApplied,
     );
@@ -1306,10 +1151,7 @@ class FreeProductEveryXTotalPromotion extends Discount {
         title: json["title"],
         tag: json["tag"],
         titleWhenApplied: json["titleWhenApplied"],
-        freeProductId: json["freeProductId"],
-        freeProductName: json["freeProductName"],
-        freeProductImage: json["freeProductImage"],
-        freeProductPrice: json["freeProductPrice"],
+        product: Product.fromJson(json["product"]),
         everyXTotal: json["everyXTotal"],
         isApplied: json["isApplied"] ?? false,
       );
@@ -1320,10 +1162,7 @@ class FreeProductEveryXTotalPromotion extends Discount {
         "title": title,
         "tag": tag,
         "titleWhenApplied": titleWhenApplied,
-        "freeProductId": freeProductId,
-        "freeProductName": freeProductName,
-        "freeProductImage": freeProductImage,
-        "freeProductPrice": freeProductPrice,
+        "product": product.toJson(),
         "everyXTotal": everyXTotal,
         "isApplied": isApplied,
       };
@@ -1331,24 +1170,22 @@ class FreeProductEveryXTotalPromotion extends Discount {
   @override
   String toCartQL() {
     return '''{
-      id: $id,
-      title: "$title",
-      type: "$type",
-      tag: "$tag",
-      titleWhenApplied: "$titleWhenApplied",
-      freeProductId: "$freeProductId",
-      freeProductName: "$freeProductName",
-      freeProductImage: "$freeProductImage",
-      freeProductPrice: "$freeProductPrice",
-      everyXTotal: $everyXTotal,
-      isApplied: $isApplied,
+      id: $id
+      title: "$title"
+      type: "$type"
+      tag: "$tag"
+      titleWhenApplied: "$titleWhenApplied"
+      product: ${product.toCartQL()}
+      everyXTotal: $everyXTotal
+      isApplied: $isApplied
     }''';
   }
 }
 
 class FlashSalePromotion extends Discount {
-  final String salePrice;
+  final Money salePrice;
   final DateTime endTime;
+  final DateTime startTime;
 
   const FlashSalePromotion({
     required int id,
@@ -1357,6 +1194,7 @@ class FlashSalePromotion extends Discount {
     required String titleWhenApplied,
     required this.salePrice,
     required this.endTime,
+    required this.startTime,
     bool isApplied = false,
   }) : super(
           id: id,
@@ -1376,6 +1214,7 @@ class FlashSalePromotion extends Discount {
         titleWhenApplied,
         salePrice,
         endTime,
+        startTime,
       ];
 
   @override
@@ -1388,6 +1227,7 @@ class FlashSalePromotion extends Discount {
         titleWhenApplied: $titleWhenApplied,
         salePrice: $salePrice,
         endTime: $endTime,
+        startTime: $startTime,
         isApplied: $isApplied,
       }''';
   }
@@ -1397,8 +1237,9 @@ class FlashSalePromotion extends Discount {
     String? title,
     String? tag,
     String? titleWhenApplied,
-    String? salePrice,
+    Money? salePrice,
     DateTime? endTime,
+    DateTime? startTime,
     bool? isApplied,
   }) {
     return FlashSalePromotion(
@@ -1408,6 +1249,7 @@ class FlashSalePromotion extends Discount {
       titleWhenApplied: titleWhenApplied ?? this.titleWhenApplied,
       salePrice: salePrice ?? this.salePrice,
       endTime: endTime ?? this.endTime,
+      startTime: startTime ?? this.startTime,
       isApplied: isApplied ?? this.isApplied,
     );
   }
@@ -1418,8 +1260,9 @@ class FlashSalePromotion extends Discount {
         title: json["title"],
         tag: json["tag"],
         titleWhenApplied: json["titleWhenApplied"],
-        salePrice: json["salePrice"],
+        salePrice: Money.fromJson(json["salePrice"]),
         endTime: DateTime.parse(json["endTime"]),
+        startTime: DateTime.parse(json["startTime"]),
         isApplied: json["isApplied"] ?? false,
       );
 
@@ -1429,22 +1272,24 @@ class FlashSalePromotion extends Discount {
         "title": title,
         "tag": tag,
         "titleWhenApplied": titleWhenApplied,
-        "salePrice": salePrice,
+        "salePrice": salePrice.toJson(),
         "endTime": endTime.toIso8601String(),
+        "startTime": startTime.toIso8601String(),
         "isApplied": isApplied,
       };
 
   @override
   String toCartQL() {
     return '''{
-      id: $id,
-      title: "$title",
-      type: "$type",
-      tag: "$tag",
-      titleWhenApplied: "$titleWhenApplied",
-      salePrice: "$salePrice",
-      endTime: "$endTime",
-      isApplied: $isApplied,
+      id: $id
+      title: "$title"
+      type: "$type"
+      tag: "$tag"
+      titleWhenApplied: "$titleWhenApplied"
+      salePrice: ${salePrice.toCartQL()}
+      endTime: "$endTime"
+      startTime: "$startTime"
+      isApplied: $isApplied
     }''';
   }
 }

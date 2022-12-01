@@ -40,4 +40,14 @@ class OrderQuantity {
 
   @override
   String toString() => 'ProductQuantity(min: $min, max: $max, step: $step)';
+
+  String toCartQL() {
+    return '''
+      order_quantity: {
+        min: $min
+        max: $max
+        step: $step
+      }
+    ''';
+  }
 }

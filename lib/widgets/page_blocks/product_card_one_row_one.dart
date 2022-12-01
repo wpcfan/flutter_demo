@@ -48,20 +48,35 @@ class ProductCardOneRowOneWidget extends StatelessWidget {
       maxLines: 1,
       overflow: TextOverflow.ellipsis,
     ).padding(bottom: spaceVertical);
+
+    final discounts = data.product.discounts ?? [];
+    final discount = discounts.isNotEmpty
+        ? discounts.firstWhere(
+            (el) => el.isApplied,
+            orElse: () => discounts.first,
+          )
+        : null;
     // 商品原价：划线价
-    final productOriginalPrice = data.product.originalPrice != null
-        ? data.product.originalPrice!
+    final productOriginalPrice = data.product.price != null &&
+            discount != null &&
+            discount.type == DiscountType.discount &&
+            (discount as DiscountPromotion).discount?.amount != null &&
+            discount.discount?.amount != data.product.price
+        ? data.product.price
             .toString()
             .lineThru()
             .padding(bottom: spaceVertical, right: 8)
             .alignment(Alignment.centerRight)
-        : const SizedBox();
+        : null;
     // 商品价格
-    final productPrice = data.product.price
-        .toString()
-        .toPriceWithDecimalSize(defaultFontSize: 16, decimalFontSize: 12)
-        .padding(bottom: spaceVertical, right: 8)
-        .alignment(Alignment.centerRight);
+    final productPrice = discount != null &&
+            discount.type == DiscountType.discount &&
+            (discount as DiscountPromotion).discount?.formatted != null
+        ? discount.discount?.formatted!
+            .toPriceWithDecimalSize(defaultFontSize: 16, decimalFontSize: 12)
+            .padding(bottom: spaceVertical, right: 8)
+            .alignment(Alignment.centerRight)
+        : null;
     // 购物车图标
     const double buttonSize = 30.0;
     final cartBtn = const Icon(Icons.add_shopping_cart, color: Colors.white)
@@ -72,11 +87,11 @@ class ProductCardOneRowOneWidget extends StatelessWidget {
       productOriginalPrice,
       productPrice,
       IgnorePointer(ignoring: addToCart == null, child: cartBtn)
-    ].toRow(
-      mainAxisAlignment: MainAxisAlignment.end,
-      crossAxisAlignment: CrossAxisAlignment.baseline,
-      textBaseline: TextBaseline.alphabetic,
-    );
+    ].whereType<Widget>().toList().toRow(
+          mainAxisAlignment: MainAxisAlignment.end,
+          crossAxisAlignment: CrossAxisAlignment.baseline,
+          textBaseline: TextBaseline.alphabetic,
+        );
 
     // 商品名称和描述形成一列
     final nameAndDescColumn = <Widget>[

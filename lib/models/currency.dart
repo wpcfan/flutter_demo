@@ -39,4 +39,14 @@ class Currency {
   String toString() {
     return 'Currency{code: $code, symbol: $symbol, thousandsSeparator: $thousandsSeparator, decimalSeparator: $decimalSeparator, decimalDigits: $decimalDigits}';
   }
+
+  String toCartQL() {
+    return '''{
+      code: ${code?.index}
+      symbol: $symbol
+      thousandsSeparator: $thousandsSeparator
+      decimalSeparator: $decimalSeparator
+      decimalDigits: $decimalDigits
+    }''';
+  }
 }
